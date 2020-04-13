@@ -3,9 +3,11 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="colorButton">#3ECEC1</color>
-    <color name="colorBlack">#000000</color>
+    <color name="colorButtonBlack">#2C3740</color>
+    <color name="colorYellowApp">#F28749</color>
     <color name="colorGrey">#7E7976</color>
+    <color name="colorAlmostWhite">#F2F2F2</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorOcre">#F2DFCE</color>
     <color name="colorWhiteTransparent">#80FFFFFF</color>
 </resources>

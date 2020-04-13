@@ -4,9 +4,9 @@ public class ApiUtils {
     private ApiUtils() {}
 
     private static final String BASE_URL = "http://192.168.56.1" +
-            "/api-manager-karate/karate-manager-api-laravel/public/api/";
+            "/trabajos/api-manager-karate/karate-manager-api-laravel/public/api/";
 
-    static APIService getAPIService() {
+    public static APIService getAPIService() {
         return RetrofitClient.getClient(BASE_URL).create(APIService.class);
     }
 

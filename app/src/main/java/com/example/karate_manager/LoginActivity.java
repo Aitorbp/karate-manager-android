@@ -11,14 +11,21 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.karate_manager.Models.User;
+import com.example.karate_manager.Network.APIService;
+import com.example.karate_manager.Network.ApiUtils;
+
 import androidx.appcompat.app.AppCompatActivity;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
     EditText input_email, input_password;
     Button loginBtn;
     LinearLayout popup_loading;
-   // private APIService APIService;
+    private APIService APIService;
     Dialog dialogLoading;
 
 
@@ -31,13 +38,13 @@ public class LoginActivity extends AppCompatActivity {
         input_email = findViewById(R.id.input_email);
         input_password = findViewById(R.id.input_password);
         loginBtn = findViewById(R.id.btn_login);
-      //  APIService = ApiUtils.getAPIService();
+        APIService = ApiUtils.getAPIService();
 
-       // popup_loading = findViewById(R.id.popup_loading);
+        popup_loading = findViewById(R.id.popup_loading);
 
 
         dialogLoading = new Dialog(LoginActivity.this);
- //       dialogLoading.setContentView(R.layout.popup_loading);
+       dialogLoading.setContentView(R.layout.popup_loading);
 
         //Click Listener del botón del login
         loginBtn.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         else if(checkEmail(email) && checkPass(pass)){
 
-          //  loginPOST(pass,email);
+          loginPOST(pass,email);
         }else{
             Log.d("tusmuertos", email);
         }
@@ -95,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
     }
     //Click from login to register view
     public void link_signup(View view) {
-      //  startActivity(new Intent(this, RegisterActivity.class));
+        startActivity(new Intent(this, RegisterActivity.class));
     }
 
     public void link_forgot_password(View view) {
@@ -103,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-/*
+
     private void loginPOST(String password, String email)
     {
         dialogLoading.show();
@@ -113,11 +120,8 @@ public class LoginActivity extends AppCompatActivity {
         APIService.sendUser(user).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-
                 dialogLoading.dismiss();
                 if(response.isSuccessful()) {
-
-
 
                     Log.d("RESPUESTA DEL MENSAJE", response.toString());
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class );
@@ -126,7 +130,6 @@ public class LoginActivity extends AppCompatActivity {
                 }else{
                     Toast.makeText(getApplicationContext(), "Incorrect username or password", Toast.LENGTH_SHORT).show();
                 }
-
             }
 
             @Override
@@ -136,7 +139,5 @@ public class LoginActivity extends AppCompatActivity {
                 dialogLoading.dismiss();
             }
         });
-
-
-    }*/
+    }
 }
