@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.karate_manager.Models.LoginResponse;
 import com.example.karate_manager.Models.User;
 import com.example.karate_manager.Network.APIService;
 import com.example.karate_manager.Network.ApiUtils;
@@ -19,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import com.example.karate_manager.Utils.Storage;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -27,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     LinearLayout popup_loading;
     private APIService APIService;
     Dialog dialogLoading;
-
+    Storage storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,12 @@ public class LoginActivity extends AppCompatActivity {
 
         dialogLoading = new Dialog(LoginActivity.this);
        dialogLoading.setContentView(R.layout.popup_loading);
+
+
+        if(storage.getLoggedStatus(getApplicationContext())) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+        }
 
         //Click Listener del botón del login
         loginBtn.setOnClickListener(new View.OnClickListener() {
@@ -114,15 +122,20 @@ public class LoginActivity extends AppCompatActivity {
         dialogLoading.show();
         dialogLoading.setCancelable(false);
 
-        User user = new User(password, email);
-        APIService.sendUser(user).enqueue(new Callback<User>() {
+       // User user = new User(password,email);
+
+        APIService.sendUser(email, password).enqueue(new Callback<LoginResponse>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 dialogLoading.dismiss();
+
+
                 if(response.isSuccessful()) {
 
-                    Log.d("RESPUESTA DEL MENSAJE", response.toString());
+                    Log.d("RESPUESTA DEL MENSAJE", response.body().getUser().getToken());
+                    storage.setLoggedIn(getApplicationContext(), true);
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class );
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
 
                 }else{
@@ -131,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "We are having problems with the server, try again later", Toast.LENGTH_SHORT).show();
                 Log.d("RESPUESTA DEL MENSAJE", "ERROR");
                 dialogLoading.dismiss();

@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.karate_manager.Models.LoginResponse;
 import com.example.karate_manager.Models.User;
 import com.example.karate_manager.Network.APIService;
 import com.example.karate_manager.Network.ApiUtils;
@@ -146,14 +147,14 @@ public class RegisterActivity extends AppCompatActivity {
         dialogLoading.show();
         dialogLoading.setCancelable(false);
 
-        User user1 = new User(password, email, user_name);
-        APIService.createUser(user1).enqueue(new Callback<User>() {
+      //  User user1 = new User(password, email, user_name);
+        APIService.createUser(email, password, user_name).enqueue(new Callback<LoginResponse>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 dialogLoading.dismiss();
                 if(response.isSuccessful()) {
 
-                    Log.d("RESPUESTA DEL MENSAJE", response.toString());
+                    Log.d("RESPUESTA DEL MENSAJE", response.body().getUser().getEmail());
                     (Toast.makeText(getApplicationContext(), "Welcome to PetIt", Toast.LENGTH_LONG)).show();
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class );
                     startActivity(intent);
@@ -162,7 +163,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
 
                 dialogLoading.dismiss();

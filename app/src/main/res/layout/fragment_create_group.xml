@@ -81,6 +81,7 @@
                         android:layout_gravity="center"
                         android:gravity="center_vertical">
                         <EditText
+                            android:inputType="text"
                         android:id="@+id/name_group"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
@@ -100,6 +101,7 @@
                         android:layout_gravity="center"
                         android:gravity="center_vertical">
                         <EditText
+                            android:inputType="textPassword"
                             android:id="@+id/password_group"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"

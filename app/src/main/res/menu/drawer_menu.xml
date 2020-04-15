@@ -17,5 +17,9 @@
 
             android:title="Create a group"/>
 
+        <item android:id="@+id/nav_log_out"
+
+            android:title="Log out"/>
+
     </group>
 </menu>
