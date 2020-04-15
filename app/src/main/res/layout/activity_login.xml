@@ -25,7 +25,7 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_gravity="center"
-            android:src="@color/colorButtonBlack"
+            android:src="@drawable/logo_border_karate_manager"
        />
 
 
@@ -42,6 +42,7 @@
         android:paddingRight="24dp">
 
         <EditText
+
             android:background="@drawable/custom_buttom_formulary"
             android:layout_marginTop="30dp"
             android:padding="10dp"
@@ -79,6 +80,7 @@
             android:clickable="true"
             android:onClick="link_forgot_password"/>
         <Button
+
             android:id="@+id/btn_login"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -89,6 +91,9 @@
             android:textSize="17dp"
             android:background="@drawable/custom_button"
             android:textColor="#FFFFFF"
+            android:elevation="3dp"
+            android:translationZ="2dp"
+            android:stateListAnimator="@null"
             />
         <TextView
             android:textColor="@color/colorButtonBlack"

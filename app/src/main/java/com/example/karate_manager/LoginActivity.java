@@ -52,8 +52,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email = input_email.getText().toString();
                 String pass = input_password.getText().toString();
-
-
                 checkInputs(email, pass);
 
 

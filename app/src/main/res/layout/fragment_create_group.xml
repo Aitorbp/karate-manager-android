@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.CreateGroupFragment"
+    android:background="@color/colorWhite">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="280dp"
+                android:gravity="center"
+                android:background="@color/colorGrey">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/profile_image"
+                    android:layout_width="230dp"
+                    android:layout_height="230dp"
+                    android:src="@color/colorAlmostWhite"
+                    app:civ_border_width="14dp"
+                    app:civ_border_color="@color/colorButtonBlack"
+                    android:layout_gravity="center"
+
+
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                     android:background="@color/colorGrey"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:background="@drawable/custom_formulary"
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_marginTop="10dp"
+                                android:gravity="center"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:textStyle="bold"
+                                android:text="Group form"
+                                android:textSize="30dp"
+                                android:textColor="@color/colorButtonBlack"/>
+
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginRight="29dp"
+                        android:layout_marginLeft="29dp"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center"
+                        android:gravity="center_vertical">
+                        <EditText
+                        android:id="@+id/name_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:hint="Group name"
+                        android:textColor="@color/colorGrey"
+                        android:textSize="20dp"
+                        />
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginRight="29dp"
+                        android:layout_marginLeft="29dp"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center"
+                        android:gravity="center_vertical">
+                        <EditText
+                            android:id="@+id/password_group"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:hint="Group password"
+                            android:textColor="@color/colorGrey"
+                            android:textSize="20dp"
+                            />
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="29dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="29dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="220dp"
+                            android:layout_height="40dp"
+                            android:text="Initial budget per player"
+                            android:textSize="20dp"
+                            android:textStyle="bold"
+                            android:textColor="#455559"
+                            >
+
+                        </TextView>
+                        <Spinner
+                            android:id="@+id/budget_spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp">
+
+                        </Spinner>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="29dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="29dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:textColor="#455559"
+                            android:layout_width="70dp"
+                            android:layout_height="40dp"
+                            android:text="Genre"
+                            android:textSize="22dp"
+                            android:textStyle="bold">
+
+                        </TextView>
+
+
+                        <Switch
+                            android:id="@+id/switch_genre"
+                            android:layout_width="140dp"
+                            android:showText="true"
+                            android:textOn="Male"
+                            android:textOff="Femela"
+                            android:elegantTextHeight="true"
+                            android:textDirection="firstStrongRtl"
+                            android:layout_height="match_parent"></Switch>
+
+
+
+
+
+                    </LinearLayout>
+
+
+
+                    <Button
+                        android:layout_marginRight="29dp"
+                        android:layout_marginLeft="29dp"
+                        android:id="@+id/btn_create_group"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="15dp"
+                        android:padding="12dp"
+                        android:text="Create group"
+                        android:textSize="17dp"
+                        android:background="@drawable/custom_button"
+                        android:textColor="#FFFFFF"
+                        android:elevation="3dp"
+                        android:translationZ="2dp"
+                        android:stateListAnimator="@null"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

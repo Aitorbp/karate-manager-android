@@ -1,5 +1,6 @@
 package com.example.karate_manager.Network;
 
+import com.example.karate_manager.Models.Group;
 import com.example.karate_manager.Models.User;
 
 import retrofit2.Call;
@@ -16,4 +17,7 @@ public interface APIService {
     Call<User> sendUser(@Body User user);
     @POST("user/password/reset")
     Call<User> recoverPass(@Body User user);
+
+    @POST("group")
+    Call<Group> createGroup(@Body Group group);
 }

@@ -24,7 +24,7 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_gravity="center"
-            android:src="@color/colorButtonBlack"
+            android:src="@drawable/logo_border_karate_manager"
         />
     </LinearLayout>
 
@@ -92,7 +92,10 @@
             android:padding="12dp"
             android:text="SIGN UP"
             android:background="@drawable/custom_button"
-            android:textColor="#FFFFFF"/>
+            android:textColor="#FFFFFF"
+            android:elevation="3dp"
+            android:translationZ="2dp"
+            android:stateListAnimator="@null"/>
     </LinearLayout>
 
 
