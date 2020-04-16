@@ -32,6 +32,7 @@ import com.example.karate_manager.Network.APIService;
 import com.example.karate_manager.Network.ApiUtils;
 import com.example.karate_manager.R;
 import com.example.karate_manager.RegisterActivity;
+import com.example.karate_manager.Utils.Storage;
 
 
 public class CreateGroupFragment extends Fragment {
@@ -60,7 +61,7 @@ public class CreateGroupFragment extends Fragment {
                 R.array.budgets, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_budget.setAdapter(adapter);
-
+        String token = Storage.getToken(getContext());
 
         switch_genre.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -72,7 +73,7 @@ public class CreateGroupFragment extends Fragment {
                 }
             }
         });
-        Log.d("Value of genre", String.valueOf(genre));
+
 
 
         btn_create_group.setOnClickListener(new View.OnClickListener() {

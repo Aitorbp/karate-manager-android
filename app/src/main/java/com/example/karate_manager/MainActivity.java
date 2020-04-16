@@ -14,6 +14,7 @@ import android.content.Intent;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        String token = Storage.getToken(getApplicationContext());
+        Log.d("TOKEEN RECIBIDO", token);
     }
 
     @Override

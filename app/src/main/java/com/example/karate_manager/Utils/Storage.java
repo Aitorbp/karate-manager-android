@@ -13,6 +13,20 @@ public class Storage {
         }
 
 
+        public static boolean saveToken(Context context, String token){
+            SharedPreferences.Editor editor = getPreferences(context).edit();
+            editor.putString(TOKEN,token);
+            editor.apply();
+            return true;
+        }
+
+        public static String getToken(Context context){
+            SharedPreferences sharedPref = getPreferences(context);
+
+            String token = sharedPref.getString(TOKEN, null);
+
+            return token;
+        }
         /**
          * Set the Login Status
          * @param context
