@@ -6,11 +6,11 @@ import androidx.annotation.Nullable;
 
 public class User {
 
-    public User(float id, String email, String name, String token, float admin_user, float active, String photo_profile, String email_verified_at, String created_at, String updated_at) {
+    public User(float id, String email, String name, String api_token, float admin_user, float active, String photo_profile, String email_verified_at, String created_at, String updated_at) {
         this.id = id;
         this.email = email;
         this.name = name;
-        this.token = token;
+        this.api_token = api_token;
         this.admin_user = admin_user;
         this.active = active;
         this.photo_profile = photo_profile;
@@ -31,8 +31,8 @@ public class User {
     @SerializedName("name")
     private String name;
 
-    @SerializedName("token")
-    private String token;
+    @SerializedName("api_token")
+    private String api_token;
     @SerializedName("admin_user")
     private float admin_user;
 
@@ -62,8 +62,8 @@ public class User {
         return name;
     }
 
-    public String getToken() {
-        return token;
+    public String getApitoken() {
+        return api_token;
     }
 
     public float getAdmin_user() {

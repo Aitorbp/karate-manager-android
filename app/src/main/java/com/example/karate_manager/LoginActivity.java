@@ -130,8 +130,8 @@ public class LoginActivity extends AppCompatActivity {
                 dialogLoading.dismiss();
                 if(response.isSuccessful()) {
 
-                    Log.d("RESPUESTA DEL MENSAJE", response.body().getUser().getToken());
-                    Storage.saveToken(getApplicationContext(),response.body().getUser().getToken());
+                    Log.d("RESPUESTA DEL MENSAJE", response.body().getUser().getApitoken());
+                    Storage.saveToken(getApplicationContext(),response.body().getUser().getApitoken());
                     storage.setLoggedIn(getApplicationContext(), true);
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class );
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_CLEAR_TASK);

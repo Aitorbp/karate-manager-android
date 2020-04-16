@@ -85,7 +85,7 @@ public class CreateGroupFragment extends Fragment {
                 int budget = Integer.parseInt(spinner_budget.getSelectedItem().toString());
                 String switch_genre = String.valueOf(genre);
 
-                registerPOST("1",name, pass, budget, switch_genre, 0);
+                registerPOST("2",name, pass, budget, switch_genre, 0);
             }
         });
 
@@ -96,11 +96,13 @@ public class CreateGroupFragment extends Fragment {
     {
         Log.d("eeer","addede");
         Log.d("OBJETO:", pass);
+
+        String api_token = Storage.getToken(getContext());
         dialogLoading.show();
         dialogLoading.setCancelable(false);
 
         Group group = new Group(id_user ,name, pass, budget, switch_genre, points);
-        APIService.createGroup(group).enqueue(new Callback<Group>() {
+        APIService.createGroup(group, api_token).enqueue(new Callback<Group>() {
             @Override
             public void onResponse(Call<Group> call, Response<Group> response) {
                 dialogLoading.dismiss();
