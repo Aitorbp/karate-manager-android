@@ -7,14 +7,13 @@ import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.karate_manager.Models.LoginResponse;
-import com.example.karate_manager.Models.User;
+import com.example.karate_manager.Models.UserModel.UserResponse;
 import com.example.karate_manager.Network.APIService;
 import com.example.karate_manager.Network.ApiUtils;
+import com.example.karate_manager.Utils.Storage;
 
 import androidx.appcompat.app.AppCompatActivity;
 import retrofit2.Call;
@@ -26,7 +25,7 @@ public class RegisterActivity extends AppCompatActivity {
     Button btn_register;
     Dialog dialogLoading;
     private APIService APIService;
-
+    Storage storage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,14 +147,18 @@ public class RegisterActivity extends AppCompatActivity {
         dialogLoading.setCancelable(false);
 
       //  User user1 = new User(password, email, user_name);
-        APIService.createUser(email, password, user_name).enqueue(new Callback<LoginResponse>() {
+        APIService.createUser(email, password, user_name).enqueue(new Callback<UserResponse>() {
             @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 dialogLoading.dismiss();
                 if(response.isSuccessful()) {
 
                     Log.d("RESPUESTA DEL MENSAJE", response.body().getUser().getEmail());
+                    Storage.saveToken(getApplicationContext(),response.body().getUser().getApitoken());
+                    storage.setLoggedIn(getApplicationContext(), true);
+
                     (Toast.makeText(getApplicationContext(), "Welcome to PetIt", Toast.LENGTH_LONG)).show();
+
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class );
                     startActivity(intent);
 
@@ -163,7 +166,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
+            public void onFailure(Call<UserResponse> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
 
                 dialogLoading.dismiss();

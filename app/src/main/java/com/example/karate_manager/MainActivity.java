@@ -7,12 +7,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
-import android.content.Context;
 import android.content.Intent;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -21,13 +22,20 @@ import android.view.MenuItem;
 import com.example.karate_manager.Fragments.CreateGroupFragment;
 import com.example.karate_manager.Fragments.JoinGroupFragment;
 import com.example.karate_manager.Fragments.ProfileFragment;
+import com.example.karate_manager.Models.UserModel.UserResponse;
+import com.example.karate_manager.Models.UserModel.User;
+import com.example.karate_manager.Network.APIService;
+import com.example.karate_manager.Network.ApiUtils;
 import com.example.karate_manager.Utils.Storage;
 import com.google.android.material.navigation.NavigationView;
+import static com.example.karate_manager.Utils.PreferencesUtility.*;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
     Toolbar toolbar;
     NavigationView navigationView;
+    private APIService APIService;
+    UserResponse user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,14 +46,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        APIService = ApiUtils.getAPIService();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        String token = Storage.getToken(getApplicationContext());
-        Log.d("TOKEEN RECIBIDO", token);
+       String api_token = Storage.getToken(getApplicationContext());
+
+        getUser(api_token, new GetUserCallback() {
+            @Override
+            public void onSuccess(UserResponse userResponse) {
+                user = userResponse;
+            }
+            @Override
+            public void onError() {
+            }
+        });
+
+
     }
 
     @Override
@@ -56,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void changeSecreen(int screen){
+
         switch (screen) {
             case R.id.nav_profile:
                 ProfileFragment profileFragment = new ProfileFragment();
@@ -67,11 +87,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_create_group:
-                CreateGroupFragment createGroupFragment = new CreateGroupFragment();
+                final CreateGroupFragment createGroupFragment = new CreateGroupFragment();
                 addFragment(createGroupFragment);
+                sendUser(user,createGroupFragment);
                 break;
 
             case R.id.nav_log_out:
+                Storage.removeToken(getApplicationContext(),TOKEN);
                 Storage.setLoggedIn(getApplicationContext(), false);
                 Intent intent = new Intent(this, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -91,6 +113,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.closeDrawer(Gravity.LEFT); //para cerrar el drawer_menu lateral cuando pulsemos un boton
     }
 
+
+
+    private void getUser(String api_token, final GetUserCallback callback){
+
+      Call<UserResponse> call =  APIService.getUserByToken(api_token);
+
+            call.enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+
+                if(response.isSuccessful()) {
+                    callback.onSuccess(response.body());
+                    Log.d("GET API TOKEN USER MAIN", String.valueOf(response.body().getUser().getId()));
+                }
+            }
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+                Log.d("Falloooooo", t.getMessage());
+            }
+        });
+
+
+
+
+    }
+    //Interface para que se ejecute de forma asincrona y podamos rescatar el User para poder utilizarlo en todo el programa
+    public interface GetUserCallback{
+        void onSuccess(UserResponse userResponse);
+        void onError();
+    }
+    public void sendUser(UserResponse userResponse, CreateGroupFragment fragment){
+        fragment.recievedUser(userResponse);
+
+    }
 
 
 }

@@ -1,4 +1,4 @@
-package com.example.karate_manager.Models;
+package com.example.karate_manager.Models.UserModel;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 
 public class User {
 
-    public User(float id, String email, String name, String api_token, float admin_user, float active, String photo_profile, String email_verified_at, String created_at, String updated_at) {
+    public User(int id, String email, String name, String api_token, int admin_user, int active, String photo_profile, String email_verified_at, String created_at, String updated_at) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -23,7 +23,7 @@ public class User {
 
 
     @SerializedName("id")
-    private float id;
+    private int id;
 
     @SerializedName("email")
     private String email;
@@ -34,10 +34,10 @@ public class User {
     @SerializedName("api_token")
     private String api_token;
     @SerializedName("admin_user")
-    private float admin_user;
+    private int admin_user;
 
     @SerializedName("active")
-    private float active;
+    private int active;
 
     @SerializedName("photo_profile")
     private String photo_profile = null;
@@ -50,7 +50,7 @@ public class User {
     @SerializedName("updated_at")
     private String updated_at;
 
-    public float getId() {
+    public int getId() {
         return id;
     }
 
@@ -66,11 +66,11 @@ public class User {
         return api_token;
     }
 
-    public float getAdmin_user() {
+    public int getAdmin_user() {
         return admin_user;
     }
 
-    public float getActive() {
+    public int getActive() {
         return active;
     }
 

@@ -1,9 +1,6 @@
 package com.example.karate_manager.Fragments;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,11 +24,11 @@ import android.widget.Toast;
 
 import com.example.karate_manager.MainActivity;
 import com.example.karate_manager.Models.Group;
-import com.example.karate_manager.Models.User;
+import com.example.karate_manager.Models.UserModel.User;
+import com.example.karate_manager.Models.UserModel.UserResponse;
 import com.example.karate_manager.Network.APIService;
 import com.example.karate_manager.Network.ApiUtils;
 import com.example.karate_manager.R;
-import com.example.karate_manager.RegisterActivity;
 import com.example.karate_manager.Utils.Storage;
 
 
@@ -45,6 +42,7 @@ public class CreateGroupFragment extends Fragment {
     Dialog dialogLoading;
     private  APIService APIService;
     MainActivity mainActivity;
+    UserResponse user = new UserResponse(200,null,null );
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View RootView = inflater.inflate(R.layout.fragment_create_group, container, false);
@@ -74,8 +72,7 @@ public class CreateGroupFragment extends Fragment {
             }
         });
 
-
-
+        Log.d("AAAAAAAAAAAAAAAAA", String.valueOf(user.getUser().getId()));
         btn_create_group.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,13 +92,13 @@ public class CreateGroupFragment extends Fragment {
     private void registerPOST(String id_user, String name, String pass,  int budget, String switch_genre, int points)
     {
         Log.d("eeer","addede");
-        Log.d("OBJETO:", pass);
+
 
         String api_token = Storage.getToken(getContext());
         dialogLoading.show();
         dialogLoading.setCancelable(false);
 
-        Group group = new Group(id_user ,name, pass, budget, switch_genre, points);
+        Group group = new Group(String.valueOf(user.getUser().getId() ),name, pass, budget, switch_genre, points);
         APIService.createGroup(group, api_token).enqueue(new Callback<Group>() {
             @Override
             public void onResponse(Call<Group> call, Response<Group> response) {
@@ -126,4 +123,10 @@ public class CreateGroupFragment extends Fragment {
     }
 
 
+    public void recievedUser(UserResponse userResponse) {
+        if(user!=null){
+            user =userResponse;
+        }
+
+    }
 }

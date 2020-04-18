@@ -11,8 +11,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.example.karate_manager.Models.LoginResponse;
-import com.example.karate_manager.Models.User;
+import com.example.karate_manager.Models.UserModel.UserResponse;
 import com.example.karate_manager.Network.APIService;
 import com.example.karate_manager.Network.ApiUtils;
 
@@ -124,9 +123,10 @@ public class LoginActivity extends AppCompatActivity {
 
        // User user = new User(password,email);
 
-        APIService.sendUser(email, password).enqueue(new Callback<LoginResponse>() {
+        APIService.sendUser(email, password).enqueue(new Callback<UserResponse>() {
+
             @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 dialogLoading.dismiss();
                 if(response.isSuccessful()) {
 
@@ -143,7 +143,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
+            public void onFailure(Call<UserResponse> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "We are having problems with the server, try again later", Toast.LENGTH_SHORT).show();
                 Log.d("RESPUESTA DEL MENSAJE", "ERROR");
                 dialogLoading.dismiss();

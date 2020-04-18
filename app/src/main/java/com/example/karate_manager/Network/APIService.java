@@ -1,15 +1,15 @@
 package com.example.karate_manager.Network;
 
 import com.example.karate_manager.Models.Group;
-import com.example.karate_manager.Models.LoginResponse;
-import com.example.karate_manager.Models.User;
+import com.example.karate_manager.Models.UserModel.UserResponse;
+import com.example.karate_manager.Models.ParticipantModel.Participant;
+import com.example.karate_manager.Models.UserModel.User;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.Header;
-import retrofit2.http.Headers;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -18,21 +18,38 @@ public interface APIService {
   //  @Headers("Content-Type: application/json")
     @FormUrlEncoded
     @POST("user")
-    Call<LoginResponse> createUser(
+    Call<UserResponse> createUser(
             @Field("email") String email,
             @Field("password") String password,
             @Field("name") String user_name);
 
     @FormUrlEncoded
     @POST("user/login")
-    Call<LoginResponse> sendUser(
+    Call<UserResponse> sendUser(
             @Field("email") String email,
             @Field("password") String password
             );
 
-    @POST("user/password/reset")
-    Call<User> recoverPass(@Body User user);
 
+    @GET("user/one")
+    Call<UserResponse> getUserByToken(@Query("api_token") String api_token);
+
+
+  @POST("user/password/reset")
+  Call<User> recoverPass(@Body User user);
+
+
+  //GROUP ENDPOINTS
     @POST("group")
     Call<Group> createGroup(@Body Group group , @Query("api_token") String authToken);
+
+  //PARTICIPANT ENDPOINTS
+
+  @POST("participant")
+  Call<Participant> createParticipantInGroup(
+          @Field("password_group") String password_group,
+          @Field("name_group") String password,
+          @Field("id_user") String id_user,
+          @Query("api_token") String authToken);
+
 }

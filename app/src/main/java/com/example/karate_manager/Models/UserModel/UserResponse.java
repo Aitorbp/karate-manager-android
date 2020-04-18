@@ -1,8 +1,8 @@
-package com.example.karate_manager.Models;
+package com.example.karate_manager.Models.UserModel;
 
-public class LoginResponse {
+public class UserResponse {
 
-    public LoginResponse(float code, User user, String msg) {
+    public UserResponse(float code, User user, String msg) {
         this.code = code;
         this.user = user;
         this.msg = msg;

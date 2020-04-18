@@ -27,6 +27,10 @@ public class Storage {
 
             return token;
         }
+        public static void removeToken(Context context, String key){
+            SharedPreferences.Editor editor = getPreferences(context).edit();
+            editor.remove(TOKEN).commit();
+        }
         /**
          * Set the Login Status
          * @param context
