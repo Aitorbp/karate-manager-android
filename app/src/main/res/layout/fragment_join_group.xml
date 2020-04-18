@@ -1,14 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Fragments.JoinGroupFragment">
+    android:layout_width="300dp"
+    android:layout_height="350dp"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/custom_join_group_popup"
+    tools:context=".Fragments.JoinGroupFragment"
+    android:elevation="3dp"
+    android:translationZ="1dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+
+            <TextView
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="29dp"
+                android:layout_marginLeft="29dp"
+
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:textStyle="bold"
+                android:text="Join the group"
+                android:textSize="30dp"
+                android:textColor="@color/colorButtonBlack"/>
+            <EditText
+                android:layout_marginRight="29dp"
+                android:layout_marginLeft="29dp"
+                android:layout_marginTop="40dp"
+                android:inputType="text"
+                android:id="@+id/name_group"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:hint="Group name"
+                android:textColor="@color/colorGrey"
+                android:textSize="20dp"
+                />
+            <EditText
+                android:layout_marginRight="29dp"
+                android:layout_marginLeft="29dp"
+                android:layout_marginTop="20dp"
+                android:inputType="textPassword"
+                android:id="@+id/password_group"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:hint="Group password"
+                android:textColor="@color/colorGrey"
+                android:textSize="20dp"
+                />
+            <Button
+                android:layout_marginRight="29dp"
+                android:layout_marginLeft="29dp"
+                android:id="@+id/btn_create_group"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="30dp"
+                android:padding="12dp"
+                android:text="Create group"
+                android:textSize="17dp"
+                android:background="@drawable/custom_button"
+                android:textColor="#FFFFFF"
+                android:elevation="3dp"
+                android:translationZ="2dp"
+                android:stateListAnimator="@null"
+                />
+        </LinearLayout>
+
+
