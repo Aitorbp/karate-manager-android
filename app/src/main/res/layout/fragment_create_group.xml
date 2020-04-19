@@ -105,7 +105,7 @@
                             android:id="@+id/password_group"
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
-                            android:hint="Group password"
+                            android:hint="Password"
                             android:textColor="@color/colorGrey"
                             android:textSize="20dp"
                             />

@@ -34,14 +34,14 @@ import com.example.karate_manager.Utils.Storage;
 
 public class CreateGroupFragment extends Fragment {
 
-    EditText password_group, name_group;
-    Spinner spinner_budget;
-    Button btn_create_group;
-    Switch switch_genre;
+    private EditText password_group, name_group;
+    private Spinner spinner_budget;
+    private Button btn_create_group;
+    private Switch switch_genre;
     boolean genre = false;
     Dialog dialogLoading;
     private  APIService APIService;
-    MainActivity mainActivity;
+
     UserResponse user = new UserResponse(200,null,null );
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -82,32 +82,87 @@ public class CreateGroupFragment extends Fragment {
                 int budget = Integer.parseInt(spinner_budget.getSelectedItem().toString());
                 String switch_genre = String.valueOf(genre);
 
-                registerPOST("2",name, pass, budget, switch_genre, 0);
+                checkInputsRegister(name, pass, budget, switch_genre);
             }
         });
 
         return RootView;
     }
 
-    private void registerPOST(String id_user, String name, String pass,  int budget, String switch_genre, int points)
+    //Method to check inputs of the login view
+    private void checkInputsRegister(String name,  String pass, int budget, String switch_genre) {
+
+        //Check if inputs are empty
+        if(name.isEmpty()){
+            Log.d("valor del email", "ëdededede");
+            name_group.setError("Empty inputs are not allowed");
+        }else{
+            Log.d("valor del email", "no está vacio");
+            checkUsername(name);
+
+        }
+        if(pass.isEmpty()){
+            password_group.setError("Empty inputs are not allowed");
+        }else{
+            checkPass(pass);
+
+        }
+
+        if ( checkPass(pass)==true &&checkUsername(name)==true) {
+
+
+            registerGroup(name, pass, budget, switch_genre, 0);
+        }
+
+    }
+
+
+    private boolean checkUsername(String userName){
+        if (userName.length() <= 3) {
+            name_group.setError("The name group must be greater than 3 characters");
+            return false;
+        }
+        return true;
+    }
+
+
+    private boolean checkPass(String pass) {
+        if (pass.length() < 8) {
+            password_group.setError("The password must be greater than 8 characters");
+            return false;
+        }
+        if (!pass.matches("(?=.*[0-8]).*")) {
+            password_group.setError("The password must contain at least one number");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void registerGroup(String name, String pass,  int budget, String switch_genre, int points)
     {
         Log.d("eeer","addede");
 
-
+        String id_user = String.valueOf(user.getUser().getId());
         String api_token = Storage.getToken(getContext());
         dialogLoading.show();
         dialogLoading.setCancelable(false);
 
-        Group group = new Group(String.valueOf(user.getUser().getId() ),name, pass, budget, switch_genre, points);
+        Group group = new Group(id_user ,name, pass, budget, switch_genre, points);
         APIService.createGroup(group, api_token).enqueue(new Callback<Group>() {
             @Override
             public void onResponse(Call<Group> call, Response<Group> response) {
                 dialogLoading.dismiss();
                 if(response.isSuccessful()) {
 
-                    Log.d("RESPUESTA DEL MENSAJE", response.toString());
                     (Toast.makeText(getContext(), "Group created", Toast.LENGTH_LONG)).show();
+
+                    MainActivity mainActivity = (MainActivity) getActivity();
+
+
                     mainActivity.changeSecreen(R.id.nav_profile);
+                }else{
+                    (Toast.makeText(getContext(), "There was an error. Maybe the group already registered.", Toast.LENGTH_LONG)).show();
                 }
             }
 
@@ -116,6 +171,8 @@ public class CreateGroupFragment extends Fragment {
                 Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
 
                 dialogLoading.dismiss();
+
+
             }
         });
 

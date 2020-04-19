@@ -153,7 +153,7 @@ public class RegisterActivity extends AppCompatActivity {
                 dialogLoading.dismiss();
                 if(response.isSuccessful()) {
 
-                    Log.d("RESPUESTA DEL MENSAJE", response.body().getUser().getEmail());
+                //    Log.d("RESPUESTA DEL MENSAJE", response.body().getUser().getEmail());
                     Storage.saveToken(getApplicationContext(),response.body().getUser().getApitoken());
                     storage.setLoggedIn(getApplicationContext(), true);
 
@@ -162,7 +162,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class );
                     startActivity(intent);
 
-                }
+                }else{           Toast.makeText(getApplicationContext(), "The user is already register with this email", Toast.LENGTH_SHORT).show();}
             }
 
             @Override

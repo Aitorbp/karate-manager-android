@@ -51,7 +51,7 @@
             <Button
                 android:layout_marginRight="29dp"
                 android:layout_marginLeft="29dp"
-                android:id="@+id/btn_create_group"
+                android:id="@+id/btn_join_group"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"

@@ -121,15 +121,12 @@ public class LoginActivity extends AppCompatActivity {
         dialogLoading.show();
         dialogLoading.setCancelable(false);
 
-       // User user = new User(password,email);
-
         APIService.sendUser(email, password).enqueue(new Callback<UserResponse>() {
 
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 dialogLoading.dismiss();
                 if(response.isSuccessful()) {
-
                     Log.d("RESPUESTA DEL MENSAJE", response.body().getUser().getApitoken());
                     Storage.saveToken(getApplicationContext(),response.body().getUser().getApitoken());
                     storage.setLoggedIn(getApplicationContext(), true);
