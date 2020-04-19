@@ -17,13 +17,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.karate_manager.Fragments.CreateGroupFragment;
 import com.example.karate_manager.Fragments.JoinGroupFragment;
 import com.example.karate_manager.Fragments.ProfileFragment;
 import com.example.karate_manager.Models.UserModel.UserResponse;
-import com.example.karate_manager.Models.UserModel.User;
 import com.example.karate_manager.Network.APIService;
 import com.example.karate_manager.Network.ApiUtils;
 import com.example.karate_manager.Utils.Storage;
@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     Toolbar toolbar;
     NavigationView navigationView;
+
     private APIService APIService;
     UserResponse user;
     @Override
@@ -45,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
+
+
         navigationView.setNavigationItemSelectedListener(this);
         APIService = ApiUtils.getAPIService();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
@@ -64,6 +67,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        final Menu menu = navigationView.getMenu();
+        menu.add(R.id.dinamyc_group_menu, Menu.NONE,0, "My groups");
+        for (int i = 1; i<= 2; i++){
+
+            menu.add(R.id.dinamyc_group_menu, Menu.NONE,0, "Karatekas").setIcon(R.drawable.logo_karate_manager);
+        }
 
     }
 
@@ -84,12 +93,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_join_group:
                 JoinGroupFragment joinGroupFragment = new JoinGroupFragment();
                 addFragment(joinGroupFragment);
+                sendUserToJoinGroup(user,joinGroupFragment);
                 break;
 
             case R.id.nav_create_group:
                 final CreateGroupFragment createGroupFragment = new CreateGroupFragment();
                 addFragment(createGroupFragment);
-                sendUser(user,createGroupFragment);
+                sendUserToCreateGroup(user,createGroupFragment);
                 break;
 
             case R.id.nav_log_out:
@@ -143,10 +153,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         void onSuccess(UserResponse userResponse);
         void onError();
     }
-    public void sendUser(UserResponse userResponse, CreateGroupFragment fragment){
+
+
+
+    public void sendUserToCreateGroup(UserResponse userResponse, CreateGroupFragment fragment){
         fragment.recievedUser(userResponse);
 
     }
+
+    public void sendUserToJoinGroup(UserResponse userResponse, JoinGroupFragment fragment){
+        fragment.recievedUser(userResponse);
+
+    }
+
+    
 
 
 }

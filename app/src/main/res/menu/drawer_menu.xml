@@ -1,25 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:checkableBehavior="single"
+        android:id="@+id/dinamyc_group_menu"
+        android:menuCategory="system">
+
+
+    </group>
+
+    <group android:checkableBehavior="single"
+        >
 
         <item android:id="@+id/nav_profile"
-
+            android:orderInCategory="1"
             android:title="Profile"
             />
 
         <item android:id="@+id/nav_join_group"
-            android:title="Join a group"/>
+            android:title="Join a group"
+            android:orderInCategory="1"/>
 
         <item android:id="@+id/nav_create_group"
-
+            android:orderInCategory="1"
             android:title="Create a group"/>
 
+
+
+    </group>
+
+    <group android:checkableBehavior="single">
         <item android:id="@+id/nav_log_out"
-
+            android:orderInCategory="2"
             android:title="Log out"/>
-
     </group>
 </menu>
