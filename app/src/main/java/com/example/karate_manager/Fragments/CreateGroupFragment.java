@@ -1,6 +1,7 @@
 package com.example.karate_manager.Fragments;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,8 +24,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.karate_manager.MainActivity;
-import com.example.karate_manager.Models.Group;
-import com.example.karate_manager.Models.UserModel.User;
+import com.example.karate_manager.Models.GroupModel.Group;
 import com.example.karate_manager.Models.UserModel.UserResponse;
 import com.example.karate_manager.Network.APIService;
 import com.example.karate_manager.Network.ApiUtils;
@@ -147,8 +147,8 @@ public class CreateGroupFragment extends Fragment {
         String api_token = Storage.getToken(getContext());
         dialogLoading.show();
         dialogLoading.setCancelable(false);
+        Group group = new Group(name,budget,switch_genre,id_user,pass,points);
 
-        Group group = new Group(id_user ,name, pass, budget, switch_genre, points);
         APIService.createGroup(group, api_token).enqueue(new Callback<Group>() {
             @Override
             public void onResponse(Call<Group> call, Response<Group> response) {
@@ -157,10 +157,8 @@ public class CreateGroupFragment extends Fragment {
 
                     (Toast.makeText(getContext(), "Group created", Toast.LENGTH_LONG)).show();
 
-                    MainActivity mainActivity = (MainActivity) getActivity();
-
-
-                    mainActivity.changeSecreen(R.id.nav_profile);
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    startActivity(intent);
                 }else{
                     (Toast.makeText(getContext(), "There was an error. Maybe the group already registered.", Toast.LENGTH_LONG)).show();
                 }

@@ -23,11 +23,15 @@ import android.view.MenuItem;
 import com.example.karate_manager.Fragments.CreateGroupFragment;
 import com.example.karate_manager.Fragments.JoinGroupFragment;
 import com.example.karate_manager.Fragments.ProfileFragment;
+import com.example.karate_manager.Models.GroupModel.GroupsResponse;
 import com.example.karate_manager.Models.UserModel.UserResponse;
 import com.example.karate_manager.Network.APIService;
 import com.example.karate_manager.Network.ApiUtils;
 import com.example.karate_manager.Utils.Storage;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.ArrayList;
+
 import static com.example.karate_manager.Utils.PreferencesUtility.*;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -37,6 +41,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private APIService APIService;
     UserResponse user;
+    GroupsResponse groups;
+    int groupSelected;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,35 +65,57 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
        String api_token = Storage.getToken(getApplicationContext());
 
+
+       //METODO PARA RECOGER LOS DATOS DEL USUARIO Y PODER UTILIZARLOS
         getUser(api_token, new GetUserCallback() {
             @Override
             public void onSuccess(UserResponse userResponse) {
                 user = userResponse;
+
+                getAllGroupsByUser(String.valueOf(user.getUser().getId()), new GetAllGroupsByUserCallback() {
+                    @Override
+                    public void onSuccess(GroupsResponse groupsResponse) {
+                        groups = groupsResponse;
+
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
             }
             @Override
             public void onError() {
             }
         });
 
-        final Menu menu = navigationView.getMenu();
-        menu.add(R.id.dinamyc_group_menu, Menu.NONE,0, "My groups");
-        for (int i = 1; i<= 2; i++){
 
-            menu.add(R.id.dinamyc_group_menu, Menu.NONE,0, "Karatekas").setIcon(R.drawable.logo_karate_manager);
-        }
-
+        Log.d("Valor del grupo en me", String.valueOf(groupSelected));
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int screen =  menuItem.getItemId();
         changeSecreen(screen);
+        for (int i = 0; i < groups.getGroupByParticipant().size() ; i++) {
+            if(menuItem.getItemId() == groups.getGroupByParticipant().get(i).getId()){
+                Log.d("MenuItem  clicked----", String.valueOf(groups.getGroupByParticipant().get(i).getId()));
+                groupSelected = groups.getGroupByParticipant().get(i).getId();
+            }
+        }
+
+        Log.d("Id del user", String.valueOf(user.getUser().getId()));
         return true;
     }
 
     public void changeSecreen(int screen){
-
+        Intent intent;
         switch (screen) {
+            case R.id.nav_home:
+                intent = new Intent(this, MainActivity.class );
+                startActivity(intent);
+                break;
             case R.id.nav_profile:
                 ProfileFragment profileFragment = new ProfileFragment();
                 addFragment(profileFragment);
@@ -105,12 +135,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_log_out:
                 Storage.removeToken(getApplicationContext(),TOKEN);
                 Storage.setLoggedIn(getApplicationContext(), false);
-                Intent intent = new Intent(this, LoginActivity.class);
+                intent = new Intent(this, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 break;
 
         }
+
+
     }
 
     public void addFragment(Fragment fragment) {
@@ -144,9 +176,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-
-
-
     }
     //Interface para que se ejecute de forma asincrona y podamos rescatar el User para poder utilizarlo en todo el programa
     public interface GetUserCallback{
@@ -155,6 +184,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+
+    public void getAllGroupsByUser(String id_user,  final GetAllGroupsByUserCallback callback){
+
+
+        Call<GroupsResponse> call = APIService.getGroupsByUser(id_user);
+        call.enqueue(new Callback<GroupsResponse>() {
+            @Override
+            public void onResponse(Call<GroupsResponse> call, Response<GroupsResponse> response) {
+                if(response.isSuccessful()) {
+                    callback.onSuccess(response.body());
+                    if(response.body().getGroupByParticipant().size() == 0){
+                        Log.d("Your arent in any group", String.valueOf( response.body().getGroupByParticipant().size()));
+                    }else{
+                        final Menu menu = navigationView.getMenu();
+
+                        int groups = response.body().getGroupByParticipant().size();
+
+                        for (int i = 0; i < groups; i++) {
+                            int idItem = response.body().getGroupByParticipant().get(i).getId();
+                            menu.add(R.id.dynamic_group_menu, idItem,1, response.body().getGroupByParticipant().get(i).getName_group()).setIcon(R.drawable.logo_karate_manager);
+                        }
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GroupsResponse> call, Throwable t) {
+
+            }
+        });
+
+    }
+    public interface GetAllGroupsByUserCallback{
+        void onSuccess(GroupsResponse groupsResponse);
+        void onError();
+    }
 
     public void sendUserToCreateGroup(UserResponse userResponse, CreateGroupFragment fragment){
         fragment.recievedUser(userResponse);
@@ -166,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    
+
 
 
 }

@@ -26,7 +26,7 @@ import com.example.karate_manager.Network.ApiUtils;
 import com.example.karate_manager.R;
 import com.example.karate_manager.Utils.Storage;
 
-
+import android.content.Intent;
 public class JoinGroupFragment extends Fragment {
     Button btn_join_group;
     EditText password_group, name_group;
@@ -40,7 +40,7 @@ public class JoinGroupFragment extends Fragment {
         name_group = (EditText) RootView.findViewById(R.id.name_group);
         btn_join_group = (Button)   RootView.findViewById(R.id.btn_join_group);
         APIService = ApiUtils.getAPIService();
-        final String userId = String.valueOf(user.getUser().getId());
+
 
         btn_join_group.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,7 +48,7 @@ public class JoinGroupFragment extends Fragment {
                 String nameGroup = name_group.getText().toString();
                 String passGroup = password_group.getText().toString();
 
-
+                String userId = String.valueOf(user.getUser().getId());
                 joinGroupPost(passGroup,nameGroup,userId);
             }
         });
@@ -68,13 +68,12 @@ public class JoinGroupFragment extends Fragment {
                 if(response.isSuccessful()) {
 
 
-                    Log.d("JOIN GROUP", response.body().getParticipant().getId());
+              //     Log.d("JOIN GROUP", response.body().getParticipant().getId());
                     (Toast.makeText(getContext(), "Group created", Toast.LENGTH_LONG)).show();
 
-                    MainActivity mainActivity = (MainActivity) getActivity();
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    startActivity(intent);
 
-
-                    mainActivity.changeSecreen(R.id.nav_profile);
                 }else{
                     (Toast.makeText(getContext(), "There was an error. Maybe the participant already registered in this group.", Toast.LENGTH_LONG)).show();
                 }

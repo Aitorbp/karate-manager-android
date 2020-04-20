@@ -4,29 +4,37 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
+    <group
+        android:checkableBehavior="single"
+        android:id="@+id/group_menu"
+        android:orderInCategory="0">
+
+    </group>
 
     <group
         android:checkableBehavior="single"
-        android:id="@+id/dinamyc_group_menu"
-        android:menuCategory="system">
-
+        android:id="@+id/dynamic_group_menu"
+        android:orderInCategory="1">
 
     </group>
 
     <group android:checkableBehavior="single"
         >
-
+        <item android:id="@+id/nav_home"
+            android:orderInCategory="2"
+            android:title="Home"
+            />
         <item android:id="@+id/nav_profile"
-            android:orderInCategory="1"
+            android:orderInCategory="2"
             android:title="Profile"
             />
 
         <item android:id="@+id/nav_join_group"
             android:title="Join a group"
-            android:orderInCategory="1"/>
+            android:orderInCategory="2"/>
 
         <item android:id="@+id/nav_create_group"
-            android:orderInCategory="1"
+            android:orderInCategory="2"
             android:title="Create a group"/>
 
 

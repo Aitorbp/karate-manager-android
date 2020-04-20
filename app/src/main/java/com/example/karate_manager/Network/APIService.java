@@ -1,9 +1,9 @@
 package com.example.karate_manager.Network;
 
-import com.example.karate_manager.Models.Group;
+import com.example.karate_manager.Models.GroupModel.Group;
+import com.example.karate_manager.Models.GroupModel.GroupsResponse;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantResponse;
 import com.example.karate_manager.Models.UserModel.UserResponse;
-import com.example.karate_manager.Models.ParticipantModel.Participant;
 import com.example.karate_manager.Models.UserModel.User;
 
 import retrofit2.Call;
@@ -12,6 +12,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface APIService {
@@ -43,6 +44,9 @@ public interface APIService {
   //GROUP ENDPOINTS
     @POST("group")
     Call<Group> createGroup(@Body Group group , @Query("api_token") String authToken);
+
+  @GET("participant/get/groupsByParticipant/{id_user}")
+  Call<GroupsResponse> getGroupsByUser(@Path("id_user") String id_user);
 
   //PARTICIPANT ENDPOINTS
   @FormUrlEncoded
