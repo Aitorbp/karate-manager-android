@@ -20,14 +20,19 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.karate_manager.Fragments.CalendaryFragment;
 import com.example.karate_manager.Fragments.CreateGroupFragment;
 import com.example.karate_manager.Fragments.JoinGroupFragment;
+import com.example.karate_manager.Fragments.MarketFragment;
+import com.example.karate_manager.Fragments.MyTeamFragment;
 import com.example.karate_manager.Fragments.ProfileFragment;
+import com.example.karate_manager.Fragments.ScoringFragment;
 import com.example.karate_manager.Models.GroupModel.GroupsResponse;
 import com.example.karate_manager.Models.UserModel.UserResponse;
 import com.example.karate_manager.Network.APIService;
 import com.example.karate_manager.Network.ApiUtils;
 import com.example.karate_manager.Utils.Storage;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -38,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     Toolbar toolbar;
     NavigationView navigationView;
-
+    BottomNavigationView navigationViewHorizontal;
     private APIService APIService;
     UserResponse user;
     GroupsResponse groups;
@@ -54,8 +59,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-
-
+        navigationViewHorizontal = findViewById(R.id.hor_menu);
+navigationViewHorizontal.setOnNavigationItemSelectedListener((BottomNavigationView.OnNavigationItemSelectedListener) horListener);
         navigationView.setNavigationItemSelectedListener(this);
         APIService = ApiUtils.getAPIService();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
@@ -94,17 +99,66 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.d("Valor del grupo en me", String.valueOf(groupSelected));
     }
 
+
+    //Accediendo al menu horizontal
+    private BottomNavigationView.OnNavigationItemSelectedListener horListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+            //Validar si groupSelected es igual a cero, poner el primer grupo
+            //Mejora, guardar el grupo en shavePreference para que te guarde siempre el mismo grupo al arrancar la applicación
+            if(groupSelected == 0){
+                groupSelected = groups.getGroupByParticipant().get(0).getId();
+            }
+
+            switch (menuItem.getItemId()){
+                case R.id.hor_scoring:
+                    final ScoringFragment scoringFragment = new ScoringFragment();
+                    addFragment(scoringFragment);
+                    sendUserGroupToScoring(user,groupSelected,scoringFragment);
+                    break;
+
+                case R.id.hor_market:
+                    final MarketFragment marketFragment = new MarketFragment();
+                    addFragment(marketFragment);
+                    sendUserGroupToMarket(user,groupSelected,marketFragment);
+                    break;
+                case R.id.hor_myteam:
+                    final MyTeamFragment myTeamFragment = new MyTeamFragment();
+                    addFragment(myTeamFragment);
+
+                    sendUserGroupToMyTeam(user,groupSelected,myTeamFragment);
+                    break;
+
+                case R.id.hor_calendary:
+                    Log.d("aeaeaeaeea","wdwwdwdwd");
+                    final CalendaryFragment calendaryFragment = new CalendaryFragment();
+                    addFragment(calendaryFragment);
+                    break;
+            }
+            return true;
+        }
+    };
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int screen =  menuItem.getItemId();
-        changeSecreen(screen);
+
+
         for (int i = 0; i < groups.getGroupByParticipant().size() ; i++) {
             if(menuItem.getItemId() == groups.getGroupByParticipant().get(i).getId()){
                 Log.d("MenuItem  clicked----", String.valueOf(groups.getGroupByParticipant().get(i).getId()));
+
+                //Recogiendo el id del grupo para enviarlo al menu horizontal
                 groupSelected = groups.getGroupByParticipant().get(i).getId();
+
+                //Ir a pantalla Scoring
+                final ScoringFragment scoringFragment = new ScoringFragment();
+                addFragment(scoringFragment);
+                sendUserGroupToScoring(user,groupSelected,scoringFragment);
             }
         }
-
+        changeSecreen(screen);
         Log.d("Id del user", String.valueOf(user.getUser().getId()));
         return true;
     }
@@ -139,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 break;
+
 
         }
 
@@ -233,6 +288,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    public void sendUserGroupToScoring(UserResponse userResponse, int groupSelected, ScoringFragment fragment){
+        fragment.recievedUserGroup(userResponse, groupSelected);
+
+    }
+
+    public void sendUserGroupToMarket(UserResponse userResponse, int groupSelected, MarketFragment fragment){
+        fragment.recievedUserGroup(userResponse, groupSelected);
+
+    }
+    public void sendUserGroupToMyTeam(UserResponse userResponse, int groupSelected, MyTeamFragment fragment){
+        fragment.recievedUserGroup(userResponse, groupSelected);
+
+    }
 
 
 

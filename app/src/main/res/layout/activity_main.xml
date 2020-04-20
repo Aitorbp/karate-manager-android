@@ -26,12 +26,25 @@
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorGrey"/>
+            android:background="@color/colorGrey">
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:itemIconTint="@color/colorButtonBlack"
+                app:itemIconSize="25dp"
+                app:itemTextColor="@color/colorButtonBlack"
+                android:id="@+id/hor_menu"
+                app:menu="@menu/horizontal_menu"
+                android:background="@color/colorAlmostWhite"
+                />
+        </FrameLayout>
 
 
     </LinearLayout>
     <com.google.android.material.navigation.NavigationView
         app:itemTextColor="@color/colorButtonBlack"
+        app:itemIconTint="@color/colorButtonBlack"
         android:contextClickable="true"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

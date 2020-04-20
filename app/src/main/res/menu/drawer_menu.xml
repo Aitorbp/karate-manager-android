@@ -23,18 +23,22 @@
         <item android:id="@+id/nav_home"
             android:orderInCategory="2"
             android:title="Home"
+            android:icon="@drawable/home"
             />
         <item android:id="@+id/nav_profile"
             android:orderInCategory="2"
             android:title="Profile"
+            android:icon="@drawable/profile"
             />
 
         <item android:id="@+id/nav_join_group"
             android:title="Join a group"
+            android:icon="@drawable/join"
             android:orderInCategory="2"/>
 
         <item android:id="@+id/nav_create_group"
             android:orderInCategory="2"
+            android:icon="@drawable/add"
             android:title="Create a group"/>
 
 
@@ -44,6 +48,7 @@
     <group android:checkableBehavior="single">
         <item android:id="@+id/nav_log_out"
             android:orderInCategory="2"
+            android:icon="@drawable/logout"
             android:title="Log out"/>
     </group>
 </menu>

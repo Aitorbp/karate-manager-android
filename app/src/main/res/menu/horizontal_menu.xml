@@ -1,4 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view"
+    >
+
+    <group android:checkableBehavior="single"
+        >
+
+        <item android:id="@+id/hor_scoring"
+            android:icon="@drawable/scoring"
+            android:title="Scoring"
+            />
+
+        <item android:id="@+id/hor_market"
+            android:title="Market"
+            android:icon="@drawable/transfer"
+            />
+
+        <item android:id="@+id/hor_myteam"
+android:icon="@drawable/team"
+            android:title="My Team"
+           />
+
+        <item android:id="@+id/hor_calendary"
+android:icon="@drawable/calendar"
+            android:title="Calendary"
+            />
+
+    </group>
+
 
 </menu>
