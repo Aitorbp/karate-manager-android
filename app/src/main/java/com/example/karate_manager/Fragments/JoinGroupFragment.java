@@ -72,8 +72,13 @@ public class JoinGroupFragment extends Fragment {
 
                     (Toast.makeText(getContext(), "Group created", Toast.LENGTH_LONG)).show();
 
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    Intent intent = new Intent(getActivity(), ScoringFragment.class);
                     startActivity(intent);
+
+//                   ScoringFragment scoringFragment = new ScoringFragment();
+//                    ((MainActivity)getActivity()).addFragment(scoringFragment);
+//                    MainActivity mainActivity = null;
+//                    mainActivity.sendUserGroupToScoring(user, (int) response.body().getParticipantGroup().getId_group(),scoringFragment);
 
                 }else{
                     (Toast.makeText(getContext(), "There was an error. Maybe the participant already registered in this group.", Toast.LENGTH_LONG)).show();

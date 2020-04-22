@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.karate_manager.Fragments.CalendaryFragment;
 import com.example.karate_manager.Fragments.CreateGroupFragment;
@@ -107,8 +108,14 @@ navigationViewHorizontal.setOnNavigationItemSelectedListener((BottomNavigationVi
 
             //Validar si groupSelected es igual a cero, poner el primer grupo
             //Mejora, guardar el grupo en shavePreference para que te guarde siempre el mismo grupo al arrancar la applicación
-            if(groupSelected == 0){
-                groupSelected = groups.getGroupByParticipant().get(0).getId();
+            if(groupSelected == 0 ){
+                if(groups.getGroupByParticipant().size() == 0){ //Si el usuario no está en ningún grupo, indicarle que tiene que entrar en alguno
+                    (Toast.makeText(getApplicationContext(), "You have to join or create a good to start to play", Toast.LENGTH_LONG)).show();
+                }else{
+                    groupSelected = groups.getGroupByParticipant().get(0).getId();
+                }
+
+
             }
 
             switch (menuItem.getItemId()){

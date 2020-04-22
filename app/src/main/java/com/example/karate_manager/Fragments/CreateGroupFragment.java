@@ -159,6 +159,7 @@ public class CreateGroupFragment extends Fragment {
 
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
+
                 }else{
                     (Toast.makeText(getContext(), "There was an error. Maybe the group already registered.", Toast.LENGTH_LONG)).show();
                 }

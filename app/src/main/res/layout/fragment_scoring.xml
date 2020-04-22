@@ -6,9 +6,12 @@
     tools:context=".Fragments.ScoringFragment">
 
     <ListView
+        android:divider="@android:color/transparent"
+        android:dividerHeight="15dp"
         android:paddingTop="10dp"
         android:layout_marginTop="60dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/scoring_listview"></ListView>
 </FrameLayout>
+

@@ -33,7 +33,7 @@ public class ScoringFragment extends Fragment {
     private APIService APIService;
     UserResponse user = new UserResponse(200,null,null );
     ParticipantResponse participantResponse = new ParticipantResponse(200,null,null );
-  ParticipantGroup participants = new ParticipantGroup();
+//  ParticipantGroup participants = new ParticipantGroup();
 
 
     @Override

@@ -153,7 +153,7 @@ public class RegisterActivity extends AppCompatActivity {
                 dialogLoading.dismiss();
                 if(response.isSuccessful()) {
 
-                //    Log.d("RESPUESTA DEL MENSAJE", response.body().getUser().getEmail());
+                  Log.d("RESPUESTA DEL MENSAJE", response.body().getUser().getApitoken());
                     Storage.saveToken(getApplicationContext(),response.body().getUser().getApitoken());
                     storage.setLoggedIn(getApplicationContext(), true);
 
