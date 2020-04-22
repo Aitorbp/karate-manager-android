@@ -57,4 +57,7 @@ public interface APIService {
           @Field("id_user") String id_user,
           @Query("api_token") String authToken);
 
+
+  @GET("participant/getall/{id_group}")
+  Call<ParticipantResponse> getParticipantsByGroup(@Path("id_group") String id_group);
 }

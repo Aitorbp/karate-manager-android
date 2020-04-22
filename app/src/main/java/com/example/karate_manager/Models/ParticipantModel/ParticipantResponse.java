@@ -6,47 +6,26 @@ import com.example.karate_manager.Models.KaratekaModel.Karateka;
 import java.util.ArrayList;
 
 public class ParticipantResponse {
-    public float getCode() {
+
+    private int code;
+    private ParticipantGroup participantGroup;
+    private ArrayList<ParticipantGroup > participants = new ArrayList <> ();
+
+    public ParticipantResponse(int code, ParticipantGroup participantGroup, ArrayList<ParticipantGroup> participants) {
+        this.code = code;
+        this.participantGroup = participantGroup;
+        this.participants = participants;
+    }
+
+    public int getCode() {
         return code;
     }
 
-    public void setCode(float code) {
-        this.code = code;
+    public ParticipantGroup getParticipantGroup() {
+        return participantGroup;
     }
 
-    public Participant getParticipant() {
-        return participant;
+    public ArrayList<ParticipantGroup> getParticipants() {
+        return participants;
     }
-
-    public void setParticipant(Participant participant) {
-        this.participant = participant;
-    }
-
-    public ArrayList<Karateka> getKarateka() {
-        return karateka;
-    }
-
-    public void setKarateka(ArrayList<Karateka> karateka) {
-        this.karateka = karateka;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public ParticipantResponse(float code, Participant participant, ArrayList<Karateka> karateka, String msg) {
-        this.code = code;
-        this.participant = participant;
-        this.karateka = karateka;
-        this.msg = msg;
-    }
-
-    private float code;
-    private Participant participant;
-    private ArrayList<Karateka > karateka = new ArrayList <> ();
-    private String msg;
 }

@@ -68,7 +68,8 @@ public class JoinGroupFragment extends Fragment {
                 if(response.isSuccessful()) {
 
 
-              //     Log.d("JOIN GROUP", response.body().getParticipant().getId());
+                //   Log.d("JOIN GROUP", response.body().getParticipantGroup().getName());
+
                     (Toast.makeText(getContext(), "Group created", Toast.LENGTH_LONG)).show();
 
                     Intent intent = new Intent(getActivity(), MainActivity.class);
