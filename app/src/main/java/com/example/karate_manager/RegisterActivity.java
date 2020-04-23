@@ -157,6 +157,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Storage.saveToken(getApplicationContext(),response.body().getUser().getApitoken());
                     storage.setLoggedIn(getApplicationContext(), true);
 
+
                     (Toast.makeText(getApplicationContext(), "Welcome to PetIt", Toast.LENGTH_LONG)).show();
 
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class );

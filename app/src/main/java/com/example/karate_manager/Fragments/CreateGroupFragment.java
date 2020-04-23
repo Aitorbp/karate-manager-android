@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.karate_manager.MainActivity;
 import com.example.karate_manager.Models.GroupModel.Group;
+import com.example.karate_manager.Models.GroupModel.GroupResponse;
 import com.example.karate_manager.Models.UserModel.UserResponse;
 import com.example.karate_manager.Network.APIService;
 import com.example.karate_manager.Network.ApiUtils;
@@ -147,16 +148,16 @@ public class CreateGroupFragment extends Fragment {
         String api_token = Storage.getToken(getContext());
         dialogLoading.show();
         dialogLoading.setCancelable(false);
-        Group group = new Group(name,budget,switch_genre,id_user,pass,points);
+   //     Group group = new Group(name,budget,switch_genre,id_user,pass,points);
 
-        APIService.createGroup(group, api_token).enqueue(new Callback<Group>() {
+        APIService.createGroup(api_token,name,switch_genre,id_user,pass,String.valueOf(budget)).enqueue(new Callback<GroupResponse>() {
             @Override
-            public void onResponse(Call<Group> call, Response<Group> response) {
+            public void onResponse(Call<GroupResponse> call, Response<GroupResponse> response) {
                 dialogLoading.dismiss();
                 if(response.isSuccessful()) {
-                    Log.d("ID_GROUP in registerGr", String.valueOf(response.body().getId_user()));
+                    Log.d("ID_GROUP in registerGr", String.valueOf(response.body().getGroup().getId()));
                     (Toast.makeText(getContext(), "Group created", Toast.LENGTH_LONG)).show();
-                    Storage.saveGroupPrincipal(getActivity(), 69);
+                    Storage.saveGroupPrincipal(getActivity(), response.body().getGroup().getId());
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
 
@@ -166,7 +167,7 @@ public class CreateGroupFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<Group> call, Throwable t) {
+            public void onFailure(Call<GroupResponse> call, Throwable t) {
                 Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
 
                 dialogLoading.dismiss();

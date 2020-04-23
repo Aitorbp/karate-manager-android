@@ -123,6 +123,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.d("STORAGE click general", String.valueOf(id_group_storage));
         }
 
+        
+
 
     }
 

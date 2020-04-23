@@ -1,6 +1,7 @@
 package com.example.karate_manager.Network;
 
 import com.example.karate_manager.Models.GroupModel.Group;
+import com.example.karate_manager.Models.GroupModel.GroupResponse;
 import com.example.karate_manager.Models.GroupModel.GroupsResponse;
 import com.example.karate_manager.Models.JoinGroupResponse.JoinGroupResponse;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantResponse;
@@ -43,8 +44,15 @@ public interface APIService {
 
 
   //GROUP ENDPOINTS
+    @FormUrlEncoded
     @POST("group")
-    Call<Group> createGroup(@Body Group group , @Query("api_token") String authToken);
+    Call<GroupResponse> createGroup(@Query("api_token") String authToken,
+                                    @Field("name_group") String name_group,
+                                    @Field("gender") String gender,
+                                    @Field("id_user") String id_user,
+                                    @Field("password_group") String password_group,
+                                    @Field("budget") String budget
+                            );
 
   @GET("participant/get/groupsByParticipant/{id_user}")
   Call<GroupsResponse> getGroupsByUser(@Path("id_user") String id_user);
