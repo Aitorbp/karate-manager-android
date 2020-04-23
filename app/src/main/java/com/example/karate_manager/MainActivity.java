@@ -123,7 +123,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.d("STORAGE click general", String.valueOf(id_group_storage));
         }
 
-        
+        if(id_group_storage == 0){
+
+            Log.d("STORAGE click general", String.valueOf(id_group_storage));
+            final ScoringFragment scoringFragment = new ScoringFragment();
+            addFragment(scoringFragment);
+            sendUserGroupToScoring(user, groups.getGroupByParticipant().get(0).getId(),scoringFragment);
+
+        }
+
+
 
 
     }
@@ -143,14 +152,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 sendUserToJoinGroup(user,joinGroupFragment);
             }
 
+
             switch (menuItem.getItemId()){
                 case R.id.hor_scoring:
-                    final ScoringFragment scoringFragment = new ScoringFragment();
-                    addFragment(scoringFragment);
-                    Storage.getIdGroupPrincipal(getApplication());
-                    sendUserGroupToScoring(user,id_group_storage,scoringFragment);
-                    Log.d("STO click hori", String.valueOf(id_group_storage));
-                    Log.d("STO click hori", String.valueOf(groupSelected));
+
+                    if(id_group_storage == 0){
+
+                        Log.d("STORAGE click general", String.valueOf(id_group_storage));
+                        final ScoringFragment scoringFragment = new ScoringFragment();
+                        addFragment(scoringFragment);
+                        sendUserGroupToScoring(user, groups.getGroupByParticipant().get(0).getId(),scoringFragment);
+
+                    }else{
+                        final ScoringFragment scoringFragment = new ScoringFragment();
+                        addFragment(scoringFragment);
+                        Storage.getIdGroupPrincipal(getApplication());
+                        sendUserGroupToScoring(user,id_group_storage,scoringFragment);
+                        Log.d("STO click hori", String.valueOf(id_group_storage));
+                        Log.d("STO click hori", String.valueOf(groupSelected));
+                    }
+
+
+
+
                     break;
 
                 case R.id.hor_market:
