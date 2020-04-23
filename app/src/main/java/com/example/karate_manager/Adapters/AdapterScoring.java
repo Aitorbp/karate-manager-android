@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.karate_manager.Models.ParticipantModel.Participant;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantGroup;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantResponse;
 import com.example.karate_manager.Network.ApiUtils;

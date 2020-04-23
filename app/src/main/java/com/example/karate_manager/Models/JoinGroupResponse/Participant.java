@@ -1,22 +1,22 @@
-package com.example.karate_manager.Models.ParticipantModel;
+package com.example.karate_manager.Models.JoinGroupResponse;
 
 import com.google.gson.annotations.SerializedName;
 
 public class Participant {
     @SerializedName("id_user")
-    private float id_user;
+    private int id_user;
 
     @SerializedName("id_group")
-    private String email;
+    private int id_group;
 
     @SerializedName("admin_user_group")
     private String admin_user_group;
 
     @SerializedName("points")
-    private float points;
+    private int points;
 
     @SerializedName("own_budget")
-    private float own_budget;
+    private int own_budget;
 
     @SerializedName("updated_at")
     private String updated_at = null;
@@ -25,11 +25,11 @@ public class Participant {
     private String created_at;
 
     @SerializedName("id")
-    private String id;
+    private int id;
 
-    public Participant(float id_user, String email, String admin_user_group, float points, float own_budget, String updated_at, String created_at, String id) {
+    public Participant(int id_user, int id_group, String admin_user_group, int points, int own_budget, String updated_at, String created_at, int id) {
         this.id_user = id_user;
-        this.email = email;
+        this.id_group = id_group;
         this.admin_user_group = admin_user_group;
         this.points = points;
         this.own_budget = own_budget;
@@ -38,23 +38,23 @@ public class Participant {
         this.id = id;
     }
 
-    public void setId_user(float id_user) {
+    public void setId_user(int id_user) {
         this.id_user = id_user;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setId_group(int id_group) {
+        this.id_group = id_group;
     }
 
     public void setAdmin_user_group(String admin_user_group) {
         this.admin_user_group = admin_user_group;
     }
 
-    public void setPoints(float points) {
+    public void setPoints(int points) {
         this.points = points;
     }
 
-    public void setOwn_budget(float own_budget) {
+    public void setOwn_budget(int own_budget) {
         this.own_budget = own_budget;
     }
 
@@ -66,7 +66,7 @@ public class Participant {
         this.created_at = created_at;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -74,8 +74,8 @@ public class Participant {
         return id_user;
     }
 
-    public String getEmail() {
-        return email;
+    public int getId_group() {
+        return id_group;
     }
 
     public String getAdmin_user_group() {
@@ -98,7 +98,7 @@ public class Participant {
         return created_at;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 }

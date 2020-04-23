@@ -15,15 +15,11 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.karate_manager.Adapters.AdapterScoring;
-import com.example.karate_manager.Models.ParticipantModel.Participant;
-import com.example.karate_manager.Models.ParticipantModel.ParticipantGroup;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantResponse;
 import com.example.karate_manager.Models.UserModel.UserResponse;
 import com.example.karate_manager.Network.APIService;
 import com.example.karate_manager.Network.ApiUtils;
 import com.example.karate_manager.R;
-
-import java.util.ArrayList;
 
 
 public class ScoringFragment extends Fragment {
@@ -33,7 +29,6 @@ public class ScoringFragment extends Fragment {
     private APIService APIService;
     UserResponse user = new UserResponse(200,null,null );
     ParticipantResponse participantResponse = new ParticipantResponse(200,null,null );
-//  ParticipantGroup participants = new ParticipantGroup();
 
 
     @Override

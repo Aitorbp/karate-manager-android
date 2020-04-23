@@ -154,9 +154,9 @@ public class CreateGroupFragment extends Fragment {
             public void onResponse(Call<Group> call, Response<Group> response) {
                 dialogLoading.dismiss();
                 if(response.isSuccessful()) {
-
+                    Log.d("ID_GROUP in registerGr", String.valueOf(response.body().getId_user()));
                     (Toast.makeText(getContext(), "Group created", Toast.LENGTH_LONG)).show();
-
+                    Storage.saveGroupPrincipal(getActivity(), 69);
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
 

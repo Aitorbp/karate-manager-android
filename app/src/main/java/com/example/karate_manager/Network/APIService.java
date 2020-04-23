@@ -2,6 +2,7 @@ package com.example.karate_manager.Network;
 
 import com.example.karate_manager.Models.GroupModel.Group;
 import com.example.karate_manager.Models.GroupModel.GroupsResponse;
+import com.example.karate_manager.Models.JoinGroupResponse.JoinGroupResponse;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantResponse;
 import com.example.karate_manager.Models.UserModel.UserResponse;
 import com.example.karate_manager.Models.UserModel.User;
@@ -51,7 +52,7 @@ public interface APIService {
   //PARTICIPANT ENDPOINTS
   @FormUrlEncoded
   @POST("participant")
-  Call<ParticipantResponse> createParticipantInGroup(
+  Call<JoinGroupResponse> createParticipantInGroup(
           @Field("password_group") String password_group,
           @Field("name_group") String name_group,
           @Field("id_user") String id_user,

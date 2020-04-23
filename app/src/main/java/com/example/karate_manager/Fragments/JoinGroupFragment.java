@@ -1,7 +1,5 @@
 package com.example.karate_manager.Fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -18,7 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.karate_manager.MainActivity;
-import com.example.karate_manager.Models.ParticipantModel.Participant;
+import com.example.karate_manager.Models.JoinGroupResponse.JoinGroupResponse;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantResponse;
 import com.example.karate_manager.Models.UserModel.UserResponse;
 import com.example.karate_manager.Network.APIService;
@@ -61,24 +59,22 @@ public class JoinGroupFragment extends Fragment {
     private void joinGroupPost(String passGroup, String name, String id_user){
 
         String api_token = Storage.getToken(getContext());
-        APIService.createParticipantInGroup(passGroup, name, id_user, api_token).enqueue(new Callback<ParticipantResponse>() {
+        APIService.createParticipantInGroup(passGroup, name, id_user, api_token).enqueue(new Callback<JoinGroupResponse>() {
             @Override
-            public void onResponse(Call<ParticipantResponse> call, Response<ParticipantResponse> response) {
+            public void onResponse(Call<JoinGroupResponse> call, Response<JoinGroupResponse> response) {
 
                 if(response.isSuccessful()) {
 
 
-                //   Log.d("JOIN GROUP", response.body().getParticipantGroup().getName());
+                        Log.d("JOIN GROUP", String.valueOf(response.body().getParticipant().getId_user()));
 
-                    (Toast.makeText(getContext(), "Group created", Toast.LENGTH_LONG)).show();
 
-                    Intent intent = new Intent(getActivity(), ScoringFragment.class);
+
+                    (Toast.makeText(getContext(), "You have joined the group", Toast.LENGTH_LONG)).show();
+                    Storage.saveGroupPrincipal(getActivity(), (int) response.body().getParticipant().getId_group());
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
 
-//                   ScoringFragment scoringFragment = new ScoringFragment();
-//                    ((MainActivity)getActivity()).addFragment(scoringFragment);
-//                    MainActivity mainActivity = null;
-//                    mainActivity.sendUserGroupToScoring(user, (int) response.body().getParticipantGroup().getId_group(),scoringFragment);
 
                 }else{
                     (Toast.makeText(getContext(), "There was an error. Maybe the participant already registered in this group.", Toast.LENGTH_LONG)).show();
@@ -86,7 +82,7 @@ public class JoinGroupFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ParticipantResponse> call, Throwable t) {
+            public void onFailure(Call<JoinGroupResponse> call, Throwable t) {
                 (Toast.makeText(getContext(), "Participant already registered in this group.", Toast.LENGTH_LONG)).show();
             }
         });

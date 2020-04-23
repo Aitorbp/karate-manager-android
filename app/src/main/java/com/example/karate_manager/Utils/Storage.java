@@ -12,6 +12,25 @@ public class Storage {
             return PreferenceManager.getDefaultSharedPreferences(context);
         }
 
+        public static boolean saveGroupPrincipal(Context context, int id_group){
+            SharedPreferences.Editor editor = getPreferences(context).edit();
+            editor.putInt(ID_GROUP,id_group);
+            editor.apply();
+            return true;
+        }
+
+    public static int getIdGroupPrincipal(Context context){
+        SharedPreferences sharedPref = getPreferences(context);
+
+        int id_group = sharedPref.getInt(ID_GROUP, 0);
+
+        return id_group;
+    }
+    public static void removeIdGroupPrincipal(Context context, String key){
+        SharedPreferences.Editor editor = getPreferences(context).edit();
+        editor.remove(ID_GROUP).commit();
+    }
+
 
         public static boolean saveToken(Context context, String token){
             SharedPreferences.Editor editor = getPreferences(context).edit();

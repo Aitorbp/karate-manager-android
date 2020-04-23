@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     UserResponse user;
     GroupsResponse groups;
     int groupSelected;
-
+    int  id_group_storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         navigationViewHorizontal = findViewById(R.id.hor_menu);
-navigationViewHorizontal.setOnNavigationItemSelectedListener((BottomNavigationView.OnNavigationItemSelectedListener) horListener);
+        navigationViewHorizontal.setOnNavigationItemSelectedListener((BottomNavigationView.OnNavigationItemSelectedListener) horListener);
         navigationView.setNavigationItemSelectedListener(this);
         APIService = ApiUtils.getAPIService();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
@@ -70,8 +70,9 @@ navigationViewHorizontal.setOnNavigationItemSelectedListener((BottomNavigationVi
         toggle.syncState();
 
        String api_token = Storage.getToken(getApplicationContext());
+       id_group_storage = Storage.getIdGroupPrincipal(getApplicationContext());
 
-
+        Log.d("GET ID_GROUP STORAGE", String.valueOf(id_group_storage));
        //METODO PARA RECOGER LOS DATOS DEL USUARIO Y PODER UTILIZARLOS
         getUser(api_token, new GetUserCallback() {
             @Override
@@ -82,6 +83,8 @@ navigationViewHorizontal.setOnNavigationItemSelectedListener((BottomNavigationVi
                     @Override
                     public void onSuccess(GroupsResponse groupsResponse) {
                         groups = groupsResponse;
+
+                        validationIfThereArentGroup(groups, id_group_storage);
 
                     }
 
@@ -98,6 +101,29 @@ navigationViewHorizontal.setOnNavigationItemSelectedListener((BottomNavigationVi
 
 
         Log.d("Valor del grupo en me", String.valueOf(groupSelected));
+
+
+    }
+
+    private void validationIfThereArentGroup(GroupsResponse groups, int  id_group_storage ){
+
+        //Validar si groupSelected es igual a cero, poner el primer grupo
+        //Mejora, guardar el grupo en shavePreference para que te guarde siempre el mismo grupo al arrancar la applicación
+        if(groups == null || groups.getGroupByParticipant().size() == 0 || groups.getGroupByParticipant().isEmpty()){ //Si el usuario no está en ningún grupo, indicarle que tiene que entrar en alguno
+
+            (Toast.makeText(getApplicationContext(), "You have to join or create a good to start to play", Toast.LENGTH_LONG)).show();
+            JoinGroupFragment joinGroupFragment = new JoinGroupFragment();
+            addFragment(joinGroupFragment);
+            sendUserToJoinGroup(user,joinGroupFragment);
+        }else{
+
+            final ScoringFragment scoringFragment = new ScoringFragment();
+            addFragment(scoringFragment);
+            sendUserGroupToScoring(user,id_group_storage,scoringFragment);
+            Log.d("STORAGE click general", String.valueOf(id_group_storage));
+        }
+
+
     }
 
 
@@ -106,23 +132,23 @@ navigationViewHorizontal.setOnNavigationItemSelectedListener((BottomNavigationVi
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-            //Validar si groupSelected es igual a cero, poner el primer grupo
-            //Mejora, guardar el grupo en shavePreference para que te guarde siempre el mismo grupo al arrancar la applicación
-            if(groupSelected == 0 ){
-                if(groups.getGroupByParticipant().size() == 0){ //Si el usuario no está en ningún grupo, indicarle que tiene que entrar en alguno
-                    (Toast.makeText(getApplicationContext(), "You have to join or create a good to start to play", Toast.LENGTH_LONG)).show();
-                }else{
-                    groupSelected = groups.getGroupByParticipant().get(0).getId();
-                }
 
+            if(groups == null || groups.getGroupByParticipant().size() == 0 || groups.getGroupByParticipant().isEmpty()){ //Si el usuario no está en ningún grupo, indicarle que tiene que entrar en alguno
 
+                (Toast.makeText(getApplicationContext(), "You have to join or create a good to start to play", Toast.LENGTH_LONG)).show();
+                JoinGroupFragment joinGroupFragment = new JoinGroupFragment();
+                addFragment(joinGroupFragment);
+                sendUserToJoinGroup(user,joinGroupFragment);
             }
 
             switch (menuItem.getItemId()){
                 case R.id.hor_scoring:
                     final ScoringFragment scoringFragment = new ScoringFragment();
                     addFragment(scoringFragment);
-                    sendUserGroupToScoring(user,groupSelected,scoringFragment);
+                    Storage.getIdGroupPrincipal(getApplication());
+                    sendUserGroupToScoring(user,id_group_storage,scoringFragment);
+                    Log.d("STO click hori", String.valueOf(id_group_storage));
+                    Log.d("STO click hori", String.valueOf(groupSelected));
                     break;
 
                 case R.id.hor_market:
@@ -151,20 +177,30 @@ navigationViewHorizontal.setOnNavigationItemSelectedListener((BottomNavigationVi
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int screen =  menuItem.getItemId();
 
+        if(!(groups ==null)){
+            for (int i = 0; i < groups.getGroupByParticipant().size() ; i++) {
+                if(menuItem.getItemId() == groups.getGroupByParticipant().get(i).getId()){
+                    Log.d("MenuItem  clicked----", String.valueOf(groups.getGroupByParticipant().get(i).getId()));
 
-        for (int i = 0; i < groups.getGroupByParticipant().size() ; i++) {
-            if(menuItem.getItemId() == groups.getGroupByParticipant().get(i).getId()){
-                Log.d("MenuItem  clicked----", String.valueOf(groups.getGroupByParticipant().get(i).getId()));
+                    //Recogiendo el id del grupo para enviarlo al menu horizontal
+                    groupSelected = groups.getGroupByParticipant().get(i).getId();
 
-                //Recogiendo el id del grupo para enviarlo al menu horizontal
-                groupSelected = groups.getGroupByParticipant().get(i).getId();
+                    Log.d("STO click GRUP", String.valueOf(groupSelected));
 
-                //Ir a pantalla Scoring
-                final ScoringFragment scoringFragment = new ScoringFragment();
-                addFragment(scoringFragment);
-                sendUserGroupToScoring(user,groupSelected,scoringFragment);
+                    Storage.saveGroupPrincipal(getApplicationContext(),groupSelected);
+                    id_group_storage = groupSelected;
+
+                    Log.d("STO click GRUP", String.valueOf(id_group_storage));
+                    Log.d("STO click GRUP", String.valueOf(groupSelected));
+                    //Ir a pantalla Scoring
+                    final ScoringFragment scoringFragment = new ScoringFragment();
+                    addFragment(scoringFragment);
+                    sendUserGroupToScoring(user,groupSelected,scoringFragment);
+                }
             }
         }
+
+
         changeSecreen(screen);
         Log.d("Id del user", String.valueOf(user.getUser().getId()));
         return true;
@@ -195,6 +231,7 @@ navigationViewHorizontal.setOnNavigationItemSelectedListener((BottomNavigationVi
 
             case R.id.nav_log_out:
                 Storage.removeToken(getApplicationContext(),TOKEN);
+                Storage.removeIdGroupPrincipal(getApplicationContext(),ID_GROUP);
                 Storage.setLoggedIn(getApplicationContext(), false);
                 intent = new Intent(this, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -255,9 +292,15 @@ navigationViewHorizontal.setOnNavigationItemSelectedListener((BottomNavigationVi
             @Override
             public void onResponse(Call<GroupsResponse> call, Response<GroupsResponse> response) {
                 if(response.isSuccessful()) {
-                    callback.onSuccess(response.body());
+
                     if(response.body().getGroupByParticipant().size() == 0){
                         Log.d("Your arent in any group", String.valueOf( response.body().getGroupByParticipant().size()));
+
+                        (Toast.makeText(getApplicationContext(), "Your arent in any group", Toast.LENGTH_LONG)).show();
+                        JoinGroupFragment joinGroupFragment = new JoinGroupFragment();
+                        addFragment(joinGroupFragment);
+                        sendUserToJoinGroup(user,joinGroupFragment);
+
                     }else{
                         final Menu menu = navigationView.getMenu();
 
@@ -267,7 +310,7 @@ navigationViewHorizontal.setOnNavigationItemSelectedListener((BottomNavigationVi
                             int idItem = response.body().getGroupByParticipant().get(i).getId();
                             menu.add(R.id.dynamic_group_menu, idItem,1, response.body().getGroupByParticipant().get(i).getName_group()).setIcon(R.drawable.logo_karate_manager);
                         }
-
+                        callback.onSuccess(response.body());
                     }
 
                 }
