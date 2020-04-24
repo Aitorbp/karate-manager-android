@@ -4,6 +4,7 @@ import com.example.karate_manager.Models.GroupModel.Group;
 import com.example.karate_manager.Models.GroupModel.GroupResponse;
 import com.example.karate_manager.Models.GroupModel.GroupsResponse;
 import com.example.karate_manager.Models.JoinGroupResponse.JoinGroupResponse;
+import com.example.karate_manager.Models.KaratekaModel.MarketResponse;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantResponse;
 import com.example.karate_manager.Models.UserModel.UserResponse;
 import com.example.karate_manager.Models.UserModel.User;
@@ -69,4 +70,9 @@ public interface APIService {
 
   @GET("participant/getall/{id_group}")
   Call<ParticipantResponse> getParticipantsByGroup(@Path("id_group") String id_group);
+
+
+  //MARKET ENDPOINTS
+  @GET("market/show/karatekas/{id_group}")
+  Call<MarketResponse> getKaratekasInSaleByGroup(@Path("id_group") String id_group);
 }

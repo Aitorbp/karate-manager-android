@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -157,7 +158,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.hor_scoring:
 
                     if(id_group_storage == 0){
-
                         Log.d("STORAGE click general", String.valueOf(id_group_storage));
                         final ScoringFragment scoringFragment = new ScoringFragment();
                         addFragment(scoringFragment);
@@ -171,16 +171,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Log.d("STO click hori", String.valueOf(id_group_storage));
                         Log.d("STO click hori", String.valueOf(groupSelected));
                     }
-
-
-
-
                     break;
 
                 case R.id.hor_market:
-                    final MarketFragment marketFragment = new MarketFragment();
-                    addFragment(marketFragment);
-                    sendUserGroupToMarket(user,groupSelected,marketFragment);
+                    if(id_group_storage == 0){
+                        final MarketFragment marketFragment = new MarketFragment();
+                        addFragment(marketFragment);
+                        sendUserGroupToMarket(user,groups.getGroupByParticipant().get(0).getId(),marketFragment);
+                    }else{
+                        final MarketFragment marketFragment = new MarketFragment();
+                        addFragment(marketFragment);
+                        Storage.getIdGroupPrincipal(getApplication());
+                        sendUserGroupToMarket(user,id_group_storage,marketFragment);
+                        Log.d("STO click hori", String.valueOf(id_group_storage));
+                        Log.d("STO click hori", String.valueOf(groupSelected));
+                    }
+
                     break;
                 case R.id.hor_myteam:
                     final MyTeamFragment myTeamFragment = new MyTeamFragment();
@@ -198,6 +204,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return true;
         }
     };
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
