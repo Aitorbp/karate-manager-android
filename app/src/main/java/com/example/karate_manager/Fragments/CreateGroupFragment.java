@@ -2,15 +2,20 @@ package com.example.karate_manager.Fragments;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +24,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.karate_manager.MainActivity;
@@ -32,6 +39,12 @@ import com.example.karate_manager.Network.ApiUtils;
 import com.example.karate_manager.R;
 import com.example.karate_manager.Utils.Storage;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
+import static android.app.Activity.RESULT_OK;
+
 
 public class CreateGroupFragment extends Fragment {
 
@@ -41,8 +54,14 @@ public class CreateGroupFragment extends Fragment {
     private Switch switch_genre;
     boolean genre = false;
     Dialog dialogLoading;
+    Dialog dialogGalleryPhoto;
     private  APIService APIService;
 
+    final int CODIGO_PETICION_GALLERY = 1;
+    final int CODIGO_PETICION_CAMERA = 2;
+    Bitmap imageGallery, imageCamera, imageChoose, imageSend;
+    private CircleImageView group_image;
+    InputStream stream;
     UserResponse user = new UserResponse(200,null,null );
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -60,6 +79,10 @@ public class CreateGroupFragment extends Fragment {
                 R.array.budgets, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_budget.setAdapter(adapter);
+
+        group_image = (CircleImageView) RootView.findViewById(R.id.group_image);
+        dialogGalleryPhoto = new Dialog(getContext());
+
         String token = Storage.getToken(getContext());
 
         switch_genre.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -84,6 +107,13 @@ public class CreateGroupFragment extends Fragment {
                 String switch_genre = String.valueOf(genre);
 
                 checkInputsRegister(name, pass, budget, switch_genre);
+            }
+        });
+
+        group_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showMenuPopUpGalleryPhoto(view);
             }
         });
 
@@ -178,8 +208,105 @@ public class CreateGroupFragment extends Fragment {
 
 
     }
+    public void showMenuPopUpGalleryPhoto(View v) {
+        TextView textClose;
 
+        dialogGalleryPhoto.setContentView(R.layout.popup_choose_picture);
+        textClose = (TextView) dialogGalleryPhoto.findViewById(R.id.closePopUp);
+  
 
+        textClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogGalleryPhoto.dismiss();
+            }
+        });
+        dialogGalleryPhoto.show();
+        IntoToGallery();
+        IntoToCamera();
+    }
+
+    /***
+     * Boton para acceder a la galeria y coger una foto
+     */
+    public void IntoToGallery(){
+        Button gallery;
+
+        gallery =(Button) dialogGalleryPhoto.findViewById(R.id.gallery);
+
+        gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, CODIGO_PETICION_GALLERY);
+                dialogGalleryPhoto.dismiss();
+            }
+        });
+    }
+    /***
+     * Boton para acceder a la camara y coger una foto
+     */
+    public void IntoToCamera(){
+        Button camera;
+        camera = (Button) dialogGalleryPhoto.findViewById(R.id.camera);
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, CODIGO_PETICION_CAMERA);
+                dialogGalleryPhoto.dismiss();
+            }
+        });
+    }
+
+    /***
+     * Código para poner la foto en el imageview
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == CODIGO_PETICION_CAMERA && resultCode == RESULT_OK){
+            Bundle bundle = data.getExtras();
+            Bitmap image = (Bitmap) bundle.get("data");
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            imageCamera = BitmapFactory.decodeByteArray(byteArray, 0,
+                    byteArray.length);
+            group_image.setImageBitmap(imageCamera);
+            Log.d("iiiiii", String.valueOf(group_image));
+
+        }
+
+        if (requestCode == CODIGO_PETICION_GALLERY && resultCode == RESULT_OK) {
+            try {
+                Uri uri = data.getData();
+                stream = getActivity().getContentResolver().openInputStream(uri);
+                imageGallery = BitmapFactory.decodeStream(stream);
+                group_image.setImageBitmap(imageGallery);
+                Log.d("tttt", String.valueOf(group_image));
+
+            } catch (FileNotFoundException e) {
+                Toast.makeText(getActivity(),"Imagen no encontrada", Toast.LENGTH_SHORT);
+            }
+        }
+
+        imageSend = ChooseParameters(imageCamera, imageGallery, imageChoose);
+    }
+
+    /***
+     * Metodo pra que te elija la foto de la galeria o de la camara
+     */
+    public Bitmap ChooseParameters(Bitmap imageCamera, Bitmap imageGallery, Bitmap imageChoose){
+        if(imageCamera!= null && imageGallery ==null){
+            imageChoose = imageCamera;
+        }
+        if(imageCamera== null && imageGallery !=null){
+            imageChoose = imageGallery;
+        }
+
+        return imageChoose;
+    }
     public void recievedUser(UserResponse userResponse) {
         if(user!=null){
             user =userResponse;

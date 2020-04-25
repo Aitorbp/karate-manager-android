@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.CreateGroupFragment"
-    android:background="@color/colorWhite">
+    android:background="@color/colorWhite"
+    android:layout_marginTop="60dp">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -23,14 +25,13 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
 
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/profile_image"
+                    android:id="@+id/group_image"
                     android:layout_width="230dp"
                     android:layout_height="230dp"
-                    android:src="@color/colorAlmostWhite"
-                    app:civ_border_width="14dp"
-                    app:civ_border_color="@color/colorButtonBlack"
                     android:layout_gravity="center"
+                    android:src="@drawable/default_picture"
+                    app:civ_border_color="@color/colorButtonBlack"
+                    app:civ_border_width="14dp"
 
 
                     />

@@ -63,7 +63,7 @@ public class AdapterMarket extends ArrayAdapter {
 
         if(image!= null) {
             ImageView elementImage = convertView.findViewById(R.id.picture_karateka);
-            Picasso.get().load(apiUtils.BASE_URL_PICTURE + image).fit().into(elementImage);
+            Picasso.get().load(image).fit().into(elementImage);
         }
 
 
