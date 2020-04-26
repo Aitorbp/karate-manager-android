@@ -6,15 +6,20 @@ import com.example.karate_manager.Models.GroupModel.GroupsResponse;
 import com.example.karate_manager.Models.JoinGroupResponse.JoinGroupResponse;
 import com.example.karate_manager.Models.KaratekaModel.MarketResponse;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantResponse;
+import com.example.karate_manager.Models.Prueba;
 import com.example.karate_manager.Models.UserModel.UserResponse;
 import com.example.karate_manager.Models.UserModel.User;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -44,6 +49,12 @@ public interface APIService {
   Call<User> recoverPass(@Body User user);
 
 
+  @Multipart
+  @POST("upload/image")
+  Call<Prueba> uploadImage(
+          @Part MultipartBody.Part part,
+          @Part ("id") int id_group
+          );
   //GROUP ENDPOINTS
     @FormUrlEncoded
     @POST("group")

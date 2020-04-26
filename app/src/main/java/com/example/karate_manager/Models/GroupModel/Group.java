@@ -33,6 +33,10 @@ public class Group {
         return points;
     }
 
+    public String getPicture_group() {
+        return picture_group;
+    }
+
     @SerializedName("id")
     private int id;
     @SerializedName("name_group")
@@ -45,14 +49,17 @@ public class Group {
     private String id_user;
     @SerializedName("password_group")
     private String password_group;
+    @SerializedName("picture_group")
+    private String picture_group;
 
-    public Group(String name_group, int budget, String gender, String id_user, String password_group, int points) {
+    public Group(String name_group, int budget, String gender, String id_user, String password_group, int points, String picture_group) {
         this.name_group = name_group;
         this.budget = budget;
         this.gender = gender;
         this.id_user = id_user;
         this.password_group = password_group;
         this.points = points;
+        this.picture_group = picture_group;
     }
 
     @SerializedName("points")

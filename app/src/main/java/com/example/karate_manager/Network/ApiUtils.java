@@ -12,7 +12,7 @@ public class ApiUtils {
 
 
     public static final String BASE_URL_PICTURE = "http://192.168.56.1" +
-            "/trabajos/petit-api/storage/app/";
+            "/trabajos/api-manager-karate/karate-manager-api-laravel/storage/app/";
 
 
 

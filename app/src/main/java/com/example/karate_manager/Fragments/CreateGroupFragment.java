@@ -1,20 +1,30 @@
 package com.example.karate_manager.Fragments;
 
+import android.Manifest;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,15 +34,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.karate_manager.MainActivity;
-import com.example.karate_manager.Models.GroupModel.Group;
 import com.example.karate_manager.Models.GroupModel.GroupResponse;
+import com.example.karate_manager.Models.Prueba;
 import com.example.karate_manager.Models.UserModel.UserResponse;
 import com.example.karate_manager.Network.APIService;
 import com.example.karate_manager.Network.ApiUtils;
@@ -40,10 +49,16 @@ import com.example.karate_manager.R;
 import com.example.karate_manager.Utils.Storage;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
+import static android.os.Environment.getExternalStoragePublicDirectory;
+import static android.os.Environment.getExternalStorageState;
 
 
 public class CreateGroupFragment extends Fragment {
@@ -59,10 +74,18 @@ public class CreateGroupFragment extends Fragment {
 
     final int CODIGO_PETICION_GALLERY = 1;
     final int CODIGO_PETICION_CAMERA = 2;
-    Bitmap imageGallery, imageCamera, imageChoose, imageSend;
-    private CircleImageView group_image;
+    Bitmap imageGallery, imageCamera;
+
+
+    MultipartBody.Part imageToServe;
+    String pathToFileCamera, pathToFileGallery, pathChoose, pathSend;
     InputStream stream;
+
+    private CircleImageView group_image;
+
     UserResponse user = new UserResponse(200,null,null );
+
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View RootView = inflater.inflate(R.layout.fragment_create_group, container, false);
@@ -117,6 +140,11 @@ public class CreateGroupFragment extends Fragment {
             }
         });
 
+
+        if(Build.VERSION.SDK_INT >= 23){
+            requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
+        }
+
         return RootView;
     }
 
@@ -139,12 +167,21 @@ public class CreateGroupFragment extends Fragment {
 
         }
 
-        if ( checkPass(pass)==true &&checkUsername(name)==true) {
+        if ( checkPass(pass)==true &&checkUsername(name)==true && checkImagen(pathSend) == true) {
 
-
+ //
             registerGroup(name, pass, budget, switch_genre, 0);
+
         }
 
+    }
+
+    private boolean checkImagen(String pathSend){
+      if(pathSend ==null){
+          (Toast.makeText(getContext(), "Imagen group must be uploaded to create a group ", Toast.LENGTH_LONG)).show();
+          return false;
+      }
+      return true;
     }
 
 
@@ -185,8 +222,10 @@ public class CreateGroupFragment extends Fragment {
             public void onResponse(Call<GroupResponse> call, Response<GroupResponse> response) {
                 dialogLoading.dismiss();
                 if(response.isSuccessful()) {
+                    imageToServe = uploadFile(pathSend,response.body().getGroup().getId());
                     Log.d("ID_GROUP in registerGr", String.valueOf(response.body().getGroup().getId()));
                     (Toast.makeText(getContext(), "Group created", Toast.LENGTH_LONG)).show();
+
                     Storage.saveGroupPrincipal(getActivity(), response.body().getGroup().getId());
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
@@ -213,7 +252,7 @@ public class CreateGroupFragment extends Fragment {
 
         dialogGalleryPhoto.setContentView(R.layout.popup_choose_picture);
         textClose = (TextView) dialogGalleryPhoto.findViewById(R.id.closePopUp);
-  
+
 
         textClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -222,14 +261,16 @@ public class CreateGroupFragment extends Fragment {
             }
         });
         dialogGalleryPhoto.show();
-        IntoToGallery();
-        IntoToCamera();
+        intoToGallery();
+        intoToCamera();
+
+
     }
 
     /***
      * Boton para acceder a la galeria y coger una foto
      */
-    public void IntoToGallery(){
+    public void intoToGallery(){
         Button gallery;
 
         gallery =(Button) dialogGalleryPhoto.findViewById(R.id.gallery);
@@ -244,69 +285,139 @@ public class CreateGroupFragment extends Fragment {
             }
         });
     }
-    /***
-     * Boton para acceder a la camara y coger una foto
-     */
-    public void IntoToCamera(){
+
+
+    private void intoToCamera(){
         Button camera;
         camera = (Button) dialogGalleryPhoto.findViewById(R.id.camera);
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, CODIGO_PETICION_CAMERA);
+                File photoFile = null;
+                photoFile = createPhotoFile();
+
+                if(photoFile != null){
+                    pathToFileCamera = photoFile.getAbsolutePath();
+
+                    Log.d("Path absolute pic", String.valueOf(pathToFileCamera));
+                    Uri photoURI = FileProvider.getUriForFile(getActivity(),"android.support.v4.content.FileProvider",photoFile);
+                    Log.d("URI absolute pic", String.valueOf(photoURI));
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    startActivityForResult(intent, CODIGO_PETICION_CAMERA);
+                }
                 dialogGalleryPhoto.dismiss();
             }
         });
     }
+    private File createPhotoFile(){
+        String name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File storageDir = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        Log.d("Storage Directory pic", String.valueOf(storageDir));
+        File image = null;
+        try {
+           image = File.createTempFile(name, ".jpg", storageDir);
+           Log.d("Path imagen", String.valueOf(image));
+        } catch (IOException e) {
+                e.printStackTrace();
+        }
+        return image;
+        }
+
 
     /***
      * Código para poner la foto en el imageview
      */
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == CODIGO_PETICION_CAMERA && resultCode == RESULT_OK){
-            Bundle bundle = data.getExtras();
-            Bitmap image = (Bitmap) bundle.get("data");
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] byteArray = stream.toByteArray();
-            imageCamera = BitmapFactory.decodeByteArray(byteArray, 0,
-                    byteArray.length);
-            group_image.setImageBitmap(imageCamera);
-            Log.d("iiiiii", String.valueOf(group_image));
 
+
+        if (requestCode == CODIGO_PETICION_CAMERA && resultCode == RESULT_OK) {
+            imageCamera = BitmapFactory.decodeFile(pathToFileCamera);
+            group_image.setImageBitmap(imageCamera);
         }
 
         if (requestCode == CODIGO_PETICION_GALLERY && resultCode == RESULT_OK) {
             try {
                 Uri uri = data.getData();
+                pathToFileGallery = getFileNameByUri(getActivity(),uri);
                 stream = getActivity().getContentResolver().openInputStream(uri);
                 imageGallery = BitmapFactory.decodeStream(stream);
                 group_image.setImageBitmap(imageGallery);
-                Log.d("tttt", String.valueOf(group_image));
+
+                Log.d("tttt", String.valueOf(uri.getPath()));
 
             } catch (FileNotFoundException e) {
-                Toast.makeText(getActivity(),"Imagen no encontrada", Toast.LENGTH_SHORT);
+                Toast.makeText(getActivity(), "Imagen no encontrada", Toast.LENGTH_SHORT);
             }
         }
 
-        imageSend = ChooseParameters(imageCamera, imageGallery, imageChoose);
+        pathSend = ChooseParameters(pathToFileCamera, pathToFileGallery, pathChoose);
     }
 
     /***
      * Metodo pra que te elija la foto de la galeria o de la camara
      */
-    public Bitmap ChooseParameters(Bitmap imageCamera, Bitmap imageGallery, Bitmap imageChoose){
-        if(imageCamera!= null && imageGallery ==null){
-            imageChoose = imageCamera;
+    public String ChooseParameters(String pathToFileCamera, String pathToFileGallery, String pathChoose){
+        if(pathToFileCamera!= null && pathToFileGallery ==null){
+            pathChoose = pathToFileCamera;
         }
-        if(imageCamera== null && imageGallery !=null){
-            imageChoose = imageGallery;
+        if(pathToFileCamera== null && pathToFileGallery !=null){
+            pathChoose = pathToFileGallery;
         }
 
-        return imageChoose;
+        return pathChoose;
     }
+
+
+
+    public MultipartBody.Part uploadFile(String filePath, int id_group){
+        File file = new File(filePath);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("imagen/*"), file);
+        MultipartBody.Part part = MultipartBody.Part.createFormData("picture_group", file.getName(), requestBody); // vcogemos el nombre de la tabal que hacemos referencia
+
+        APIService.uploadImage(part, id_group).enqueue(new Callback<Prueba>() {
+            @Override
+            public void onResponse(Call<Prueba> call, Response<Prueba> response) {
+                Log.d("Imagen send to serve", "Imagen send to serve");
+            }
+
+            @Override
+            public void onFailure(Call<Prueba> call, Throwable t) {
+                Log.d("Fallo send image", "Fallo send image");
+            }
+        });
+        return  part;
+    }
+
+    //Metodo par acoger el path de la galería
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    public static String getFileNameByUri(Context context, Uri uri){
+        String fileName="unknown";//default fileName
+        Uri filePathUri = uri;
+        if (uri.getScheme().toString().compareTo("content")==0){
+            Cursor cursor =context.getContentResolver().query(uri,null, null, null, null);
+            if (cursor.moveToFirst()){
+                int column_index =
+                        cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+                filePathUri = Uri.parse(cursor.getString(column_index));
+                if(filePathUri == null){
+                    fileName = "xxx.png";//load a default Image from server
+                }else{
+                    fileName = filePathUri.getPath().toString();
+                }
+            }
+        }else
+        if (uri.getScheme().compareTo("file")==0){
+            fileName = filePathUri.getPath().toString();
+        }else{
+            fileName = fileName+"_"+filePathUri.getPath();
+        }
+        return fileName;
+        }
+
+
     public void recievedUser(UserResponse userResponse) {
         if(user!=null){
             user =userResponse;

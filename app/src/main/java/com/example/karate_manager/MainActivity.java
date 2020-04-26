@@ -36,6 +36,7 @@ import com.example.karate_manager.Network.ApiUtils;
 import com.example.karate_manager.Utils.Storage;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -341,6 +342,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         for (int i = 0; i < groups; i++) {
                             int idItem = response.body().getGroupByParticipant().get(i).getId();
+
+                          //  String pictureGroup = response.body().getGroupByParticipant().get(i).getPicture_group();
+                          //  Picasso.get().load(image).fit();
+
                             menu.add(R.id.dynamic_group_menu, idItem,1, response.body().getGroupByParticipant().get(i).getName_group()).setIcon(R.drawable.logo_karate_manager);
                         }
                         callback.onSuccess(response.body());
