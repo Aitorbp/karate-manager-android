@@ -69,6 +69,10 @@ public interface APIService {
   @GET("participant/get/groupsByParticipant/{id_user}")
   Call<GroupsResponse> getGroupsByUser(@Path("id_user") String id_user);
 
+
+  @GET("group/one/{id}")
+  Call<GroupResponse> getGroupByParticipant(@Path("id") int id);
+
   //PARTICIPANT ENDPOINTS
   @FormUrlEncoded
   @POST("participant")

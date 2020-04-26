@@ -15,11 +15,13 @@ import retrofit2.Response;
 
 import android.content.Intent;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.karate_manager.Fragments.CalendaryFragment;
@@ -343,10 +345,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         for (int i = 0; i < groups; i++) {
                             int idItem = response.body().getGroupByParticipant().get(i).getId();
 
-                          //  String pictureGroup = response.body().getGroupByParticipant().get(i).getPicture_group();
-                          //  Picasso.get().load(image).fit();
+                            String pictureGroup = response.body().getGroupByParticipant().get(i).getPicture_group();
 
-                            menu.add(R.id.dynamic_group_menu, idItem,1, response.body().getGroupByParticipant().get(i).getName_group()).setIcon(R.drawable.logo_karate_manager);
+                            menu.add(R.id.dynamic_group_menu, idItem,1, response.body().getGroupByParticipant().get(i).getName_group()).setIcon(R.drawable.belt);
                         }
                         callback.onSuccess(response.body());
                     }

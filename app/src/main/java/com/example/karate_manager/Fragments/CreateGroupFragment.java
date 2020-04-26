@@ -168,12 +168,8 @@ public class CreateGroupFragment extends Fragment {
         }
 
         if ( checkPass(pass)==true &&checkUsername(name)==true && checkImagen(pathSend) == true) {
-
- //
             registerGroup(name, pass, budget, switch_genre, 0);
-
         }
-
     }
 
     private boolean checkImagen(String pathSend){

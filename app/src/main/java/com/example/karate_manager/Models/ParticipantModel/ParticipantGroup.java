@@ -15,21 +15,21 @@ public class ParticipantGroup {
     public ParticipantGroup() {
     }
     @SerializedName("id")
-    private float id;
+    private int id;
     @SerializedName("own_budget")
-    private float own_budget;
+    private int own_budget;
 
     @SerializedName("points")
-    private float points;
+    private int points;
 
     @SerializedName("admin_user_group")
-    private float admin_user_group;
+    private int admin_user_group;
 
     @SerializedName("id_user")
-    private float id_user;
+    private int id_user;
 
     @SerializedName("id_group")
-    private float id_group;
+    private int id_group;
 
     @SerializedName("created_at")
     private String created_at;
@@ -49,27 +49,27 @@ public class ParticipantGroup {
 
     // Getter Methods
 
-    public float getId() {
+    public int getId() {
         return id;
     }
 
-    public float getOwn_budget() {
+    public int getOwn_budget() {
         return own_budget;
     }
 
-    public float getPoints() {
+    public int getPoints() {
         return points;
     }
 
-    public float getAdmin_user_group() {
+    public int getAdmin_user_group() {
         return admin_user_group;
     }
 
-    public float getId_user() {
+    public int getId_user() {
         return id_user;
     }
 
-    public float getId_group() {
+    public int getId_group() {
         return id_group;
     }
 
@@ -95,27 +95,27 @@ public class ParticipantGroup {
 
     // Setter Methods
 
-    public void setId( float id ) {
+    public void setId( int id ) {
         this.id = id;
     }
 
-    public void setOwn_budget( float own_budget ) {
+    public void setOwn_budget( int own_budget ) {
         this.own_budget = own_budget;
     }
 
-    public void setPoints( float points ) {
+    public void setPoints( int points ) {
         this.points = points;
     }
 
-    public void setAdmin_user_group( float admin_user_group ) {
+    public void setAdmin_user_group( int admin_user_group ) {
         this.admin_user_group = admin_user_group;
     }
 
-    public void setId_user( float id_user ) {
+    public void setId_user( int id_user ) {
         this.id_user = id_user;
     }
 
-    public void setId_group( float id_group ) {
+    public void setId_group( int id_group ) {
         this.id_group = id_group;
     }
 
