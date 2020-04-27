@@ -52,9 +52,16 @@ public interface APIService {
   @Multipart
   @POST("upload/image")
   Call<Prueba> uploadImage(
-          @Part MultipartBody.Part part,
-          @Part ("id") int id_group
+                  @Part MultipartBody.Part part,
+                  @Part ("id") int id_group
           );
+
+  @Multipart
+  @POST("upload/image/user")
+  Call<Prueba> uploadImageUser(
+          @Part MultipartBody.Part part,
+          @Part ("id") int id_user
+  );
   //GROUP ENDPOINTS
     @FormUrlEncoded
     @POST("group")

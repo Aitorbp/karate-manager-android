@@ -252,6 +252,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_profile:
                 ProfileFragment profileFragment = new ProfileFragment();
                 addFragment(profileFragment);
+                sendUserToProfile(user,profileFragment);
                 break;
             case R.id.nav_join_group:
                 JoinGroupFragment joinGroupFragment = new JoinGroupFragment();
@@ -388,6 +389,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     public void sendUserGroupToMyTeam(UserResponse userResponse, int groupSelected, MyTeamFragment fragment){
         fragment.recievedUserGroup(userResponse, groupSelected);
+
+    }
+
+    public void sendUserToProfile(UserResponse userResponse, ProfileFragment fragment){
+        fragment.recievedUser(userResponse);
 
     }
 
