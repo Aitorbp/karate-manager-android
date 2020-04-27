@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.karate_manager.Adapters.AdapterScoring;
 import com.example.karate_manager.Models.GroupModel.Group;
@@ -37,15 +38,18 @@ public class ScoringFragment extends Fragment {
     ParticipantResponse participantResponse = new ParticipantResponse(200,null,null );
     CircleImageView group_image_in_scoring;
     ApiUtils apiUtils;
+    TextView group_name, participant_name;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View RootView = inflater.inflate(R.layout.fragment_scoring, container, false);
         listViewScoring = (ListView) RootView.findViewById(R.id.scoring_listview);
         group_image_in_scoring = (CircleImageView) RootView.findViewById(R.id.group_image_in_scoring);
+        group_name = (TextView) RootView.findViewById(R.id.group_name);
+        participant_name = (TextView) RootView.findViewById(R.id.participant_name);
         APIService = ApiUtils.getAPIService();
 
-
+        String userName = user.getUser().getName().toString();
 
 
 
@@ -54,6 +58,9 @@ public class ScoringFragment extends Fragment {
         Log.d("User in Scoring", user.getUser().getName());
         Log.d("User in Scoring", String.valueOf(groupSelectedId));
         getAllParticipantByGroup(String.valueOf(groupSelectedId));
+
+        participant_name.setText(userName);
+
 
         return RootView;
     }
@@ -64,13 +71,15 @@ public class ScoringFragment extends Fragment {
         call.enqueue(new Callback<GroupResponse>() {
             @Override
             public void onResponse(Call<GroupResponse> call, Response<GroupResponse> response) {
-Log.d("getPicture group", String.valueOf(response.body().getGroup().getPicture_group()));
+
             String pathImageGroup =response.body().getGroup().getPicture_group();
+            String groupName =response.body().getGroup().getName_group();
             if(pathImageGroup ==null){
                 group_image_in_scoring.setImageResource(R.drawable.default_image);
             }else{
                 Picasso.get().load(apiUtils.BASE_URL_PICTURE + pathImageGroup).fit().into(group_image_in_scoring);
             }
+                group_name.setText(groupName);
 
             }
 

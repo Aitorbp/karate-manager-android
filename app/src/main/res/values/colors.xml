@@ -13,5 +13,7 @@
     <color name="colorOcre">#F2DFCE</color>
     <color name="colorWhiteTransparent">#80FFFFFF</color>
     <color name="colorBlueGrey">#586973</color>
+    <color name="colorBlueTransparent">#102C3740</color>
+    <color name="colorYellowWithTransparent">#50F2A35E</color>
 
 </resources>
