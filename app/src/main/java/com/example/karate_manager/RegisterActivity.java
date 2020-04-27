@@ -20,6 +20,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.karate_manager.Utils.PreferencesUtility.ID_GROUP;
+import static com.example.karate_manager.Utils.PreferencesUtility.TOKEN;
+
 public class RegisterActivity extends AppCompatActivity {
     EditText input_email, input_password, input_username, input_confirm_password ;
     Button btn_register;
@@ -90,6 +93,7 @@ public class RegisterActivity extends AppCompatActivity {
                 && checkPass(pass)==true
                 && confirmPassword(pass, confirmPass)==true
                 &&checkUsername(username)==true) {
+            Storage.removeToken(getApplicationContext(),TOKEN);
 
 
             registerPOST(pass, email, username);

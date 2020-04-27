@@ -141,6 +141,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    public void validationInHorizontal(){
+        Log.d("PRUEBA HOR", String.valueOf(id_group_storage));
+        if(groups == null || groups.getGroupByParticipant().size() == 0 || groups.getGroupByParticipant().isEmpty()){ //Si el usuario no está en ningún grupo, indicarle que tiene que entrar en alguno
+
+            (Toast.makeText(getApplicationContext(), "You have to join or create a good to start to play", Toast.LENGTH_LONG)).show();
+            JoinGroupFragment joinGroupFragment = new JoinGroupFragment();
+            addFragment(joinGroupFragment);
+            sendUserToJoinGroup(user,joinGroupFragment);
+        }else if(
+        // Si el id del usuario nos llega a 0 por que hemos hecho logout anteriormte pero tenemos grupos, ponemos el primer grupo de la lista
+        id_group_storage == 0 && groups.getGroupByParticipant().size() != 0 || groups.getGroupByParticipant().isEmpty()){
+            Log.d("STORAGE click general", String.valueOf(id_group_storage));
+            final ScoringFragment scoringFragment = new ScoringFragment();
+            addFragment(scoringFragment);
+            id_group_storage= groups.getGroupByParticipant().get(0).getId();
+            sendUserGroupToScoring(user, id_group_storage,scoringFragment);
+        }
+       else if(id_group_storage != 0 && groups.getGroupByParticipant().size() != 0|| !groups.getGroupByParticipant().isEmpty()){
+            final ScoringFragment scoringFragment = new ScoringFragment();
+            addFragment(scoringFragment);
+            Storage.getIdGroupPrincipal(getApplication());
+            sendUserGroupToScoring(user,id_group_storage,scoringFragment);
+            Log.d("STO click hori", String.valueOf(id_group_storage));
+            Log.d("STO click hori", String.valueOf(groupSelected));
+        }
+    }
+
 
     //Accediendo al menu horizontal
     private BottomNavigationView.OnNavigationItemSelectedListener horListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -148,39 +175,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
 
-            if(groups == null || groups.getGroupByParticipant().size() == 0 || groups.getGroupByParticipant().isEmpty()){ //Si el usuario no está en ningún grupo, indicarle que tiene que entrar en alguno
-
-                (Toast.makeText(getApplicationContext(), "You have to join or create a good to start to play", Toast.LENGTH_LONG)).show();
-                JoinGroupFragment joinGroupFragment = new JoinGroupFragment();
-                addFragment(joinGroupFragment);
-                sendUserToJoinGroup(user,joinGroupFragment);
-            }
 
 
             switch (menuItem.getItemId()){
                 case R.id.hor_scoring:
-
-                    if(id_group_storage == 0){
+                    validationInHorizontal();
+                   /* if(id_group_storage == 0){
                         Log.d("STORAGE click general", String.valueOf(id_group_storage));
-                        final ScoringFragment scoringFragment = new ScoringFragment();
-                        addFragment(scoringFragment);
-                        sendUserGroupToScoring(user, groups.getGroupByParticipant().get(0).getId(),scoringFragment);
+                        final JoinGroupFragment joinGroupFragment = new JoinGroupFragment();
+                        addFragment(joinGroupFragment);
+                        sendUserToJoinGroup(user,joinGroupFragment);
+                      //  sendUserGroupToScoring(user, groups.getGroupByParticipant().get(0).getId(),scoringFragment);
 
-                    }else{
-                        final ScoringFragment scoringFragment = new ScoringFragment();
+                    }else{*/
+         /*               final ScoringFragment scoringFragment = new ScoringFragment();
                         addFragment(scoringFragment);
                         Storage.getIdGroupPrincipal(getApplication());
                         sendUserGroupToScoring(user,id_group_storage,scoringFragment);
                         Log.d("STO click hori", String.valueOf(id_group_storage));
-                        Log.d("STO click hori", String.valueOf(groupSelected));
-                    }
+                        Log.d("STO click hori", String.valueOf(groupSelected));*/
+                //    }
                     break;
 
                 case R.id.hor_market:
                     if(id_group_storage == 0){
-                        final MarketFragment marketFragment = new MarketFragment();
-                        addFragment(marketFragment);
-                        sendUserGroupToMarket(user,groups.getGroupByParticipant().get(0).getId(),marketFragment);
+                        final JoinGroupFragment joinGroupFragment = new JoinGroupFragment();
+                        addFragment(joinGroupFragment);
+                        sendUserToJoinGroup(user,joinGroupFragment);
+                        (Toast.makeText(getApplicationContext(), "You have to join or create a good to start to play", Toast.LENGTH_LONG)).show();
+                        //   sendUserGroupToMarket(user,groups.getGroupByParticipant().get(0).getId(),joinGroupFragment);
                     }else{
                         final MarketFragment marketFragment = new MarketFragment();
                         addFragment(marketFragment);
