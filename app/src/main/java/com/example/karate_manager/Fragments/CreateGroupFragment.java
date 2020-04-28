@@ -221,8 +221,9 @@ public class CreateGroupFragment extends Fragment {
                     imageToServe = uploadFile(pathSend,response.body().getGroup().getId());
                     Log.d("ID_GROUP in registerGr", String.valueOf(response.body().getGroup().getId()));
                     (Toast.makeText(getContext(), "Group created", Toast.LENGTH_LONG)).show();
-
+                    Storage.saveGroup(getActivity(), response.body().getGroup());
                     Storage.saveGroupPrincipal(getActivity(), response.body().getGroup().getId());
+                    Log.d("IMAGENPATH-CREATED", String.valueOf(response.body().getGroup().getPicture_group()));
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
 

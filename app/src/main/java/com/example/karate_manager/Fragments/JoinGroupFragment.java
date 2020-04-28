@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.karate_manager.MainActivity;
+import com.example.karate_manager.Models.GroupModel.GroupResponse;
 import com.example.karate_manager.Models.JoinGroupResponse.JoinGroupResponse;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantResponse;
 import com.example.karate_manager.Models.UserModel.UserResponse;
@@ -23,6 +24,7 @@ import com.example.karate_manager.Network.APIService;
 import com.example.karate_manager.Network.ApiUtils;
 import com.example.karate_manager.R;
 import com.example.karate_manager.Utils.Storage;
+import com.squareup.picasso.Picasso;
 
 import android.content.Intent;
 public class JoinGroupFragment extends Fragment {
@@ -72,6 +74,8 @@ public class JoinGroupFragment extends Fragment {
 
                     (Toast.makeText(getContext(), "You have joined the group", Toast.LENGTH_LONG)).show();
                     Storage.saveGroupPrincipal(getActivity(), (int) response.body().getParticipant().getId_group());
+
+                    getGroupByParticipant(response.body().getParticipant().getId_group());
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
 
@@ -84,6 +88,24 @@ public class JoinGroupFragment extends Fragment {
             @Override
             public void onFailure(Call<JoinGroupResponse> call, Throwable t) {
                 (Toast.makeText(getContext(), "Participant already registered in this group.", Toast.LENGTH_LONG)).show();
+            }
+        });
+    }
+
+    public void getGroupByParticipant(int id_group){
+        Call<GroupResponse> call = APIService.getGroupByParticipant(id_group);
+        call.enqueue(new Callback<GroupResponse>() {
+            @Override
+            public void onResponse(Call<GroupResponse> call, Response<GroupResponse> response) {
+
+                //Guardamos el grupo para que nos lo capture en la siguiente pantalla, que sería el main
+                Storage.saveGroup(getActivity(), response.body().getGroup());
+
+            }
+
+            @Override
+            public void onFailure(Call<GroupResponse> call, Throwable t) {
+
             }
         });
     }

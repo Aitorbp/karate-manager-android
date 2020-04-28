@@ -36,6 +36,7 @@ public class ScoringFragment extends Fragment {
     private APIService APIService;
     UserResponse user = new UserResponse(200,null,null );
     ParticipantResponse participantResponse = new ParticipantResponse(200,null,null );
+    Group groupFromMain =new Group(null,122,null,null,null,0,null);
     CircleImageView group_image_in_scoring;
     ApiUtils apiUtils;
     TextView group_name, participant_name;
@@ -56,6 +57,18 @@ public class ScoringFragment extends Fragment {
         adapterScoring = new AdapterScoring(getActivity().getApplicationContext(), R.layout.item_participant_layout, participantResponse.getParticipants());
 
         Log.d("User in Scoring", user.getUser().getName());
+      //
+        if(groupFromMain!=null ){
+            String groupName = groupFromMain.getName_group();
+            group_name.setText(groupName);
+            String pathImageGroup = groupFromMain.getPicture_group();
+            if(pathImageGroup ==null){
+                group_image_in_scoring.setImageResource(R.drawable.default_image);
+            }else{
+                Picasso.get().load(apiUtils.BASE_URL_PICTURE + pathImageGroup).fit().into(group_image_in_scoring);
+            }
+            Log.d("Group in Scoring", groupFromMain.getName_group());
+        }
         Log.d("User in Scoring", String.valueOf(groupSelectedId));
         getAllParticipantByGroup(String.valueOf(groupSelectedId));
 
@@ -72,14 +85,10 @@ public class ScoringFragment extends Fragment {
             @Override
             public void onResponse(Call<GroupResponse> call, Response<GroupResponse> response) {
 
-            String pathImageGroup =response.body().getGroup().getPicture_group();
+
             String groupName =response.body().getGroup().getName_group();
-            if(pathImageGroup ==null){
-                group_image_in_scoring.setImageResource(R.drawable.default_image);
-            }else{
-                Picasso.get().load(apiUtils.BASE_URL_PICTURE + pathImageGroup).fit().into(group_image_in_scoring);
-            }
-                group_name.setText(groupName);
+
+
 
             }
 
@@ -120,10 +129,11 @@ public class ScoringFragment extends Fragment {
 
     }
 
-    public void recievedUserGroup(UserResponse userResponse, int groupSelected) {
-        if(user!=null ){
+    public void recievedUserGroup(UserResponse userResponse, int groupSelected, Group group) {
+        if(user!=null && groupFromMain!=null ){
             user =userResponse;
             groupSelectedId = groupSelected;
+            groupFromMain = group;
         }
     }
 

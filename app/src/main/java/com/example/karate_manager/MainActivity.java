@@ -31,6 +31,7 @@ import com.example.karate_manager.Fragments.MarketFragment;
 import com.example.karate_manager.Fragments.MyTeamFragment;
 import com.example.karate_manager.Fragments.ProfileFragment;
 import com.example.karate_manager.Fragments.ScoringFragment;
+import com.example.karate_manager.Models.GroupModel.Group;
 import com.example.karate_manager.Models.GroupModel.GroupsResponse;
 import com.example.karate_manager.Models.UserModel.UserResponse;
 import com.example.karate_manager.Network.APIService;
@@ -55,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     int groupSelected;
     int  id_group_storage;
 
+    Group groupSend;
+    Group group_send_storage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,9 +77,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
        String api_token = Storage.getToken(getApplicationContext());
-       id_group_storage = Storage.getIdGroupPrincipal(getApplicationContext());
 
         Log.d("GET ID_GROUP STORAGE", String.valueOf(id_group_storage));
+
+        id_group_storage = Storage.getIdGroupPrincipal(getApplicationContext());
+
+        group_send_storage = Storage.getGroupSelected(getApplicationContext());
+
+        Log.d("GET ID_GROUP STORAGE", String.valueOf(id_group_storage));
+        Log.d("GETGROUPSTORAGE", String.valueOf(group_send_storage.getPicture_group()));
+        Log.d("GETGROUPSTORAGE", String.valueOf(group_send_storage.getName_group()));
        //METODO PARA RECOGER LOS DATOS DEL USUARIO Y PODER UTILIZARLOS
         getUser(api_token, new GetUserCallback() {
             @Override
@@ -88,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     public void onSuccess(GroupsResponse groupsResponse) {
                         groups = groupsResponse;
 
-                        validationIfThereArentGroup(groups, id_group_storage);
+                        validationIfThereArentGroup(groups, id_group_storage, group_send_storage);
 
                     }
 
@@ -109,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    private void validationIfThereArentGroup(GroupsResponse groups, int  id_group_storage ){
+    private void validationIfThereArentGroup(GroupsResponse groups, int  id_group_storage , Group group_send_storage ){
 
         //Validar si groupSelected es igual a cero, poner el primer grupo
         //Mejora, guardar el grupo en shavePreference para que te guarde siempre el mismo grupo al arrancar la applicación
@@ -120,11 +130,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             addFragment(joinGroupFragment);
             sendUserToJoinGroup(user,joinGroupFragment);
         }else{
-
+            Storage.getGroupSelected(getApplicationContext());
             final ScoringFragment scoringFragment = new ScoringFragment();
             addFragment(scoringFragment);
-            sendUserGroupToScoring(user,id_group_storage,scoringFragment);
+       //     group_send_storage = groups.getGroupByParticipant().get(0);
+
+            sendUserGroupToScoring(user,id_group_storage,group_send_storage, scoringFragment);
             Log.d("STORAGE click general", String.valueOf(id_group_storage));
+            Log.d("GROUP IN MENU LAT", String.valueOf(group_send_storage.getPicture_group()));
         }
 
         if(id_group_storage == 0){
@@ -132,7 +145,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.d("STORAGE click general", String.valueOf(id_group_storage));
             final ScoringFragment scoringFragment = new ScoringFragment();
             addFragment(scoringFragment);
-            sendUserGroupToScoring(user, groups.getGroupByParticipant().get(0).getId(),scoringFragment);
+            group_send_storage = groups.getGroupByParticipant().get(0);
+            Storage.saveGroup(getApplicationContext(),group_send_storage);
+            sendUserGroupToScoring(user, groups.getGroupByParticipant().get(0).getId(),group_send_storage, scoringFragment);
 
         }
 
@@ -156,14 +171,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             final ScoringFragment scoringFragment = new ScoringFragment();
             addFragment(scoringFragment);
             id_group_storage= groups.getGroupByParticipant().get(0).getId();
-            sendUserGroupToScoring(user, id_group_storage,scoringFragment);
+            group_send_storage = groups.getGroupByParticipant().get(0);
+            sendUserGroupToScoring(user, id_group_storage, group_send_storage, scoringFragment);
         }
        else if(id_group_storage != 0 && groups.getGroupByParticipant().size() != 0|| !groups.getGroupByParticipant().isEmpty()){
             final ScoringFragment scoringFragment = new ScoringFragment();
             addFragment(scoringFragment);
             Storage.getIdGroupPrincipal(getApplication());
-            sendUserGroupToScoring(user,id_group_storage,scoringFragment);
-            Log.d("STO click hori", String.valueOf(id_group_storage));
+            Storage.getGroupSelected(getApplication());
+        //    group_send_storage = groups.getGroupByParticipant().get(0);
+            sendUserGroupToScoring(user,id_group_storage, group_send_storage, scoringFragment);
+            Log.d("click hori group", String.valueOf(group_send_storage.getName_group()));
             Log.d("STO click hori", String.valueOf(groupSelected));
         }
     }
@@ -174,27 +192,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-
-
-
             switch (menuItem.getItemId()){
                 case R.id.hor_scoring:
-                    validationInHorizontal();
-                   /* if(id_group_storage == 0){
-                        Log.d("STORAGE click general", String.valueOf(id_group_storage));
-                        final JoinGroupFragment joinGroupFragment = new JoinGroupFragment();
-                        addFragment(joinGroupFragment);
-                        sendUserToJoinGroup(user,joinGroupFragment);
-                      //  sendUserGroupToScoring(user, groups.getGroupByParticipant().get(0).getId(),scoringFragment);
 
-                    }else{*/
-         /*               final ScoringFragment scoringFragment = new ScoringFragment();
-                        addFragment(scoringFragment);
-                        Storage.getIdGroupPrincipal(getApplication());
-                        sendUserGroupToScoring(user,id_group_storage,scoringFragment);
-                        Log.d("STO click hori", String.valueOf(id_group_storage));
-                        Log.d("STO click hori", String.valueOf(groupSelected));*/
-                //    }
+                    validationInHorizontal();
                     break;
 
                 case R.id.hor_market:
@@ -243,18 +244,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     //Recogiendo el id del grupo para enviarlo al menu horizontal
                     groupSelected = groups.getGroupByParticipant().get(i).getId();
+                    groupSend = groups.getGroupByParticipant().get(i);
 
                     Log.d("STO click GRUP", String.valueOf(groupSelected));
 
+                    Storage.saveGroup(getApplicationContext(), groupSend);
                     Storage.saveGroupPrincipal(getApplicationContext(),groupSelected);
                     id_group_storage = groupSelected;
-
+                    group_send_storage = groupSend;
                     Log.d("STO click GRUP", String.valueOf(id_group_storage));
                     Log.d("STO click GRUP", String.valueOf(groupSelected));
                     //Ir a pantalla Scoring
                     final ScoringFragment scoringFragment = new ScoringFragment();
                     addFragment(scoringFragment);
-                    sendUserGroupToScoring(user,groupSelected,scoringFragment);
+
+                    sendUserGroupToScoring(user,groupSelected, groupSend,scoringFragment);
                 }
             }
         }
@@ -292,6 +296,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_log_out:
                 Storage.removeToken(getApplicationContext(),TOKEN);
                 Storage.removeIdGroupPrincipal(getApplicationContext(),ID_GROUP);
+                Storage.removeGroup(getApplicationContext(),GROUP);
                 Storage.setLoggedIn(getApplicationContext(), false);
                 intent = new Intent(this, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -362,6 +367,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         sendUserToJoinGroup(user,joinGroupFragment);
 
                     }else{
+
                         final Menu menu = navigationView.getMenu();
 
                         int groups = response.body().getGroupByParticipant().size();
@@ -369,7 +375,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         for (int i = 0; i < groups; i++) {
                             int idItem = response.body().getGroupByParticipant().get(i).getId();
 
-                            String pictureGroup = response.body().getGroupByParticipant().get(i).getPicture_group();
+
 
                             menu.add(R.id.dynamic_group_menu, idItem,1, response.body().getGroupByParticipant().get(i).getName_group()).setIcon(R.drawable.belt);
                         }
@@ -401,8 +407,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    public void sendUserGroupToScoring(UserResponse userResponse, int groupSelected, ScoringFragment fragment){
-        fragment.recievedUserGroup(userResponse, groupSelected);
+    public void sendUserGroupToScoring(UserResponse userResponse, int groupSelected, Group groupSend, ScoringFragment fragment){
+        fragment.recievedUserGroup(userResponse, groupSelected, groupSend);
 
     }
 
