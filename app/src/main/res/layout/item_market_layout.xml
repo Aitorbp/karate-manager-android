@@ -88,7 +88,7 @@
     </TextView>
     <Button
 
-        android:id="@+id/value_karateka"
+        android:id="@+id/item_button_value_karateka"
         android:layout_gravity="center"
         android:background="@drawable/custom_position_participant"
         android:textColor="@color/colorWhite"

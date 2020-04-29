@@ -50,14 +50,15 @@ public class ScoringFragment extends Fragment {
         participant_name = (TextView) RootView.findViewById(R.id.participant_name);
         APIService = ApiUtils.getAPIService();
 
-        String userName = user.getUser().getName().toString();
+        String userName = user.getUser().getName();
 
 
 
         adapterScoring = new AdapterScoring(getActivity().getApplicationContext(), R.layout.item_participant_layout, participantResponse.getParticipants());
 
         Log.d("User in Scoring", user.getUser().getName());
-      //
+
+      //La primera vez entra en null porque no carga los datos, una segunda vez ya si los tiene.
         if(groupFromMain!=null ){
             String groupName = groupFromMain.getName_group();
             group_name.setText(groupName);

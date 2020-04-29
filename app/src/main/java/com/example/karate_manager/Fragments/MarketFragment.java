@@ -4,6 +4,7 @@ package com.example.karate_manager.Fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,7 +43,8 @@ public class MarketFragment extends Fragment {
         View RootView = inflater.inflate(R.layout.fragment_market, container, false);
         listViewMarket = (ListView) RootView.findViewById(R.id.market_listview);
         APIService = ApiUtils.getAPIService();
-        adapterMarket = new AdapterMarket(getActivity().getApplicationContext(), R.layout.item_market_layout, marketResponse.getKaratekas());
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        adapterMarket = new AdapterMarket(getActivity().getApplicationContext(), R.layout.item_market_layout, marketResponse.getKaratekas(), fragmentManager);
 
         Log.d("User in Scoring", user.getUser().getName());
 

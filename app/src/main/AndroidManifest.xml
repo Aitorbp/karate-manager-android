@@ -21,8 +21,8 @@
             </intent-filter>
 
         </activity>
-        
-        
+
+
         <provider
             android:authorities="android.support.v4.content.FileProvider"
             android:name="androidx.core.content.FileProvider"
