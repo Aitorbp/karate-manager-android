@@ -40,6 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.karate_manager.MainActivity;
+import com.example.karate_manager.Models.GroupModel.Group;
 import com.example.karate_manager.Models.GroupModel.GroupResponse;
 import com.example.karate_manager.Models.Prueba;
 import com.example.karate_manager.Models.UserModel.UserResponse;
@@ -218,14 +219,10 @@ public class CreateGroupFragment extends Fragment {
             public void onResponse(Call<GroupResponse> call, Response<GroupResponse> response) {
                 dialogLoading.dismiss();
                 if(response.isSuccessful()) {
+
+                    //Ponemos la imagen del grupo con un update, dentro de este método llamamos al método coger grupo para que se nos actualice la imagen en el android y no pase al main vacia
                     imageToServe = uploadFile(pathSend,response.body().getGroup().getId());
-                    Log.d("ID_GROUP in registerGr", String.valueOf(response.body().getGroup().getId()));
-                    (Toast.makeText(getContext(), "Group created", Toast.LENGTH_LONG)).show();
-                    Storage.saveGroup(getActivity(), response.body().getGroup());
-                    Storage.saveGroupPrincipal(getActivity(), response.body().getGroup().getId());
-                    Log.d("IMAGENPATH-CREATED", String.valueOf(response.body().getGroup().getPicture_group()));
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    startActivity(intent);
+
 
                 }else{
                     (Toast.makeText(getContext(), "There was an error. Maybe the group already registered.", Toast.LENGTH_LONG)).show();
@@ -369,7 +366,7 @@ public class CreateGroupFragment extends Fragment {
 
 
 
-    public MultipartBody.Part uploadFile(String filePath, int id_group){
+    public MultipartBody.Part uploadFile(String filePath, final int id_group){
         File file = new File(filePath);
         RequestBody requestBody = RequestBody.create(MediaType.parse("imagen/*"), file);
         MultipartBody.Part part = MultipartBody.Part.createFormData("picture_group", file.getName(), requestBody); // vcogemos el nombre de la tabal que hacemos referencia
@@ -378,6 +375,8 @@ public class CreateGroupFragment extends Fragment {
             @Override
             public void onResponse(Call<Prueba> call, Response<Prueba> response) {
                 Log.d("Imagen send to serve", "Imagen send to serve");
+
+                getGroupByid(id_group);
             }
 
             @Override
@@ -414,6 +413,31 @@ public class CreateGroupFragment extends Fragment {
         return fileName;
         }
 
+
+    public void getGroupByid(int id_group){
+        Call<GroupResponse> call = APIService.getGroupByParticipant(id_group);
+        call.enqueue(new Callback<GroupResponse>() {
+            @Override
+            public void onResponse(Call<GroupResponse> call, Response<GroupResponse> response) {
+
+                Log.d("IMAGENPATH-CREATED", String.valueOf(response.body().getGroup().getPicture_group()));
+                Log.d("ID_GROUP in registerGr", String.valueOf(response.body().getGroup().getId()));
+                (Toast.makeText(getContext(), "Group created", Toast.LENGTH_LONG)).show();
+                Storage.saveGroup(getActivity(), response.body().getGroup());
+                Storage.saveGroupPrincipal(getActivity(), response.body().getGroup().getId());
+                Log.d("IMAGENPATH-CREATED", String.valueOf(response.body().getGroup().getPicture_group()));
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+
+
+            }
+
+            @Override
+            public void onFailure(Call<GroupResponse> call, Throwable t) {
+
+            }
+        });
+    }
 
     public void recievedUser(UserResponse userResponse) {
         if(user!=null){

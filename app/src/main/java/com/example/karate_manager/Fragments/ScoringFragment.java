@@ -79,25 +79,8 @@ public class ScoringFragment extends Fragment {
     }
 
 
-    public void getGroupByParticipant(int id_group){
-        Call<GroupResponse> call = APIService.getGroupByParticipant(id_group);
-        call.enqueue(new Callback<GroupResponse>() {
-            @Override
-            public void onResponse(Call<GroupResponse> call, Response<GroupResponse> response) {
 
 
-            String groupName =response.body().getGroup().getName_group();
-
-
-
-            }
-
-            @Override
-            public void onFailure(Call<GroupResponse> call, Throwable t) {
-
-            }
-        });
-    }
 
 
     public void getAllParticipantByGroup(String id_group){
@@ -114,7 +97,7 @@ public class ScoringFragment extends Fragment {
                     adapterScoring.setData(participantResponse);
                     listViewScoring.setAdapter(adapterScoring);
                     Log.d("RESPONSE_SUCCESS", "Everything All right");
-                    getGroupByParticipant(idGroup);
+                  //  getGroupByParticipant(idGroup);
                 }
             }
 

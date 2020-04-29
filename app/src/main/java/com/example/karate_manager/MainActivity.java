@@ -167,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }else if(
         // Si el id del usuario nos llega a 0 por que hemos hecho logout anteriormte pero tenemos grupos, ponemos el primer grupo de la lista
         id_group_storage == 0 && groups.getGroupByParticipant().size() != 0 || groups.getGroupByParticipant().isEmpty()){
+            group_send_storage = Storage.getGroupSelected(getApplicationContext());
             Log.d("STORAGE click general", String.valueOf(id_group_storage));
             final ScoringFragment scoringFragment = new ScoringFragment();
             addFragment(scoringFragment);
@@ -178,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             final ScoringFragment scoringFragment = new ScoringFragment();
             addFragment(scoringFragment);
             Storage.getIdGroupPrincipal(getApplication());
-            Storage.getGroupSelected(getApplication());
+            group_send_storage =   Storage.getGroupSelected(getApplication());
         //    group_send_storage = groups.getGroupByParticipant().get(0);
             sendUserGroupToScoring(user,id_group_storage, group_send_storage, scoringFragment);
             Log.d("click hori group", String.valueOf(group_send_storage.getName_group()));
@@ -384,6 +385,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 }
             }
+
+
 
             @Override
             public void onFailure(Call<GroupsResponse> call, Throwable t) {
