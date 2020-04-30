@@ -3,6 +3,7 @@ package com.example.karate_manager.Fragments;
 
 import android.os.Bundle;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import retrofit2.Call;
@@ -13,10 +14,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.karate_manager.Adapters.AdapterMarket;
 import com.example.karate_manager.Adapters.AdapterScoring;
+import com.example.karate_manager.Models.KaratekaModel.Karateka;
 import com.example.karate_manager.Models.KaratekaModel.MarketResponse;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantResponse;
 import com.example.karate_manager.Models.UserModel.UserResponse;
@@ -27,7 +30,7 @@ import com.example.karate_manager.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MarketFragment extends Fragment {
+public class MarketFragment extends Fragment implements AdapterMarket.ClickOnBid {
 
     AdapterMarket adapterMarket;
     ListView listViewMarket;
@@ -37,14 +40,16 @@ public class MarketFragment extends Fragment {
     MarketResponse marketResponse = new MarketResponse(200,null,null );
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View RootView = inflater.inflate(R.layout.fragment_market, container, false);
         listViewMarket = (ListView) RootView.findViewById(R.id.market_listview);
+        Button buttonValue = RootView.findViewById(R.id.item_button_value_karateka);
         APIService = ApiUtils.getAPIService();
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        adapterMarket = new AdapterMarket(getActivity().getApplicationContext(), R.layout.item_market_layout, marketResponse.getKaratekas(), fragmentManager);
+        adapterMarket = new AdapterMarket(getActivity().getApplicationContext(), R.layout.item_market_layout, marketResponse.getKaratekas(), fragmentManager, this);
 
         Log.d("User in Scoring", user.getUser().getName());
 
@@ -86,4 +91,13 @@ public class MarketFragment extends Fragment {
             groupSelectedId = groupSelected;
         }
     }
+
+    @Override
+    public void onClick(Karateka karateka) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        AdapterMarket.BidKaratekaDialogFragment bidKaratekaDialog = new AdapterMarket.BidKaratekaDialogFragment(karateka);
+        bidKaratekaDialog.show(fragmentManager, "bid" );
+
+    }
+
 }

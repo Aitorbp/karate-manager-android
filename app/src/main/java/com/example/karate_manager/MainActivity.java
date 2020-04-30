@@ -84,9 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         group_send_storage = Storage.getGroupSelected(getApplicationContext());
 
-        Log.d("GET ID_GROUP STORAGE", String.valueOf(id_group_storage));
-        Log.d("GETGROUPSTORAGE", String.valueOf(group_send_storage.getPicture_group()));
-        Log.d("GETGROUPSTORAGE", String.valueOf(group_send_storage.getName_group()));
+
        //METODO PARA RECOGER LOS DATOS DEL USUARIO Y PODER UTILIZARLOS
         getUser(api_token, new GetUserCallback() {
             @Override
@@ -136,8 +134,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
        //     group_send_storage = groups.getGroupByParticipant().get(0);
 
             sendUserGroupToScoring(user,id_group_storage,group_send_storage, scoringFragment);
-            Log.d("STORAGE click general", String.valueOf(id_group_storage));
-            Log.d("GROUP IN MENU LAT", String.valueOf(group_send_storage.getPicture_group()));
+//            Log.d("STORAGE click general", String.valueOf(id_group_storage));
+//            Log.d("GROUP IN MENU LAT", String.valueOf(group_send_storage.getPicture_group()));
         }
 
         if(id_group_storage == 0){
@@ -156,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    public void validationInHorizontal(){
+    public void validationInHorizontalScoring(){
         Log.d("PRUEBA HOR", String.valueOf(id_group_storage));
         if(groups == null || groups.getGroupByParticipant().size() == 0 || groups.getGroupByParticipant().isEmpty()){ //Si el usuario no está en ningún grupo, indicarle que tiene que entrar en alguno
 
@@ -187,7 +185,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    public void validationInHorizontalMarket(){
+        Log.d("PRUEBA HOR", String.valueOf(id_group_storage));
+        if(groups == null || groups.getGroupByParticipant().size() == 0 || groups.getGroupByParticipant().isEmpty()){ //Si el usuario no está en ningún grupo, indicarle que tiene que entrar en alguno
 
+            (Toast.makeText(getApplicationContext(), "You have to join or create a good to start to play", Toast.LENGTH_LONG)).show();
+            JoinGroupFragment joinGroupFragment = new JoinGroupFragment();
+            addFragment(joinGroupFragment);
+            sendUserToJoinGroup(user,joinGroupFragment);
+        }else if(
+            // Si el id del usuario nos llega a 0 por que hemos hecho logout anteriormte pero tenemos grupos, ponemos el primer grupo de la lista
+                id_group_storage == 0 && groups.getGroupByParticipant().size() != 0 || groups.getGroupByParticipant().isEmpty()){
+            group_send_storage = Storage.getGroupSelected(getApplicationContext());
+            Log.d("STORAGE click general", String.valueOf(id_group_storage));
+            final MarketFragment marketFragment = new MarketFragment();
+            addFragment(marketFragment);
+            id_group_storage= groups.getGroupByParticipant().get(0).getId();
+            Storage.getIdGroupPrincipal(getApplication());
+            sendUserGroupToMarket(user,id_group_storage,marketFragment);
+
+        }
+        else if(id_group_storage != 0 && groups.getGroupByParticipant().size() != 0|| !groups.getGroupByParticipant().isEmpty()){
+            final MarketFragment marketFragment = new MarketFragment();
+            addFragment(marketFragment);
+            Storage.getIdGroupPrincipal(getApplication());
+            group_send_storage =  Storage.getGroupSelected(getApplication());
+            sendUserGroupToMarket(user,id_group_storage,marketFragment);
+
+        }
+    }
     //Accediendo al menu horizontal
     private BottomNavigationView.OnNavigationItemSelectedListener horListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -196,24 +222,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switch (menuItem.getItemId()){
                 case R.id.hor_scoring:
 
-                    validationInHorizontal();
+                    validationInHorizontalScoring();
                     break;
 
                 case R.id.hor_market:
-                    if(id_group_storage == 0){
-                        final JoinGroupFragment joinGroupFragment = new JoinGroupFragment();
-                        addFragment(joinGroupFragment);
-                        sendUserToJoinGroup(user,joinGroupFragment);
-                        (Toast.makeText(getApplicationContext(), "You have to join or create a good to start to play", Toast.LENGTH_LONG)).show();
-                        //   sendUserGroupToMarket(user,groups.getGroupByParticipant().get(0).getId(),joinGroupFragment);
-                    }else{
-                        final MarketFragment marketFragment = new MarketFragment();
-                        addFragment(marketFragment);
-                        Storage.getIdGroupPrincipal(getApplication());
-                        sendUserGroupToMarket(user,id_group_storage,marketFragment);
-                        Log.d("STO click hori", String.valueOf(id_group_storage));
-                        Log.d("STO click hori", String.valueOf(groupSelected));
-                    }
+                    validationInHorizontalMarket();
+//                    if(id_group_storage == 0 && groups == null){
+//                        final JoinGroupFragment joinGroupFragment = new JoinGroupFragment();
+//                        addFragment(joinGroupFragment);
+//                        sendUserToJoinGroup(user,joinGroupFragment);
+//                        (Toast.makeText(getApplicationContext(), "You have to join or create a good to start to play", Toast.LENGTH_LONG)).show();
+//                        //   sendUserGroupToMarket(user,groups.getGroupByParticipant().get(0).getId(),joinGroupFragment);
+//                    }else{
+//                        final MarketFragment marketFragment = new MarketFragment();
+//                        addFragment(marketFragment);
+//                        Storage.getIdGroupPrincipal(getApplication());
+//                        sendUserGroupToMarket(user,id_group_storage,marketFragment);
+//                        Log.d("STO click hori", String.valueOf(id_group_storage));
+//                        Log.d("STO click hori", String.valueOf(groupSelected));
+//                    }
 
                     break;
                 case R.id.hor_myteam:

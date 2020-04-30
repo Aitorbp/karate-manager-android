@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,19 +39,20 @@ import androidx.fragment.app.FragmentManager;
 
 public class AdapterMarket extends ArrayAdapter{
     private FragmentManager fm;
-    Dialog dialogDoBidKarateka;
     Context context;
     int item_Layaut;
     ArrayList<Karateka> data;
     ApiUtils apiUtils;
+    ClickOnBid listener;
 
-
-    public AdapterMarket(@NonNull Context context, int resource, @NonNull ArrayList objects, FragmentManager fm) {
+    public AdapterMarket(@NonNull Context context, int resource, @NonNull ArrayList objects, FragmentManager fm, ClickOnBid listener) {
         super(context, resource, objects);
         this.context = context;
         this.item_Layaut = resource;
         this.data = objects;
         this.fm = fm;
+        this.listener = listener;
+
     }
 
 
@@ -70,7 +72,7 @@ public class AdapterMarket extends ArrayAdapter{
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
             convertView = layoutInflater.inflate(item_Layaut, parent, false);
@@ -82,16 +84,14 @@ public class AdapterMarket extends ArrayAdapter{
         String value = String.valueOf(data.get(position).getValue());
         String weigth = String.valueOf(data.get(position).getWeight());
 
-        if(image!= null) {
-            ImageView elementImage = convertView.findViewById(R.id.picture_karateka);
-            Picasso.get().load(apiUtils.BASE_URL_PICTURE + image).fit().into(elementImage);
-        }
 
+        ImageView elementImage = convertView.findViewById(R.id.picture_karateka);
+        if(image!= null || !!!image.isEmpty() ) {
+            Picasso.get().load(apiUtils.BASE_URL_PICTURE + image).fit().into(elementImage);
+        }else{ elementImage.setImageResource(R.drawable.default_image); }
 
         TextView elementName = convertView.findViewById(R.id.name_karateka);
         elementName.setText(name);
-
-
 
         TextView elementWeigth = convertView.findViewById(R.id.weigth_karateka);
         elementWeigth.setText(weigth);
@@ -99,39 +99,59 @@ public class AdapterMarket extends ArrayAdapter{
         Button buttonValue = convertView.findViewById(R.id.item_button_value_karateka);
         buttonValue.setText(value);
 
-        popupBidKarateka(buttonValue);
+        final View finalConvertView = convertView;
+        buttonValue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                finalConvertView.findViewById(R.id.item_button_value_karateka).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listener.onClick(data.get(position));
+                    }
+                });
+
+            }
+        });
 
         return convertView;
     }
 
 
-    public void popupBidKarateka(Button buttonValue){
-        buttonValue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                DialogFragment newFragment = new BidKaratekaDialogFragment();
-
-
-                newFragment.show(fm, "bid" );
-
-
-
-            }
-        });
+    public interface ClickOnBid{
+        void onClick(Karateka karateka);
     }
 
+
+    // Popup para abrir pantalla bid
     public static class BidKaratekaDialogFragment extends DialogFragment implements View.OnClickListener{
 
+        Karateka karateka = new Karateka(0,null,null,0, null,0,null,null);
+        ApiUtils apiUtils;
+        int lessValue;
+        int moreValue;
 
+        public BidKaratekaDialogFragment(Karateka karateka) {
+            this.karateka = karateka;
+        }
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+            lessValue = (int) (karateka.getValue());
+            moreValue = (int) (karateka.getValue());
 
+
+            Log.d("Name Karateka", String.valueOf(karateka.getName()));
             LayoutInflater inflater = requireActivity().getLayoutInflater();
             View view = inflater.inflate(R.layout.popup_do_bid_karateka, null);
+
+
+
             view.findViewById(R.id.popup_do_bid).setOnClickListener(this);
+            view.findViewById(R.id.popup_bid_less_money).setOnClickListener(this);
+            view.findViewById(R.id.popup_bid_more_money).setOnClickListener(this);
+            view.findViewById(R.id.popup_close_bid).setOnClickListener(this);
+
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setView(view);
 
@@ -139,19 +159,74 @@ public class AdapterMarket extends ArrayAdapter{
         }
 
 
+        @Override
+        public void onStart() {
+            super.onStart();
+            TextView   nameKaratekaText = (TextView) getDialog().findViewById(R.id.popup_bid_name_karateka);
+            String nameKarateka = karateka.getName();
+            nameKaratekaText.setText(nameKarateka);
+
+            final EditText editTextKaratekaValue = (EditText) getDialog().findViewById(R.id.popup_bid_money);
+            final String putMoneyKarateka = String.valueOf(karateka.getValue());
+            editTextKaratekaValue.setText(putMoneyKarateka, TextView.BufferType.EDITABLE);
+
+            TextView   valueKaratekaText = (TextView) getDialog().findViewById(R.id.popup_bid_value);
+            String valueKarateka = String.valueOf(karateka.getValue());
+            valueKaratekaText.setText(valueKarateka);
+
+            TextView weightKaratekaText = (TextView) getDialog().findViewById(R.id.pop_bid_weigth);
+            String weigthKarateka = String.valueOf(karateka.getWeight());
+            weightKaratekaText.setText(weigthKarateka);
+
+            ImageView pictureKaratekaImage = (ImageView) getDialog().findViewById(R.id.popup_bid_image_karateka);
+            String pictureKarateka = String.valueOf(karateka.getPhoto_karateka());
+            if(pictureKarateka.isEmpty() || pictureKarateka == null){
+                pictureKaratekaImage.setImageResource(R.drawable.default_image);
+            }else{
+                Picasso.get().load(apiUtils.BASE_URL_PICTURE + pictureKarateka).fit().into(pictureKaratekaImage);
+            }
+
+
+
+        }
+
+
 
         @Override
         public void onClick(View view) {
+            final EditText editTextKaratekaValue = (EditText) getDialog().findViewById(R.id.popup_bid_money);
+
             switch (view.getId()) {
                 case R.id.popup_do_bid:
                     Log.d("PULSANDO", "PULSANDO");
+                    break;
+
+                case R.id.popup_close_bid:
+                    dismiss();
+                    break;
+                case R.id.popup_bid_less_money:
+                    lessValue = lessValue - 10;
+                    moreValue=lessValue;
+                    editTextKaratekaValue.setText(String.valueOf(lessValue), TextView.BufferType.EDITABLE);
+
+                    break;
+                case R.id.popup_bid_more_money:
+                    moreValue = moreValue + 10;
+                    lessValue=moreValue;
+                    editTextKaratekaValue.setText(String.valueOf(moreValue), TextView.BufferType.EDITABLE);
+
                     break;
 
                 default:
                     break;
             }
         }
+
+
     }
+
+
+
 
 
 }

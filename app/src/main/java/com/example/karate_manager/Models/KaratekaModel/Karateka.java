@@ -11,7 +11,7 @@ public class Karateka {
     private String updated_at;
     private String photo_karateka;
 
-    public Karateka(int id, String name, String country, float gender, String weight, float value, String created_at, String updated_at, String photo_karateka) {
+    public Karateka(int id, String name, String country, float gender, String weight, float value, String created_at, String updated_at) {
         this.id = id;
         this.name = name;
         this.country = country;
