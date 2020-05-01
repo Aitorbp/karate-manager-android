@@ -126,7 +126,7 @@ public class AdapterMarket extends ArrayAdapter{
                         listener.onClick(data.get(position));
                     }
                 });
-                
+
         return convertView;
     }
 
