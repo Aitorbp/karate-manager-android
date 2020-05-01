@@ -120,20 +120,13 @@ public class AdapterMarket extends ArrayAdapter{
         buttonValue.setText(value);
 
         final View finalConvertView = convertView;
-        buttonValue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
                 finalConvertView.findViewById(R.id.item_button_value_karateka).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         listener.onClick(data.get(position));
                     }
                 });
-
-            }
-        });
-
+                
         return convertView;
     }
 
