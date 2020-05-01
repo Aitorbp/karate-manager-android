@@ -20,12 +20,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginRight="10dp">
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_marginBottom="6dp"
                 android:id="@+id/popup_bid_country"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:background="@drawable/custom_position_participant"/>
+                app:civ_border_color="@color/colorButtonBlack"
+                app:civ_border_width="2dp"
+                />
             <TextView
                 android:background="@drawable/custom_position_participant"
                 android:textColor="@color/colorWhite"
@@ -70,9 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"/>
             <TextView
-
-
-                android:background="@drawable/custom_position_participant"
+                android:background="@drawable/custom_points_karatekas"
                 android:id="@+id/popup_bid_points_karateka"
                 android:layout_width="27dp"
                 android:layout_height="25dp"

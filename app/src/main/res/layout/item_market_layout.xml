@@ -36,7 +36,7 @@
             android:layout_marginTop="10dp"
             android:textColor="@color/colorButtonBlack"
             android:textSize="20dp"
-            android:gravity="center"
+            android:gravity="start"
             android:text="Rafael Aghayev"
             android:layout_marginLeft="10dp"
             android:layout_width="160dp"
@@ -47,13 +47,17 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:layout_marginLeft="10dp">
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:src="@drawable/logo_border_karate_manager"
                 android:id="@+id/icon_country"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:gravity="center"
-                android:layout_marginLeft="10dp"/>
+                app:civ_border_color="@color/colorButtonBlack"
+                app:civ_border_width="1dp"
+                android:layout_marginLeft="10dp"
+                xmlns:app="http://schemas.android.com/apk/res-auto"/>
+
             <TextView
                 android:src="@drawable/logo_border_karate_manager"
                 android:id="@+id/weigth_karateka"
@@ -64,6 +68,17 @@
                 android:textColor="@color/colorWhite"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/custom_circular_weigth"/>
+
+            <TextView
+                android:src="@drawable/logo_border_karate_manager"
+                android:id="@+id/points_karateka_market"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:text="789"
+                android:textColor="@color/colorWhite"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/custom_points_karatekas"/>
         </LinearLayout>
 
 

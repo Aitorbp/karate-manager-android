@@ -11,6 +11,8 @@ public class Karateka {
     private String updated_at;
     private String photo_karateka;
 
+    private String photo_country;
+    private int points_karateka;
     public Karateka(int id, String name, String country, float gender, String weight, float value, String created_at, String updated_at) {
         this.id = id;
         this.name = name;
@@ -21,6 +23,14 @@ public class Karateka {
         this.created_at = created_at;
         this.updated_at = updated_at;
         this.photo_karateka = photo_karateka;
+    }
+
+    public String getPhoto_country() {
+        return photo_country;
+    }
+
+    public int getPoints_karateka() {
+        return points_karateka;
     }
 
     public void setId(int id) {

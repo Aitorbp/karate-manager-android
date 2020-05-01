@@ -227,20 +227,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 case R.id.hor_market:
                     validationInHorizontalMarket();
-//                    if(id_group_storage == 0 && groups == null){
-//                        final JoinGroupFragment joinGroupFragment = new JoinGroupFragment();
-//                        addFragment(joinGroupFragment);
-//                        sendUserToJoinGroup(user,joinGroupFragment);
-//                        (Toast.makeText(getApplicationContext(), "You have to join or create a good to start to play", Toast.LENGTH_LONG)).show();
-//                        //   sendUserGroupToMarket(user,groups.getGroupByParticipant().get(0).getId(),joinGroupFragment);
-//                    }else{
-//                        final MarketFragment marketFragment = new MarketFragment();
-//                        addFragment(marketFragment);
-//                        Storage.getIdGroupPrincipal(getApplication());
-//                        sendUserGroupToMarket(user,id_group_storage,marketFragment);
-//                        Log.d("STO click hori", String.valueOf(id_group_storage));
-//                        Log.d("STO click hori", String.valueOf(groupSelected));
-//                    }
+
 
                     break;
                 case R.id.hor_myteam:

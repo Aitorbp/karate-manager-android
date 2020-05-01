@@ -83,6 +83,15 @@ public class AdapterMarket extends ArrayAdapter{
         String name = String.valueOf(data.get(position).getName());
         String value = String.valueOf(data.get(position).getValue());
         String weigth = String.valueOf(data.get(position).getWeight());
+        String pointsKarateka = String.valueOf(data.get(position).getPoints_karateka());
+        String imageCountry = data.get(position).getPhoto_country();
+
+        ImageView iconCountry = convertView.findViewById(R.id.icon_country);
+        if(imageCountry== null) {
+            iconCountry.setImageResource(R.drawable.default_image);
+        }else{
+            Picasso.get().load(apiUtils.BASE_URL_PICTURE + imageCountry).fit().into(iconCountry);}
+
 
 
         ImageView elementImage = convertView.findViewById(R.id.picture_karateka);
@@ -95,6 +104,17 @@ public class AdapterMarket extends ArrayAdapter{
 
         TextView elementWeigth = convertView.findViewById(R.id.weigth_karateka);
         elementWeigth.setText(weigth);
+
+        TextView elementPointsKarateka = convertView.findViewById(R.id.points_karateka_market);
+        if(pointsKarateka==null){
+            elementPointsKarateka.setText("0");
+        }else{
+            elementPointsKarateka.setText(pointsKarateka);
+        }
+
+
+
+
 
         Button buttonValue = convertView.findViewById(R.id.item_button_value_karateka);
         buttonValue.setText(value);
@@ -186,7 +206,22 @@ public class AdapterMarket extends ArrayAdapter{
                 Picasso.get().load(apiUtils.BASE_URL_PICTURE + pictureKarateka).fit().into(pictureKaratekaImage);
             }
 
+            ImageView pictureCountryKaratekaImage = (ImageView) getDialog().findViewById(R.id.popup_bid_country);
+            String countryKarateka = String.valueOf(karateka.getPhoto_country());
+            if(countryKarateka.isEmpty() || countryKarateka == null){
+                pictureKaratekaImage.setImageResource(R.drawable.default_image);
+            }else{
+                Picasso.get().load(apiUtils.BASE_URL_PICTURE + countryKarateka).fit().into(pictureCountryKaratekaImage);
+            }
 
+
+            TextView elementPointsKarateka =  (TextView) getDialog().findViewById(R.id.popup_bid_points_karateka);
+            String pointsKarateka = String.valueOf(karateka.getPoints_karateka());
+            if(pointsKarateka.isEmpty() || pointsKarateka==null){
+                elementPointsKarateka.setText("0");
+            }else{
+                elementPointsKarateka.setText(pointsKarateka);
+            }
 
         }
 
