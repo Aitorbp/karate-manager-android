@@ -41,8 +41,8 @@
         <de.hdodenhof.circleimageview.CircleImageView
 
             android:id="@+id/popup_bid_image_karateka"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_gravity="center"
             android:src="@drawable/default_picture"
             app:civ_border_color="@color/colorButtonBlack"
@@ -102,11 +102,13 @@
             android:layout_width="35dp"
             android:layout_height="35dp"/>
         <EditText
-            android:inputType="number"
+            android:inputType="number|none"
             android:id="@+id/popup_bid_money"
             android:layout_marginRight="10dp"
             android:layout_width="200dp"
-            android:layout_height="45dp"/>
+            android:layout_height="45dp"
+
+            />
         <Button
             android:background="@drawable/plus"
             android:id="@+id/popup_bid_more_money"

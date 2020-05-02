@@ -1,5 +1,6 @@
 package com.example.karate_manager.Network;
 
+import com.example.karate_manager.Models.BidModel.BidResponse;
 import com.example.karate_manager.Models.GroupModel.Group;
 import com.example.karate_manager.Models.GroupModel.GroupResponse;
 import com.example.karate_manager.Models.GroupModel.GroupsResponse;
@@ -90,11 +91,25 @@ public interface APIService {
           @Query("api_token") String authToken);
 
 
+  @GET("participant/get/one/{id_user}/{id_group}")
+  Call<ParticipantResponse> getParticipant(@Path("id_user") int id_user, @Path("id_group") int id_group);
+
   @GET("participant/getall/{id_group}")
   Call<ParticipantResponse> getParticipantsByGroup(@Path("id_group") String id_group);
-
 
   //MARKET ENDPOINTS
   @GET("market/show/karatekas/{id_group}")
   Call<MarketResponse> getKaratekasInSaleByGroup(@Path("id_group") String id_group);
+
+
+  //BID
+  //DO BID
+  @FormUrlEncoded
+  @POST("bid/{id_group}")
+  Call<BidResponse> createBidInGroup(
+          @Field("id_karateka") int id_karateka,
+          @Field("id_participant") int id_participant,
+          @Field("bid") int bid,
+          @Path("id_group") int id_group);
+
 }

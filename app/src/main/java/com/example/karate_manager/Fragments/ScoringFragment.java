@@ -4,11 +4,13 @@ package com.example.karate_manager.Fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +19,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.karate_manager.Adapters.AdapterMarket;
 import com.example.karate_manager.Adapters.AdapterScoring;
 import com.example.karate_manager.Models.GroupModel.Group;
 import com.example.karate_manager.Models.GroupModel.GroupResponse;
+import com.example.karate_manager.Models.ParticipantModel.ParticipantGroup;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantResponse;
 import com.example.karate_manager.Models.UserModel.UserResponse;
 import com.example.karate_manager.Network.APIService;
@@ -27,6 +31,8 @@ import com.example.karate_manager.Network.ApiUtils;
 import com.example.karate_manager.R;
 import com.example.karate_manager.Utils.Storage;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 
 public class ScoringFragment extends Fragment {
@@ -40,6 +46,7 @@ public class ScoringFragment extends Fragment {
     CircleImageView group_image_in_scoring;
     ApiUtils apiUtils;
     TextView group_name, participant_name;
+    ParticipantGroup participant;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -76,13 +83,23 @@ public class ScoringFragment extends Fragment {
         participant_name.setText(userName);
 
 
+
         return RootView;
     }
 
 
 
 
+    private void getParticipant(){
+        ArrayList<ParticipantGroup> participants = participantResponse.getParticipants();
 
+        for (int i = 0; i <participants.size() ; i++) {
+            if(participants.get(i).getId_user()==user.getUser().getId()){
+                participant =participants.get(i);
+                Log.d("Particpante in Scoring", String.valueOf(participant.getId()));
+            }
+        }
+    }
 
     public void getAllParticipantByGroup(String id_group){
 
@@ -93,7 +110,8 @@ public class ScoringFragment extends Fragment {
                 if (response.isSuccessful()) {
                     participantResponse = response.body();
                    Log.d("VALUE",String.valueOf(response.body().getParticipants().get(0).getId_group()));
-                    int idGroup = response.body().getParticipants().get(0).getId_group();
+
+                    getParticipant();
                     adapterScoring.notifyDataSetChanged();
                     adapterScoring.setData(participantResponse);
                     listViewScoring.setAdapter(adapterScoring);

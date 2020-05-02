@@ -51,7 +51,7 @@ public class MarketFragment extends Fragment implements AdapterMarket.ClickOnBid
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         adapterMarket = new AdapterMarket(getActivity().getApplicationContext(), R.layout.item_market_layout, marketResponse.getKaratekas(), fragmentManager, this);
 
-        Log.d("User in Scoring", user.getUser().getName());
+        Log.d("User in Scoring", String.valueOf(user.getUser().getId()));
 
 
         getKaratekasInSaleByGroup(String.valueOf(groupSelectedId));
@@ -96,8 +96,14 @@ public class MarketFragment extends Fragment implements AdapterMarket.ClickOnBid
     public void onClick(Karateka karateka) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         AdapterMarket.BidKaratekaDialogFragment bidKaratekaDialog = new AdapterMarket.BidKaratekaDialogFragment(karateka);
+        Bundle args = new Bundle();
+        args.putInt("idUser", user.getUser().getId());
+        args.putInt("idGroup", groupSelectedId);
+        bidKaratekaDialog.setArguments(args);
         bidKaratekaDialog.show(fragmentManager, "bid" );
 
     }
+
+
 
 }
