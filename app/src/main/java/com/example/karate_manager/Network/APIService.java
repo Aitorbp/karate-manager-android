@@ -102,6 +102,10 @@ public interface APIService {
   Call<MarketResponse> getKaratekasInSaleByGroup(@Path("id_group") String id_group);
 
 
+  @GET("karatekas/byparticipant/{id_participants}")
+  Call<MarketResponse> getKaratekasByParticipant(@Path("id_participants") int id_participant);
+
+
   //BID
   //DO BID
   @FormUrlEncoded

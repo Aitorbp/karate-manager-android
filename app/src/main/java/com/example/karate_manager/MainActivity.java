@@ -214,6 +214,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
     }
+
+    public void validationInHorizontalMyTeam(){
+        Log.d("PRUEBA HOR", String.valueOf(id_group_storage));
+        if(groups == null || groups.getGroupByParticipant().size() == 0 || groups.getGroupByParticipant().isEmpty()){ //Si el usuario no está en ningún grupo, indicarle que tiene que entrar en alguno
+
+            (Toast.makeText(getApplicationContext(), "You have to join or create a good to start to play", Toast.LENGTH_LONG)).show();
+            JoinGroupFragment joinGroupFragment = new JoinGroupFragment();
+            addFragment(joinGroupFragment);
+            sendUserToJoinGroup(user,joinGroupFragment);
+        }else if(
+            // Si el id del usuario nos llega a 0 por que hemos hecho logout anteriormte pero tenemos grupos, ponemos el primer grupo de la lista
+                id_group_storage == 0 && groups.getGroupByParticipant().size() != 0 || groups.getGroupByParticipant().isEmpty()){
+            group_send_storage = Storage.getGroupSelected(getApplicationContext());
+            Log.d("STORAGE click general", String.valueOf(id_group_storage));
+            final MyTeamFragment myTeamFragment = new MyTeamFragment();
+            addFragment(myTeamFragment);
+            id_group_storage= groups.getGroupByParticipant().get(0).getId();
+            Storage.getIdGroupPrincipal(getApplication());
+            sendUserGroupToMyTeam(user,id_group_storage,myTeamFragment);
+
+        }
+        else if(id_group_storage != 0 && groups.getGroupByParticipant().size() != 0|| !groups.getGroupByParticipant().isEmpty()){
+            final MyTeamFragment myTeamFragment = new MyTeamFragment();
+            addFragment(myTeamFragment);
+            Storage.getIdGroupPrincipal(getApplication());
+            group_send_storage =  Storage.getGroupSelected(getApplication());
+            sendUserGroupToMyTeam(user,id_group_storage,myTeamFragment);
+
+        }
+    }
     //Accediendo al menu horizontal
     private BottomNavigationView.OnNavigationItemSelectedListener horListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -231,10 +261,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     break;
                 case R.id.hor_myteam:
-                    final MyTeamFragment myTeamFragment = new MyTeamFragment();
-                    addFragment(myTeamFragment);
-
-                    sendUserGroupToMyTeam(user,groupSelected,myTeamFragment);
+                    validationInHorizontalMyTeam();
+//                    final MyTeamFragment myTeamFragment = new MyTeamFragment();
+//                    addFragment(myTeamFragment);
+//
+//                    sendUserGroupToMyTeam(user,groupSelected,myTeamFragment);
                     break;
 
                 case R.id.hor_calendary:
