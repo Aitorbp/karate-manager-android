@@ -15,6 +15,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -49,7 +50,7 @@ public interface APIService {
   @POST("user/password/reset")
   Call<User> recoverPass(@Body User user);
 
-
+//Images
   @Multipart
   @POST("upload/image")
   Call<Prueba> uploadImage(
@@ -105,6 +106,9 @@ public interface APIService {
   @GET("karatekas/byparticipant/{id_participants}")
   Call<MarketResponse> getKaratekasByParticipant(@Path("id_participants") int id_participant);
 
+  @DELETE("sell/karateka/{id_participants}/{id_group}")
+  Call<ParticipantResponse> sellKaratekaByParticipant(@Path("id_participants") int id_participant,
+                                                      @Path("id_group") int id_group );
 
   //BID
   //DO BID

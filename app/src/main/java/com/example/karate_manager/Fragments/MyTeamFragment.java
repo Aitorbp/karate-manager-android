@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.karate_manager.Adapters.AdapterMarket;
 import com.example.karate_manager.Adapters.AdapterMyTeam;
+import com.example.karate_manager.Models.KaratekaModel.Karateka;
 import com.example.karate_manager.Models.KaratekaModel.MarketResponse;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantResponse;
 import com.example.karate_manager.Models.UserModel.UserResponse;
@@ -28,7 +29,7 @@ import com.example.karate_manager.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyTeamFragment extends Fragment {
+public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSell {
 
 
     AdapterMyTeam adapterMyTeam;
@@ -46,7 +47,7 @@ public class MyTeamFragment extends Fragment {
         listViewMyTeam = (ListView) RootView.findViewById(R.id.myteam_listview);
         APIService = ApiUtils.getAPIService();
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        adapterMyTeam = new AdapterMyTeam(getActivity().getApplicationContext(), R.layout.item_myteam_layout, myTeamResponse.getKaratekas());
+        adapterMyTeam = new AdapterMyTeam(getActivity().getApplicationContext(), R.layout.item_myteam_layout, myTeamResponse.getKaratekas(), fragmentManager, this);
 
         getParticipantByGroupAndUser(user.getUser().getId(), groupSelectedId);
 
@@ -104,5 +105,16 @@ public class MyTeamFragment extends Fragment {
             user =userResponse;
             groupSelectedId = groupSelected;
         }
+    }
+
+    @Override
+    public void onClick(Karateka karateka) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        AdapterMyTeam.SellKaratekaDialogFragment sellKaratekaDialogFragment = new AdapterMyTeam.SellKaratekaDialogFragment(karateka);
+        Bundle args = new Bundle();
+        args.putInt("idUser", user.getUser().getId());
+        args.putInt("idGroup", groupSelectedId);
+        sellKaratekaDialogFragment.setArguments(args);
+        sellKaratekaDialogFragment.show(fragmentManager, "sell");
     }
 }
