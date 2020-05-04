@@ -3,15 +3,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context=".Fragments.MyTeamFragment">
 
-    <ListView
-        android:divider="@android:color/transparent"
-        android:dividerHeight="15dp"
-        android:paddingTop="10dp"
-        android:layout_marginTop="60dp"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/myteam_listview"></ListView>
+        android:orientation="vertical">
+
+
+
+        <GridView
+            android:layout_marginTop="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+
+
+            android:paddingHorizontal="10dp"
+            android:background="@color/colorWhite"
+            android:id="@+id/myteam_gridview"
+
+            android:numColumns="4"
+            android:horizontalSpacing="10dp"
+            android:verticalSpacing="10dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:columnWidth="10dp"
+            android:orientation="vertical">
+
+        </GridView>
+        <ListView
+            android:divider="@android:color/transparent"
+            android:dividerHeight="15dp"
+            android:paddingTop="10dp"
+            android:layout_marginTop="60dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/myteam_listview"></ListView>
+    </LinearLayout>
+
+
 
 </FrameLayout>

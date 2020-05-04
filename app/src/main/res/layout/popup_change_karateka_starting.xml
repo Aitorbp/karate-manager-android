@@ -1,0 +1,19 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="340dp"
+    android:layout_height="300dp"
+    android:background="@drawable/custom_join_group_popup"
+    android:layout_gravity="center">
+
+    <ListView
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10dp"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/starting_listview"></ListView>
+
+</LinearLayout>
+
+
