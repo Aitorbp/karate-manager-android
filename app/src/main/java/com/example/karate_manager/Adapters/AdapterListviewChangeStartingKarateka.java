@@ -1,15 +1,21 @@
 package com.example.karate_manager.Adapters;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.karate_manager.DialogFragment.ChoosingKaratekaStartingDialog;
+import com.example.karate_manager.MainActivity;
 import com.example.karate_manager.Models.KaratekaModel.Karateka;
 import com.example.karate_manager.Models.KaratekaModel.MarketResponse;
 import com.example.karate_manager.Network.ApiUtils;
@@ -20,7 +26,9 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 public class AdapterListviewChangeStartingKarateka extends ArrayAdapter {
 
@@ -29,14 +37,16 @@ public class AdapterListviewChangeStartingKarateka extends ArrayAdapter {
     int item_Layaut;
     ArrayList<Karateka> data;
     ApiUtils apiUtils;
+    private FragmentManager fm;
+    ClickOnChangeKarteka listener;
 
-
-    public AdapterListviewChangeStartingKarateka(Context context, int item_Layaut, ArrayList<Karateka> data) {
+    public AdapterListviewChangeStartingKarateka(Context context, int item_Layaut, ArrayList<Karateka> data, FragmentManager fm,  ClickOnChangeKarteka listener ) {
         super(context, item_Layaut,data);
         this.context = context;
         this.item_Layaut = item_Layaut;
         this.data = data;
-
+        this.fm = fm;
+        this.listener = listener;
 
     }
 
@@ -93,11 +103,32 @@ public class AdapterListviewChangeStartingKarateka extends ArrayAdapter {
             elementPointsKarateka.setText(pointsKarateka);
         }
 
-        Button buttonToChange= convertView.findViewById(R.id.item_button_to_change);
 
+//        Button buttonToChange= convertView.findViewById(R.id.item_button_to_change);
+//        buttonToChange.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.d("mkdemdekdemkdke", String.valueOf(AdapterListviewChangeStartingKarateka.this.data.get(position).getCountry()));
+//
+//
+//            }
+//        });
+
+        final View finalConvertView = convertView;
+        finalConvertView.findViewById(R.id.item_button_to_change).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onClick(data.get(position));
+            }
+        });
 
         return convertView;
     }
+
+    public interface ClickOnChangeKarteka{
+        void onClick(Karateka karateka);
+    }
+
 
 
 }

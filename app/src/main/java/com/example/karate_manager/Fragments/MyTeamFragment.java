@@ -1,8 +1,10 @@
 package com.example.karate_manager.Fragments;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,6 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -52,8 +56,12 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
     int groupSelectedId = 0;
     private APIService APIService;
     MarketResponse myTeamResponse = new MarketResponse(200,null,null );
-
+    Karateka karateka = new Karateka(0,null,null,0, null,0,null,null);
+    LinearLayout card_karateka;
+    LinearLayout card_default;
+    int REQUEST_CODE = 1;
     int idParticipant;
+    int indexGrid;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -64,7 +72,8 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         adapterMyTeam = new AdapterMyTeam(getActivity().getApplicationContext(), R.layout.item_myteam_layout, myTeamResponse.getKaratekas(), fragmentManager, this);
         adapterStartingKarateka = new AdapterStartingKarateka(getActivity().getApplicationContext(), R.layout.item_card_karateka_myteam, startingKaratekas);
-
+        card_karateka = (LinearLayout) RootView.findViewById(R.id.card_karateka);
+        card_default = (LinearLayout) RootView.findViewById(R.id.card_default);
 
         createDefaultStartingKaratekas(startingKaratekas);
 
@@ -75,18 +84,8 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 int idKarateka = (int) startingKaratekas.get(i).getId();
+                showDialogFragment(idKarateka,i);
 
-                Log.d("IndexGrid", String.valueOf(i));
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                ChoosingKaratekaStartingDialog choosingKaratekaStartingDialog = new ChoosingKaratekaStartingDialog();
-                Bundle args = new Bundle();
-                args.putInt("idUser", user.getUser().getId());
-                args.putInt("idGroup", groupSelectedId);
-                args.putInt("idParticipant", idParticipant);
-                args.putInt("idKarateka", idKarateka);
-                args.putInt("indexGrid", i);
-                choosingKaratekaStartingDialog.setArguments(args);
-                choosingKaratekaStartingDialog.show(fragmentManager, "karateka" );
             }
 
         });
@@ -98,8 +97,11 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
         return RootView;
     }
 
+
     public void changeKarateka(ArrayList<Karateka> startingKaratekas, int indexGrid, Karateka karateka){
        startingKaratekas.set(indexGrid, karateka);
+
+
     }
 
     public void createDefaultStartingKaratekas(ArrayList<Karateka> startingKaratekas){
@@ -108,6 +110,48 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
             startingKaratekas.add(startingKarateka);
 
         }
+    }
+
+    //El onactivityresult trae la información que señalamos del adappter del dialogfragment
+    // para ello necesitamos un  choosingKaratekaStartingDialog.setTargetFragment(this,1); en el métido de apertura del fragmentDialog
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case 1:
+                if (resultCode == Activity.RESULT_OK) {
+                    if(data!=null){
+                        // set value to your TextView
+
+                        Karateka karatekaChanged = (Karateka) data.getSerializableExtra("karatekaChanged");
+                        changeKarateka(startingKaratekas, indexGrid, karatekaChanged );
+                        Log.d("idKaratekaChangeaaa", String.valueOf(karatekaChanged.getId()));
+//                        adapterMyTeam.setData(startingKaratekas);
+                        gridViewMyTeam.setAdapter(adapterStartingKarateka);
+                        adapterStartingKarateka.notifyDataSetChanged();
+//                        card_karateka.setVisibility(View.VISIBLE);
+//                        card_default.setVisibility(View.GONE);
+                    }
+                }
+                break;
+        }
+    }
+ 
+
+    private void showDialogFragment(int idKarateka, int i){
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        ChoosingKaratekaStartingDialog choosingKaratekaStartingDialog = new ChoosingKaratekaStartingDialog();
+        Bundle args = new Bundle();
+        args.putInt("idUser", user.getUser().getId());
+        args.putInt("idGroup", groupSelectedId);
+        args.putInt("idParticipant", idParticipant);
+        args.putInt("idKarateka", idKarateka);
+        args.putInt("indexGrid", i);
+        indexGrid= i;
+
+        choosingKaratekaStartingDialog.setArguments(args);
+        choosingKaratekaStartingDialog.setTargetFragment(this,1);
+        choosingKaratekaStartingDialog.show(fragmentManager, "karateka" );
     }
 
     public void getParticipantByGroupAndUser(int idUser, int idGroup){

@@ -1,6 +1,9 @@
 package com.example.karate_manager.Models.KaratekaModel;
 
-public class Karateka {
+import java.io.Serializable;
+
+// Ponemos el serializable para que el
+public class Karateka implements Serializable {
     private int id;
     private String name;
     private String country;
