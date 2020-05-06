@@ -2,14 +2,10 @@ package com.example.karate_manager.Fragments;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import retrofit2.Call;
@@ -22,23 +18,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.karate_manager.Adapters.AdapterListviewChangeStartingKarateka;
-import com.example.karate_manager.Adapters.AdapterMarket;
 import com.example.karate_manager.Adapters.AdapterMyTeam;
 import com.example.karate_manager.Adapters.AdapterStartingKarateka;
 import com.example.karate_manager.DialogFragment.ChoosingKaratekaStartingDialog;
 import com.example.karate_manager.Models.KaratekaModel.Karateka;
 import com.example.karate_manager.Models.KaratekaModel.MarketResponse;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantResponse;
+import com.example.karate_manager.Models.SaleModel.StartingResponse;
 import com.example.karate_manager.Models.UserModel.UserResponse;
 import com.example.karate_manager.Network.APIService;
 import com.example.karate_manager.Network.ApiUtils;
 import com.example.karate_manager.R;
+import com.example.karate_manager.Utils.Storage;
 
 import java.util.ArrayList;
 
@@ -51,31 +46,48 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
     AdapterMyTeam adapterMyTeam;
     ListView listViewMyTeam;
     GridView gridViewMyTeam;
-    ArrayList<Karateka> startingKaratekas = new ArrayList<>();
+    ArrayList<Karateka>    startingKaratekas = new ArrayList<>();
     UserResponse user = new UserResponse(200,null,null );
     int groupSelectedId = 0;
     private APIService APIService;
     MarketResponse myTeamResponse = new MarketResponse(200,null,null );
+
+    MarketResponse myStartingResponse = new MarketResponse(200,null,null );
     Karateka karateka = new Karateka(0,null,null,0, null,0,null,null);
     LinearLayout card_karateka;
     LinearLayout card_default;
     int REQUEST_CODE = 1;
     int idParticipant;
     int indexGrid;
+    int idKarateka;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View RootView = inflater.inflate(R.layout.fragment_my_team, container, false);
+
+
+
         listViewMyTeam = (ListView) RootView.findViewById(R.id.myteam_listview);
         gridViewMyTeam = (GridView) RootView.findViewById(R.id.myteam_gridview);
         APIService = ApiUtils.getAPIService();
+
+//        startingKaratekas = Storage.loadDataKaratekasStarting(getContext() );
+//        if(startingKaratekas ==null){
+//            createDefaultStartingKaratekas( );
+//        }
+
+
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         adapterMyTeam = new AdapterMyTeam(getActivity().getApplicationContext(), R.layout.item_myteam_layout, myTeamResponse.getKaratekas(), fragmentManager, this);
-        adapterStartingKarateka = new AdapterStartingKarateka(getActivity().getApplicationContext(), R.layout.item_card_karateka_myteam, startingKaratekas);
+        adapterStartingKarateka = new AdapterStartingKarateka(getActivity().getApplicationContext(), R.layout.item_card_karateka_myteam, myStartingResponse.getKaratekas());
         card_karateka = (LinearLayout) RootView.findViewById(R.id.card_karateka);
         card_default = (LinearLayout) RootView.findViewById(R.id.card_default);
 
-        createDefaultStartingKaratekas(startingKaratekas);
+       // createDefaultStartingKaratekas(startingKaratekas);
+        getParticipantByGroupAndUser(user.getUser().getId(), groupSelectedId);
+
+
+
 
 
 
@@ -83,15 +95,15 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                int idKarateka = (int) startingKaratekas.get(i).getId();
+                 idKarateka = (int) myStartingResponse.getKaratekas().get(i).getId();
                 showDialogFragment(idKarateka,i);
 
             }
 
         });
 
-        getParticipantByGroupAndUser(user.getUser().getId(), groupSelectedId);
-        gridViewMyTeam.setAdapter(adapterStartingKarateka);
+
+   //     gridViewMyTeam.setAdapter(adapterStartingKarateka);
 
 
         return RootView;
@@ -101,10 +113,10 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
     public void changeKarateka(ArrayList<Karateka> startingKaratekas, int indexGrid, Karateka karateka){
        startingKaratekas.set(indexGrid, karateka);
 
-
     }
 
-    public void createDefaultStartingKaratekas(ArrayList<Karateka> startingKaratekas){
+    public void createDefaultStartingKaratekas(){
+         startingKaratekas = new ArrayList<>();
         for (int i = 0; i < 8 ; i++) {
             Karateka startingKarateka = new Karateka(1, "", "", 1,"-67" ,0, null, null);
             startingKaratekas.add(startingKarateka);
@@ -122,21 +134,38 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
                 if (resultCode == Activity.RESULT_OK) {
                     if(data!=null){
                         // set value to your TextView
-
                         Karateka karatekaChanged = (Karateka) data.getSerializableExtra("karatekaChanged");
-                        changeKarateka(startingKaratekas, indexGrid, karatekaChanged );
+
+                       int  idKaratekaChanged = (int) karatekaChanged.getId();
+                        Log.d("Karatekacambiado", String.valueOf(idKaratekaChanged));
+                        Log.d("Karatekaparacamn", String.valueOf(idKarateka));
+                        if(myStartingResponse.getKaratekas().size() >= 3){
+                             postAlternateKarateka(idParticipant, idKarateka);
+                             postStartingKarateka(idParticipant, idKaratekaChanged);
+
+                        }
+                        if(myStartingResponse.getKaratekas().size() < 3){
+                        postStartingKarateka(idParticipant, idKaratekaChanged);
+                        Log.d("Entrada en <3", "kekekkekekek");
+                        }
+
+
+                   //     changeKarateka(startingKaratekas, indexGrid, karatekaChanged );
                         Log.d("idKaratekaChangeaaa", String.valueOf(karatekaChanged.getId()));
 //                        adapterMyTeam.setData(startingKaratekas);
                         gridViewMyTeam.setAdapter(adapterStartingKarateka);
                         adapterStartingKarateka.notifyDataSetChanged();
+                     //   Storage.saveDataKaratekasStarting(getContext(), startingKaratekas);
 //                        card_karateka.setVisibility(View.VISIBLE);
 //                        card_default.setVisibility(View.GONE);
+
+                        getStartingKaratekaByParticipant(idParticipant);
                     }
                 }
                 break;
         }
     }
- 
+
 
     private void showDialogFragment(int idKarateka, int i){
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -154,6 +183,45 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
         choosingKaratekaStartingDialog.show(fragmentManager, "karateka" );
     }
 
+    public void postAlternateKarateka(int id_participants, int id_karatekas){
+        Call<StartingResponse> call = APIService.postAlternateKarateka(id_participants, id_karatekas);
+        call.enqueue(new Callback<StartingResponse>() {
+            @Override
+            public void onResponse(Call<StartingResponse> call, Response<StartingResponse> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(getContext(), "Karateka added", Toast.LENGTH_SHORT).show();
+
+                }else {
+                    Log.d("Error alternate", "some error");
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<StartingResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void postStartingKarateka(int id_participants, int id_karatekas){
+        Call<StartingResponse> call = APIService.postStartingKarateka(id_participants, id_karatekas);
+        call.enqueue(new Callback<StartingResponse>() {
+            @Override
+            public void onResponse(Call<StartingResponse> call, Response<StartingResponse> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(getContext(), "Karateka added", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<StartingResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
     public void getParticipantByGroupAndUser(int idUser, int idGroup){
 
         Call<ParticipantResponse> call = APIService.getParticipant(idUser,idGroup);
@@ -166,7 +234,7 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
                      idParticipant =response.body().getParticipants().get(0).getId();
                     getKaratekasByParticipant(String.valueOf(idParticipant));
                     Log.d("RESPONSE_SUCCESS", "Everything All right");
-
+                    getStartingKaratekaByParticipant(idParticipant);
                 }
             }
 
@@ -196,6 +264,29 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
        }
    });
 
+    }
+
+    private void getStartingKaratekaByParticipant(int id_participant){
+        Call<MarketResponse> call =  APIService.getStartingKaratekaByParticipant(id_participant);
+        call.enqueue(new Callback<MarketResponse>() {
+            @Override
+            public void onResponse(Call<MarketResponse> call, Response<MarketResponse> response) {
+              if(response.isSuccessful()){
+                  myStartingResponse = response.body();
+                  adapterStartingKarateka.notifyDataSetChanged();
+                  adapterStartingKarateka.setData(myStartingResponse);
+                  gridViewMyTeam.setAdapter(adapterStartingKarateka);
+              }else{
+                  Log.d("Failllll", "jajajjajaja");
+              }
+
+            }
+
+            @Override
+            public void onFailure(Call<MarketResponse> call, Throwable t) {
+
+            }
+        });
     }
 
     public void recievedUserGroup(UserResponse userResponse, int groupSelected) {

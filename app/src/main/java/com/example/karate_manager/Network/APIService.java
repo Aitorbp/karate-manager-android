@@ -8,6 +8,7 @@ import com.example.karate_manager.Models.JoinGroupResponse.JoinGroupResponse;
 import com.example.karate_manager.Models.KaratekaModel.MarketResponse;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantResponse;
 import com.example.karate_manager.Models.Prueba;
+import com.example.karate_manager.Models.SaleModel.StartingResponse;
 import com.example.karate_manager.Models.UserModel.UserResponse;
 import com.example.karate_manager.Models.UserModel.User;
 
@@ -109,7 +110,21 @@ public interface APIService {
   @DELETE("sell/karateka/{id_participants}/{id_group}")
   Call<ParticipantResponse> sellKaratekaByParticipant(@Path("id_participants") int id_participant,
                                                       @Path("id_group") int id_group );
+//Starting
 
+@GET("karatekas/starting/{id_participants}")
+Call<MarketResponse> getStartingKaratekaByParticipant(@Path("id_participants") int id_participants);
+
+  @GET("karatekas/alternate/{id_participants}")
+  Call<MarketResponse> getAlternateKaratekaByParticipant(@Path("id_participants") int id_participants);
+  @FormUrlEncoded
+  @POST("karatekas/update/starting")
+  Call<StartingResponse> postStartingKarateka(@Field("id_participants") int id_participants,
+                                            @Field("id_karatekas") int id_karatekas);
+  @FormUrlEncoded
+  @POST("karatekas/update/alternate")
+  Call<StartingResponse> postAlternateKarateka(@Field("id_participants") int id_participants,
+                                               @Field("id_karatekas") int id_karatekas);
   //BID
   //DO BID
   @FormUrlEncoded

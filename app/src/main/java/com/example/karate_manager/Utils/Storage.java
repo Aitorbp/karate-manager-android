@@ -5,7 +5,12 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.example.karate_manager.Models.GroupModel.Group;
+import com.example.karate_manager.Models.KaratekaModel.Karateka;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import static com.example.karate_manager.Utils.PreferencesUtility.*;
 public class Storage {
@@ -16,6 +21,32 @@ public class Storage {
             return PreferenceManager.getDefaultSharedPreferences(context);
         }
 
+    public static void saveDataKaratekasStarting(Context context, ArrayList<Karateka> karatekasStarting){
+        SharedPreferences.Editor editor = getPreferences(context).edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(karatekasStarting);
+        editor.putString("listStarting", json);
+        editor.apply();
+    }
+    public static  ArrayList<Karateka> loadDataKaratekasStarting(Context context){
+        SharedPreferences sharedPref = getPreferences(context);
+        Gson gson = new Gson();
+        String json = sharedPref.getString("listStarting", null);
+        Type type = new TypeToken<ArrayList<Karateka>>(){}.getType();
+        ArrayList<Karateka>   karatekasStarting = gson.fromJson(json,type);
+//        if(karatekasStarting == null){
+//            for (int i = 0; i < 8 ; i++) {
+//                Karateka startingKarateka = new Karateka(1, "", "", 1,"-67" ,0, null, null);
+//                karatekasStarting.add(startingKarateka);
+//
+//            }
+//        }
+        return karatekasStarting;
+    }
+    public static void removeDataKaratekasStarting(Context context, String key){
+        SharedPreferences.Editor editor = getPreferences(context).edit();
+        editor.remove("listStarting").commit();
+    }
     public static boolean saveGroup(Context context, Group group){
         SharedPreferences.Editor editor = getPreferences(context).edit();
         Gson gson = new Gson();
@@ -97,4 +128,8 @@ public class Storage {
         public static boolean getLoggedStatus(Context context) {
             return getPreferences(context).getBoolean(LOGGED_IN_PREF, false);
         }
+
+
+
+
 }

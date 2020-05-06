@@ -80,7 +80,8 @@ public ChoosingKaratekaStartingDialog(){}
 
         adapterListviewChangeStartingKarateka = new AdapterListviewChangeStartingKarateka(getContext(), R.layout.item_change_karateka, choosemKaratekaResponse.getKaratekas(), fragmentManager, this );
         listViewKartekasStarting =  (ListView) view.findViewById(R.id.starting_listview);
-        getParticipantByGroupAndUser( idUser,  idGroup);
+        getKaratekasAlternateByParticipant(idParticipant);
+      //  getParticipantByGroupAndUser( idUser,  idGroup);
 
 
 
@@ -90,54 +91,25 @@ public ChoosingKaratekaStartingDialog(){}
     }
 
 
-    public void getParticipantByGroupAndUser(int idUser, int idGroup){
 
-        Call<ParticipantResponse> call = APIService.getParticipant(idUser,idGroup);
-        call.enqueue(new Callback<ParticipantResponse>() {
-            @Override
-            public void onResponse(Call<ParticipantResponse> call, Response<ParticipantResponse> response) {
-                if (response.isSuccessful()) {
+private void getKaratekasAlternateByParticipant(int id_participants){
+    Call<MarketResponse> call = APIService.getAlternateKaratekaByParticipant(id_participants);
+    call.enqueue(new Callback<MarketResponse>() {
+        @Override
+        public void onResponse(Call<MarketResponse> call, Response<MarketResponse> response) {
+            choosemKaratekaResponse = response.body();
+            adapterListviewChangeStartingKarateka.notifyDataSetChanged();
+            adapterListviewChangeStartingKarateka.setData(choosemKaratekaResponse);
+            listViewKartekasStarting.setAdapter(adapterListviewChangeStartingKarateka);
+        }
 
-                    Log.d("BID PARTICIPANT",String.valueOf(response.body().getParticipants().get(0).getId()));
-                    int idParticipant =response.body().getParticipants().get(0).getId();
+        @Override
+        public void onFailure(Call<MarketResponse> call, Throwable t) {
 
+        }
+    });
+}
 
-                    getKaratekasByParticipant(String.valueOf(idParticipant));
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ParticipantResponse> call, Throwable t) {
-
-                Log.d("RESPONSE_FAILURE", String.valueOf(t));
-            }
-        });
-    }
-
-
-    private void getKaratekasByParticipant(String id_participants){
-        Call<MarketResponse> call = APIService.getKaratekasByParticipant(Integer.parseInt(id_participants));
-        call.enqueue(new Callback<MarketResponse>() {
-            @Override
-            public void onResponse(Call<MarketResponse> call, Response<MarketResponse> response) {
-                choosemKaratekaResponse = response.body();
-                adapterListviewChangeStartingKarateka.notifyDataSetChanged();
-                adapterListviewChangeStartingKarateka.setData(choosemKaratekaResponse);
-                listViewKartekasStarting.setAdapter(adapterListviewChangeStartingKarateka);
-
-
-                Log.d("RESPONSE_SUCCESS", "response market by karateka done");
-
-            }
-
-            @Override
-            public void onFailure(Call<MarketResponse> call, Throwable t) {
-
-            }
-        });
-
-    }
 
     @Override
     public void onClick(Karateka karateka) {

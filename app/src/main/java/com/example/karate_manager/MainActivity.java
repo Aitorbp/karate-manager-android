@@ -343,6 +343,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Storage.removeToken(getApplicationContext(),TOKEN);
                 Storage.removeIdGroupPrincipal(getApplicationContext(),ID_GROUP);
                 Storage.removeGroup(getApplicationContext(),GROUP);
+                Storage.removeDataKaratekasStarting(getApplicationContext(),"listStarting");
                 Storage.setLoggedIn(getApplicationContext(), false);
                 intent = new Intent(this, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
