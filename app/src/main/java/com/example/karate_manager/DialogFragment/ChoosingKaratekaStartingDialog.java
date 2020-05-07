@@ -116,6 +116,7 @@ private void getKaratekasAlternateByParticipant(int id_participants){
 
     //Hacer aqui llamada a la api para que cambie uno por el otro
 
+
         dismiss();
         Intent intent = new Intent();
 

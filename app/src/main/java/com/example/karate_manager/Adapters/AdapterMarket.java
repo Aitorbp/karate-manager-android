@@ -307,20 +307,30 @@ public class AdapterMarket extends ArrayAdapter{
         }
         public void createBidInGroup(int idKarateka, int idGroup, int idParticipant, int bid){
 
+            Log.d("idKarateka!!!!", String.valueOf(idKarateka));
+            Log.d("idGroup!!!!", String.valueOf(idGroup));
+            Log.d("idParticipant!!!!", String.valueOf(idParticipant));
+            Log.d("bid!!!!", String.valueOf(bid));
             Call<BidResponse> call = APIService.createBidInGroup(idKarateka,idParticipant,bid,idGroup);
             call.enqueue(new Callback<BidResponse>() {
                 @Override
                 public void onResponse(Call<BidResponse> call, Response<BidResponse> response) {
-                    Log.d("Bid done!!!!", "Bid doneeeee!");
-                    Toast.makeText(getContext(), "Good luck, you have bet on this karateka ", Toast.LENGTH_SHORT).show();
-                    dismiss();
+                    if(response.isSuccessful()){
+                        Log.d("Bid done!!!!", "Bid doneeeee!");
+                        Toast.makeText(getContext(), "Good luck, you have bet on this karateka ", Toast.LENGTH_SHORT).show();
+                        dismiss();
+                    }else{
+                        Log.d("Bid failll!!!!", "Bid failll!");
+                    }
+
+
                 }
 
                 @Override
                 public void onFailure(Call<BidResponse> call, Throwable t) {
 
 
-                    Log.d("Failllll!!!!", String.valueOf(t));
+                    Log.d("Feeeeeilllll!!!!", String.valueOf(t));
                 }
             });
 

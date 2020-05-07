@@ -13,6 +13,7 @@ import com.example.karate_manager.Models.KaratekaModel.MarketResponse;
 import com.example.karate_manager.Network.ApiUtils;
 import com.example.karate_manager.R;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,6 +22,10 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+import jp.wasabeef.picasso.transformations.CropSquareTransformation;
+import jp.wasabeef.picasso.transformations.MaskTransformation;
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class AdapterStartingKarateka extends ArrayAdapter {
 
@@ -80,7 +85,8 @@ public class AdapterStartingKarateka extends ArrayAdapter {
         if(imageCountry== null) {
             iconCountry.setImageResource(R.drawable.default_image);
         }else{
-            Picasso.get().load(apiUtils.BASE_URL_PICTURE + imageCountry).fit().into(iconCountry);}
+
+            Picasso.get().load(apiUtils.BASE_URL_PICTURE + imageCountry).into(iconCountry);}
 
         TextView elementName = convertView.findViewById(R.id.card_name_karateka_myTeam);
         elementName.setText(name);

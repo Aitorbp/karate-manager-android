@@ -30,14 +30,15 @@
         android:layout_height="115dp"
         android:orientation="vertical"
         android:visibility="visible"
+
         >
         <ImageView
             android:id="@+id/card_imagen_karateka_myTeam"
             android:background="@drawable/custom_card_imagen_karateka"
             android:layout_gravity="center"
-            android:scaleType="matrix"
+            android:scaleType="centerCrop"
             android:adjustViewBounds="true"
-            android:layout_width="90dp"
+            android:layout_width="match_parent"
             android:layout_height="70dp" />
 
 

@@ -3,11 +3,13 @@ package com.example.karate_manager.Fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -87,7 +89,9 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
         getParticipantByGroupAndUser(user.getUser().getId(), groupSelectedId);
 
 
-
+//        if(myStartingResponse.getKaratekas() == 0){
+//            Log.d("Starting empty", "Starting emptyy");
+//        }
 
 
 
@@ -137,34 +141,34 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
                         Karateka karatekaChanged = (Karateka) data.getSerializableExtra("karatekaChanged");
 
                        int  idKaratekaChanged = (int) karatekaChanged.getId();
-                        Log.d("Karatekacambiado", String.valueOf(idKaratekaChanged));
-                        Log.d("Karatekaparacamn", String.valueOf(idKarateka));
+
                         if(myStartingResponse.getKaratekas().size() >= 3){
                              postAlternateKarateka(idParticipant, idKarateka);
                              postStartingKarateka(idParticipant, idKaratekaChanged);
 
-                        }
-                        if(myStartingResponse.getKaratekas().size() < 3){
+                        }else{
                         postStartingKarateka(idParticipant, idKaratekaChanged);
                         Log.d("Entrada en <3", "kekekkekekek");
                         }
 
-
-                   //     changeKarateka(startingKaratekas, indexGrid, karatekaChanged );
-                        Log.d("idKaratekaChangeaaa", String.valueOf(karatekaChanged.getId()));
-//                        adapterMyTeam.setData(startingKaratekas);
-                        gridViewMyTeam.setAdapter(adapterStartingKarateka);
-                        adapterStartingKarateka.notifyDataSetChanged();
-                     //   Storage.saveDataKaratekasStarting(getContext(), startingKaratekas);
-//                        card_karateka.setVisibility(View.VISIBLE);
-//                        card_default.setVisibility(View.GONE);
-
                         getStartingKaratekaByParticipant(idParticipant);
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        if (Build.VERSION.SDK_INT >= 26) {
+                            ft.setReorderingAllowed(false);
+                        }
+                        ft.detach(this).attach(this).commit();
+                        Log.d("idKaratekaChangeaaa", String.valueOf(karatekaChanged.getId()));
+
+
+
+
+
                     }
                 }
                 break;
         }
     }
+
 
 
     private void showDialogFragment(int idKarateka, int i){

@@ -128,11 +128,11 @@ Call<MarketResponse> getStartingKaratekaByParticipant(@Path("id_participants") i
   //BID
   //DO BID
   @FormUrlEncoded
-  @POST("bid/{id_group}")
+  @POST("bid")
   Call<BidResponse> createBidInGroup(
-          @Field("id_karateka") int id_karateka,
+          @Field("id_karatekas") int id_karateka,
           @Field("id_participant") int id_participant,
           @Field("bid") int bid,
-          @Path("id_group") int id_group);
+          @Field("id_group") int id_group);
 
 }
