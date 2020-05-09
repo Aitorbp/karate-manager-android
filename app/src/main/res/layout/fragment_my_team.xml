@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    tools:context=".Fragments.MyTeamFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments.MyTeamFragment"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,25 +14,40 @@
 
 
 
-        <GridView
-            android:layout_marginTop="80dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            <GridView
+                android:visibility="visible"
+                android:layout_marginTop="80dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
 
 
-            android:paddingHorizontal="10dp"
-            android:background="@color/colorWhite"
-            android:id="@+id/myteam_gridview"
+                android:paddingHorizontal="10dp"
+                android:background="@color/colorWhite"
+                android:id="@+id/myteam_gridview"
 
-            android:numColumns="4"
-            android:horizontalSpacing="10dp"
-            android:verticalSpacing="10dp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:columnWidth="10dp"
-            android:orientation="vertical">
+                android:numColumns="4"
+                android:horizontalSpacing="10dp"
+                android:verticalSpacing="10dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:columnWidth="10dp"
+                android:orientation="vertical"/>
 
-        </GridView>
+        <Button
+            android:layout_marginTop="15dp"
+            android:id="@+id/add_new_karateka_starting"
+            android:background="@drawable/custom_button"
+            android:textColor="@color/colorWhite"
+            android:textSize="10dp"
+            android:text="Add karateka to main team "
+            android:layout_width="250dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_horizontal">
+
+        </Button>
+
+
+
         <ListView
             android:divider="@android:color/transparent"
             android:dividerHeight="15dp"
@@ -44,4 +60,4 @@
 
 
 
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

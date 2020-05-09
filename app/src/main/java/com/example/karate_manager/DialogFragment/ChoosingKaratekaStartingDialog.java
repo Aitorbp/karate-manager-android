@@ -39,7 +39,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ChoosingKaratekaStartingDialog extends DialogFragment implements AdapterListviewChangeStartingKarateka.ClickOnChangeKarteka {
+public class ChoosingKaratekaStartingDialog extends DialogFragment implements AdapterListviewChangeStartingKarateka.ClickOnChangeKarteka, View.OnClickListener {
 
     private  APIService APIService;
     ListView listViewKartekasStarting;
@@ -81,6 +81,8 @@ public ChoosingKaratekaStartingDialog(){}
         adapterListviewChangeStartingKarateka = new AdapterListviewChangeStartingKarateka(getContext(), R.layout.item_change_karateka, choosemKaratekaResponse.getKaratekas(), fragmentManager, this );
         listViewKartekasStarting =  (ListView) view.findViewById(R.id.starting_listview);
         getKaratekasAlternateByParticipant(idParticipant);
+
+         view.findViewById(R.id.exit_popup_change_karateka).setOnClickListener(this);
       //  getParticipantByGroupAndUser( idUser,  idGroup);
 
 
@@ -127,4 +129,16 @@ private void getKaratekasAlternateByParticipant(int id_participants){
     }
 
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.exit_popup_change_karateka:
+                Log.d("EXIT", "PULSANDO");
+                dismiss();
+                break;
+
+            default:
+                break;
+        }
+    }
 }

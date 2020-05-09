@@ -112,7 +112,7 @@
             android:textColor="@color/colorWhite"
             android:textSize="10dp"
             android:gravity="center"
-            android:text="Change"
+            android:text="Choice"
 
 
 

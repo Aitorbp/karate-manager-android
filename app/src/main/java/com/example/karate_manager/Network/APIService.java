@@ -107,9 +107,10 @@ public interface APIService {
   @GET("karatekas/byparticipant/{id_participants}")
   Call<MarketResponse> getKaratekasByParticipant(@Path("id_participants") int id_participant);
 
-  @DELETE("sell/karateka/{id_participants}/{id_group}")
+  @DELETE("sell/karateka/{id_participants}/{id_group}/{id_karatekas}")
   Call<ParticipantResponse> sellKaratekaByParticipant(@Path("id_participants") int id_participant,
-                                                      @Path("id_group") int id_group );
+                                                      @Path("id_group") int id_group,
+                                                      @Path("id_karatekas") int id_karatekas);
 //Starting
 
 @GET("karatekas/starting/{id_participants}")

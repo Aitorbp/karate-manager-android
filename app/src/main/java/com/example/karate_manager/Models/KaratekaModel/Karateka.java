@@ -9,14 +9,14 @@ public class Karateka implements Serializable {
     private String country;
     private float gender;
     private String weight;
-    private float value;
+    private int value;
     private String created_at;
     private String updated_at;
     private String photo_karateka;
 
     private String photo_country;
     private int points_karateka;
-    public Karateka(int id, String name, String country, float gender, String weight, float value, String created_at, String updated_at) {
+    public Karateka(int id, String name, String country, float gender, String weight, int value, String created_at, String updated_at) {
         this.id = id;
         this.name = name;
         this.country = country;
@@ -56,7 +56,7 @@ public class Karateka implements Serializable {
         this.weight = weight;
     }
 
-    public void setValue(float value) {
+    public void setValue(int value) {
         this.value = value;
     }
 
@@ -72,7 +72,7 @@ public class Karateka implements Serializable {
         this.photo_karateka = photo_karateka;
     }
 
-    public float getId() {
+    public int getId() {
         return id;
     }
 

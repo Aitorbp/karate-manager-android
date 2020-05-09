@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 import com.example.karate_manager.Adapters.AdapterMyTeam;
 import com.example.karate_manager.Adapters.AdapterStartingKarateka;
 import com.example.karate_manager.DialogFragment.ChoosingKaratekaStartingDialog;
+import com.example.karate_manager.DialogFragment.SellKaratekaDialogFragment;
 import com.example.karate_manager.Models.KaratekaModel.Karateka;
 import com.example.karate_manager.Models.KaratekaModel.MarketResponse;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantResponse;
@@ -62,21 +64,17 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
     int idParticipant;
     int indexGrid;
     int idKarateka;
+Button add_new_karateka_starting;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View RootView = inflater.inflate(R.layout.fragment_my_team, container, false);
 
 
-
         listViewMyTeam = (ListView) RootView.findViewById(R.id.myteam_listview);
         gridViewMyTeam = (GridView) RootView.findViewById(R.id.myteam_gridview);
         APIService = ApiUtils.getAPIService();
 
-//        startingKaratekas = Storage.loadDataKaratekasStarting(getContext() );
-//        if(startingKaratekas ==null){
-//            createDefaultStartingKaratekas( );
-//        }
 
 
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -84,14 +82,14 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
         adapterStartingKarateka = new AdapterStartingKarateka(getActivity().getApplicationContext(), R.layout.item_card_karateka_myteam, myStartingResponse.getKaratekas());
         card_karateka = (LinearLayout) RootView.findViewById(R.id.card_karateka);
         card_default = (LinearLayout) RootView.findViewById(R.id.card_default);
+        add_new_karateka_starting = (Button ) RootView.findViewById(R.id.add_new_karateka_starting);
 
-       // createDefaultStartingKaratekas(startingKaratekas);
+
         getParticipantByGroupAndUser(user.getUser().getId(), groupSelectedId);
 
 
-//        if(myStartingResponse.getKaratekas() == 0){
-//            Log.d("Starting empty", "Starting emptyy");
-//        }
+
+
 
 
 
@@ -99,28 +97,39 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+
                  idKarateka = (int) myStartingResponse.getKaratekas().get(i).getId();
                 showDialogFragment(idKarateka,i);
+
 
             }
 
         });
 
 
-   //     gridViewMyTeam.setAdapter(adapterStartingKarateka);
-
 
         return RootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        add_new_karateka_starting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-    public void changeKarateka(ArrayList<Karateka> startingKaratekas, int indexGrid, Karateka karateka){
-       startingKaratekas.set(indexGrid, karateka);
-
+                if(myStartingResponse.getKaratekas().size()>= 8){
+                    Toast.makeText(getContext(), "You cannot add more karatekas to the starting team", Toast.LENGTH_SHORT).show();
+                    Log.d("Pulsando", "jdwnjdjnwjdwjdjwdnjw");
+                }else{
+                    showDialogWithZeroStartingFragment();
+                }
+            }
+        });
     }
 
     public void createDefaultStartingKaratekas(){
-         startingKaratekas = new ArrayList<>();
+
         for (int i = 0; i < 8 ; i++) {
             Karateka startingKarateka = new Karateka(1, "", "", 1,"-67" ,0, null, null);
             startingKaratekas.add(startingKarateka);
@@ -142,7 +151,7 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
 
                        int  idKaratekaChanged = (int) karatekaChanged.getId();
 
-                        if(myStartingResponse.getKaratekas().size() >= 3){
+                        if(myStartingResponse.getKaratekas().size() >= 8){
                              postAlternateKarateka(idParticipant, idKarateka);
                              postStartingKarateka(idParticipant, idKaratekaChanged);
 
@@ -152,15 +161,10 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
                         }
 
                         getStartingKaratekaByParticipant(idParticipant);
-                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        if (Build.VERSION.SDK_INT >= 26) {
-                            ft.setReorderingAllowed(false);
-                        }
-                        ft.detach(this).attach(this).commit();
+
+
+                        refreshFragmnet();
                         Log.d("idKaratekaChangeaaa", String.valueOf(karatekaChanged.getId()));
-
-
-
 
 
                     }
@@ -171,6 +175,14 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
 
 
 
+public void refreshFragmnet(){
+    FragmentTransaction ft = getFragmentManager().beginTransaction();
+    if (Build.VERSION.SDK_INT >= 26) {
+        ft.setReorderingAllowed(false);
+    }
+    ft.detach(this).attach(this).commit();
+
+}
     private void showDialogFragment(int idKarateka, int i){
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         ChoosingKaratekaStartingDialog choosingKaratekaStartingDialog = new ChoosingKaratekaStartingDialog();
@@ -181,6 +193,21 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
         args.putInt("idKarateka", idKarateka);
         args.putInt("indexGrid", i);
         indexGrid= i;
+
+        choosingKaratekaStartingDialog.setArguments(args);
+        choosingKaratekaStartingDialog.setTargetFragment(this,1);
+        choosingKaratekaStartingDialog.show(fragmentManager, "karateka" );
+    }
+    private void showDialogWithZeroStartingFragment(){
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        ChoosingKaratekaStartingDialog choosingKaratekaStartingDialog = new ChoosingKaratekaStartingDialog();
+        Bundle args = new Bundle();
+        args.putInt("idUser", user.getUser().getId());
+        args.putInt("idGroup", groupSelectedId);
+        args.putInt("idParticipant", idParticipant);
+        args.putInt("idKarateka", idKarateka);
+        args.putInt("indexGrid", 0);
+
 
         choosingKaratekaStartingDialog.setArguments(args);
         choosingKaratekaStartingDialog.setTargetFragment(this,1);
@@ -280,6 +307,17 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
                   adapterStartingKarateka.notifyDataSetChanged();
                   adapterStartingKarateka.setData(myStartingResponse);
                   gridViewMyTeam.setAdapter(adapterStartingKarateka);
+
+
+                  if(myStartingResponse.getKaratekas().size() == 0){
+
+                                      showDialogWithZeroStartingFragment();
+
+                      Log.d("Starting empty", "Starting emptyy");
+                  }else {Log.d("Starting not empty", "Starting not emptyy");}
+
+
+
               }else{
                   Log.d("Failllll", "jajajjajaja");
               }
@@ -307,7 +345,7 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
 
 
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        AdapterMyTeam.SellKaratekaDialogFragment sellKaratekaDialogFragment = new AdapterMyTeam.SellKaratekaDialogFragment(karateka);
+        SellKaratekaDialogFragment sellKaratekaDialogFragment = new  SellKaratekaDialogFragment(karateka);
         Bundle args = new Bundle();
         args.putInt("idUser", user.getUser().getId());
         args.putInt("idGroup", groupSelectedId);
