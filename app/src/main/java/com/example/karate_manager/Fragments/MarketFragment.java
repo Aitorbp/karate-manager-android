@@ -19,6 +19,7 @@ import android.widget.ListView;
 
 import com.example.karate_manager.Adapters.AdapterMarket;
 import com.example.karate_manager.Adapters.AdapterScoring;
+import com.example.karate_manager.DialogFragment.BidKaratekaDialogFragment;
 import com.example.karate_manager.Models.KaratekaModel.Karateka;
 import com.example.karate_manager.Models.KaratekaModel.MarketResponse;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantResponse;
@@ -95,7 +96,7 @@ public class MarketFragment extends Fragment implements AdapterMarket.ClickOnBid
     @Override
     public void onClick(Karateka karateka) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        AdapterMarket.BidKaratekaDialogFragment bidKaratekaDialog = new AdapterMarket.BidKaratekaDialogFragment(karateka);
+        BidKaratekaDialogFragment bidKaratekaDialog = new BidKaratekaDialogFragment(karateka);
         Bundle args = new Bundle();
         args.putInt("idUser", user.getUser().getId());
         args.putInt("idGroup", groupSelectedId);

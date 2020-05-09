@@ -16,6 +16,7 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.karate_manager.Adapters.AdapterListviewChangeStartingKarateka;
@@ -43,6 +44,7 @@ public class ChoosingKaratekaStartingDialog extends DialogFragment implements Ad
 
     private  APIService APIService;
     ListView listViewKartekasStarting;
+    TextView text_all_karatekas_main_team;
     AdapterListviewChangeStartingKarateka adapterListviewChangeStartingKarateka;
     int idUser;
     int idGroup;
@@ -80,6 +82,7 @@ public ChoosingKaratekaStartingDialog(){}
 
         adapterListviewChangeStartingKarateka = new AdapterListviewChangeStartingKarateka(getContext(), R.layout.item_change_karateka, choosemKaratekaResponse.getKaratekas(), fragmentManager, this );
         listViewKartekasStarting =  (ListView) view.findViewById(R.id.starting_listview);
+         text_all_karatekas_main_team = (TextView) view.findViewById(R.id.text_all_karatekas_main_team);
         getKaratekasAlternateByParticipant(idParticipant);
 
          view.findViewById(R.id.exit_popup_change_karateka).setOnClickListener(this);
@@ -103,6 +106,15 @@ private void getKaratekasAlternateByParticipant(int id_participants){
             adapterListviewChangeStartingKarateka.notifyDataSetChanged();
             adapterListviewChangeStartingKarateka.setData(choosemKaratekaResponse);
             listViewKartekasStarting.setAdapter(adapterListviewChangeStartingKarateka);
+
+
+            if(choosemKaratekaResponse.getKaratekas().size()==0){
+                listViewKartekasStarting.setVisibility(View.GONE);
+                text_all_karatekas_main_team.setVisibility(View.VISIBLE);
+            }else{
+                listViewKartekasStarting.setVisibility(View.VISIBLE);
+                text_all_karatekas_main_team.setVisibility(View.GONE);
+            }
         }
 
         @Override

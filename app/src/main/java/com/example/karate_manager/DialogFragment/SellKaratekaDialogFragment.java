@@ -1,7 +1,9 @@
 package com.example.karate_manager.DialogFragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -104,7 +106,9 @@ public class SellKaratekaDialogFragment extends DialogFragment implements View.O
             case R.id.sell_button_yes:
                 Log.d("PULSANDO", "PULSANDO");
                 getParticipantByGroupAndUser(idUser, idGroup);
-
+                Intent intent = new Intent();
+                getTargetFragment().onActivityResult(
+                        getTargetRequestCode(), Activity.RESULT_OK, intent);
                 break;
 
             case R.id.sell_button_no:

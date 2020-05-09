@@ -105,14 +105,14 @@ public class AdapterListviewChangeStartingKarateka extends ArrayAdapter {
 
 
 //        Button buttonToChange= convertView.findViewById(R.id.item_button_to_change);
-//        buttonToChange.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Log.d("mkdemdekdemkdke", String.valueOf(AdapterListviewChangeStartingKarateka.this.data.get(position).getCountry()));
-//
-//
-//            }
-//        });
+////        buttonToChange.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View view) {
+////                Log.d("mkdemdekdemkdke", String.valueOf(AdapterListviewChangeStartingKarateka.this.data.get(position).getCountry()));
+////
+////
+////            }
+////        });
 
         final View finalConvertView = convertView;
         finalConvertView.findViewById(R.id.item_button_to_change).setOnClickListener(new View.OnClickListener() {

@@ -5,7 +5,19 @@
     android:layout_height="wrap_content"
     android:background="@drawable/custom_join_group_popup"
     android:layout_gravity="center">
-
+<TextView
+    android:layout_marginTop="20dp"
+ 
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:textSize="18dp"
+    android:textStyle="bold"
+    android:textColor="@color/colorButtonBlack"
+    android:id="@+id/text_all_karatekas_main_team"
+    android:visibility="gone"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="You have all karatekas in the main team"></TextView>
     <ListView
         android:divider="@android:color/transparent"
         android:dividerHeight="10dp"

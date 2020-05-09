@@ -60,7 +60,8 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
     Karateka karateka = new Karateka(0,null,null,0, null,0,null,null);
     LinearLayout card_karateka;
     LinearLayout card_default;
-    int REQUEST_CODE = 1;
+    final int CODIGO_REQUEST_CHANGE_KARATEKA = 1;
+    final int CODIGO_REQUEST_SELL_KARATEKA = 2;
     int idParticipant;
     int indexGrid;
     int idKarateka;
@@ -143,7 +144,7 @@ Button add_new_karateka_starting;
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch(requestCode) {
-            case 1:
+            case CODIGO_REQUEST_CHANGE_KARATEKA:
                 if (resultCode == Activity.RESULT_OK) {
                     if(data!=null){
                         // set value to your TextView
@@ -169,6 +170,14 @@ Button add_new_karateka_starting;
 
                     }
                 }
+                break;
+            case CODIGO_REQUEST_SELL_KARATEKA:
+                if (resultCode == Activity.RESULT_OK) {
+
+                    getParticipantByGroupAndUser(user.getUser().getId(), groupSelectedId);
+                    refreshFragmnet();
+                }
+
                 break;
         }
     }
@@ -210,7 +219,7 @@ public void refreshFragmnet(){
 
 
         choosingKaratekaStartingDialog.setArguments(args);
-        choosingKaratekaStartingDialog.setTargetFragment(this,1);
+        choosingKaratekaStartingDialog.setTargetFragment(this,CODIGO_REQUEST_CHANGE_KARATEKA);
         choosingKaratekaStartingDialog.show(fragmentManager, "karateka" );
     }
 
@@ -350,6 +359,7 @@ public void refreshFragmnet(){
         args.putInt("idUser", user.getUser().getId());
         args.putInt("idGroup", groupSelectedId);
         sellKaratekaDialogFragment.setArguments(args);
+        sellKaratekaDialogFragment.setTargetFragment(this, CODIGO_REQUEST_SELL_KARATEKA);
         sellKaratekaDialogFragment.show(fragmentManager, "sell");
     }
 
