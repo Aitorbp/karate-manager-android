@@ -7,7 +7,7 @@
     android:layout_gravity="center">
 <TextView
     android:layout_marginTop="20dp"
- 
+
     android:layout_gravity="center"
     android:gravity="center"
     android:textSize="18dp"
@@ -19,6 +19,7 @@
     android:layout_height="wrap_content"
     android:text="You have all karatekas in the main team"></TextView>
     <ListView
+
         android:divider="@android:color/transparent"
         android:dividerHeight="10dp"
         android:padding="10dp"

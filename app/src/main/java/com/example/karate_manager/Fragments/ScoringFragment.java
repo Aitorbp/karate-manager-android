@@ -15,12 +15,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.karate_manager.Adapters.AdapterMarket;
 import com.example.karate_manager.Adapters.AdapterScoring;
+import com.example.karate_manager.DialogFragment.RivalDialogFragment;
 import com.example.karate_manager.Models.GroupModel.Group;
 import com.example.karate_manager.Models.GroupModel.GroupResponse;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantGroup;
@@ -35,7 +38,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 
-public class ScoringFragment extends Fragment {
+public class ScoringFragment extends Fragment implements AdapterScoring.ClickOnRival{
     AdapterScoring adapterScoring;
     ListView listViewScoring;
     int groupSelectedId = 0;
@@ -47,6 +50,7 @@ public class ScoringFragment extends Fragment {
     ApiUtils apiUtils;
     TextView group_name, participant_name;
     ParticipantGroup participant;
+    int idRival;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,8 +64,8 @@ public class ScoringFragment extends Fragment {
         String userName = user.getUser().getName();
 
 
-
-        adapterScoring = new AdapterScoring(getActivity().getApplicationContext(), R.layout.item_participant_layout, participantResponse.getParticipants());
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        adapterScoring = new AdapterScoring(getActivity().getApplicationContext(), R.layout.item_participant_layout, participantResponse.getParticipants(), fragmentManager,this);
 
         Log.d("User in Scoring", user.getUser().getName());
 
@@ -87,8 +91,18 @@ public class ScoringFragment extends Fragment {
         return RootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        listViewScoring.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                idRival = (int) participantResponse.getParticipantGroup().getId();
 
+            }
+        });
 
+    }
 
     private void getParticipant(){
         ArrayList<ParticipantGroup> participants = participantResponse.getParticipants();
@@ -140,5 +154,19 @@ public class ScoringFragment extends Fragment {
     }
 
 
+    @Override
+    public void onClick(ParticipantGroup participantGroup) {
+        if(participant.getId() == participantGroup.getId()){// Igualamos nuestro id de participante con el que pulsamos para identificar el nuestro y no abrir el popup
+        return;
+        }else{
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            RivalDialogFragment rivalDialogFragment = new RivalDialogFragment(participantGroup);
+            Bundle args = new Bundle();
+            args.putInt("idParticipantOwn", participant.getId());
+            rivalDialogFragment.setArguments(args);
+            rivalDialogFragment.show(fragmentManager, "rival");
+        }
 
+
+    }
 }

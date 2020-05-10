@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_margin="20dp"
+    android:layout_gravity="center_horizontal"
+    android:background="@drawable/custom_item_participant"
+    android:id="@+id/rival_item__linear"
+    >
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_marginLeft="15dp"
+        android:id="@+id/rival_item_picture_karateka"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+
+        app:civ_border_width="3dp"
+        app:civ_border_color="@color/colorButtonBlack"
+        android:src="@drawable/logo_border_karate_manager"
+        />
+    <LinearLayout
+
+        android:layout_marginTop="10dp"
+        android:layout_width="140dp"
+        android:layout_height="80dp"
+        android:layout_marginRight="10dp"
+
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/rival_item_name_karateka"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorButtonBlack"
+            android:textSize="15dp"
+            android:gravity="start|center"
+            android:text="Rafael Aghayev"
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"/>
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginLeft="10dp">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:src="@drawable/logo_border_karate_manager"
+                android:id="@+id/rival_item_icon_country"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="center"
+                app:civ_border_color="@color/colorButtonBlack"
+                app:civ_border_width="1dp"
+
+                xmlns:app="http://schemas.android.com/apk/res-auto"/>
+
+            <TextView
+                android:src="@drawable/logo_border_karate_manager"
+                android:id="@+id/rival_item_weigth_karateka"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:text="-75"
+                android:textColor="@color/colorWhite"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/custom_circular_weigth"/>
+
+            <TextView
+                android:src="@drawable/logo_border_karate_manager"
+                android:id="@+id/rival_item_points_karateka"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:text="789"
+                android:textColor="@color/colorWhite"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/custom_points_karatekas"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+
+        <TextView
+            android:gravity="left"
+            android:id="@+id/rival_item_value_karateka"
+            android:layout_gravity="top"
+            android:layout_width="match_parent"
+            android:layout_height="18dp"
+            android:text="23232"
+            android:textSize="10dp"
+
+
+            >
+
+        </TextView>
+        <Button
+
+            android:id="@+id/rival_item_button_to_offer"
+            android:layout_gravity="left"
+            android:background="@drawable/custom_position_participant"
+            android:textColor="@color/colorWhite"
+            android:textSize="10dp"
+            android:gravity="center"
+            android:text="Offer"
+
+
+            android:layout_width="70dp"
+            android:layout_height="20dp"/>
+    </LinearLayout>
+
+
+</LinearLayout>
