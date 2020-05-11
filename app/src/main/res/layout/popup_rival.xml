@@ -8,12 +8,14 @@
     android:layout_gravity="center">
 
     <LinearLayout
+        android:background="@drawable/custom_border_set_line"
         android:layout_marginTop="10dp"
-        android:layout_width="300dp"
-        android:layout_height="100dp"
+        android:layout_width="330dp"
+        android:layout_height="120dp"
         android:orientation="horizontal"
         android:layout_gravity="center"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_marginBottom="10dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
 
@@ -34,7 +36,8 @@
             android:layout_width="120dp"
             android:orientation="vertical"
             android:layout_height="match_parent"
-            android:gravity="center_vertical" >
+            android:gravity="center_vertical"
+            >
             <TextView
                 android:id="@+id/rival_name"
                 android:text="Rafael Aghayev r"
@@ -85,16 +88,7 @@
 
 
     </LinearLayout>
-    <Button
-        android:layout_marginTop="15dp"
-        android:id="@+id/add_new_karateka_starting"
-        android:background="@drawable/custom_button"
-        android:textColor="@color/colorWhite"
-        android:textSize="10dp"
-        android:text="Add karateka to main team "
-        android:layout_width="250dp"
-        android:layout_height="25dp"
-        android:layout_gravity="center_horizontal">
 
-    </Button>
+
+
 </LinearLayout>

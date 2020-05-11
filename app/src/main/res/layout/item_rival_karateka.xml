@@ -112,7 +112,7 @@
             android:textColor="@color/colorWhite"
             android:textSize="10dp"
             android:gravity="center"
-            android:text="Offer"
+            android:text="Bid"
 
 
             android:layout_width="70dp"

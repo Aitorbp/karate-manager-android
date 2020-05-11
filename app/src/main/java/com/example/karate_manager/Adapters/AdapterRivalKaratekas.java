@@ -28,16 +28,16 @@ public class AdapterRivalKaratekas extends ArrayAdapter {
     int item_Layaut;
     ArrayList<Karateka> data;
     ApiUtils apiUtils;
-//    ClickOnOffert listener;
-//    private FragmentManager fm;
+     ClickOnOffer listener;
+     private FragmentManager fm;
 
-    public AdapterRivalKaratekas(Context context, int item_Layaut,  ArrayList<Karateka> data) {
+    public AdapterRivalKaratekas(Context context, int item_Layaut,  ArrayList<Karateka> data,  FragmentManager fm , ClickOnOffer listener) {
         super(context, item_Layaut, data);
         this.context = context;
         this.item_Layaut = item_Layaut;
         this.data = data;
-//        this.fm = fm;
-//        this.listener = listener;
+        this.fm = fm;
+        this.listener = listener;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class AdapterRivalKaratekas extends ArrayAdapter {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
             convertView = layoutInflater.inflate(item_Layaut, parent, false);
@@ -92,12 +92,18 @@ public class AdapterRivalKaratekas extends ArrayAdapter {
         }else{
             elementPointsKarateka.setText(pointsKarateka);
         }
-
+        final View finalConvertView = convertView;
+        finalConvertView.findViewById(R.id.rival_item_button_to_offer).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onClick(data.get(position));
+            }
+        });
 
         return convertView;
     }
 
-    public interface ClickOnOffert{
-        void onClick(Participant participant);
+    public interface ClickOnOffer{
+        void onClick(Karateka karateka);
     }
 }

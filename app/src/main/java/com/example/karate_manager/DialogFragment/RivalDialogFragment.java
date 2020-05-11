@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.karate_manager.Adapters.AdapterRivalKaratekas;
+import com.example.karate_manager.Models.KaratekaModel.Karateka;
 import com.example.karate_manager.Models.KaratekaModel.MarketResponse;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantGroup;
 import com.example.karate_manager.Network.APIService;
@@ -26,13 +27,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RivalDialogFragment extends DialogFragment {
+public class RivalDialogFragment extends DialogFragment implements AdapterRivalKaratekas.ClickOnOffer {
 
     AdapterRivalKaratekas adapterRivalKaratekas;
     ParticipantGroup participantGroup = new ParticipantGroup();
     ApiUtils apiUtils;
     APIService APIService;
     int idParticipantOwn;
+    int idParticipantRival;
     MarketResponse karatekasRivalResponse = new MarketResponse(200,null,null );
     ListView listviewKaratekasRival;
 
@@ -51,10 +53,11 @@ public class RivalDialogFragment extends DialogFragment {
 
         Bundle mArgs = getArguments();
         idParticipantOwn = mArgs.getInt("idParticipantOwn");
+        idParticipantRival = mArgs.getInt("idParticipantRival");
         listviewKaratekasRival = (ListView) view.findViewById(R.id.listview_karatekas_rival);
 
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        adapterRivalKaratekas = new AdapterRivalKaratekas(getContext(), R.layout.item_rival_karateka, karatekasRivalResponse.getKaratekas());
+        adapterRivalKaratekas = new AdapterRivalKaratekas(getContext(), R.layout.item_rival_karateka, karatekasRivalResponse.getKaratekas(), fragmentManager, this);
 
 
 
@@ -111,5 +114,16 @@ Log.d("Id rival", String.valueOf(participantGroup.getId()));
             }
         });
 
+    }
+
+    @Override
+    public void onClick(Karateka karateka) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        BidKaratekaRivalDialogFragment bidKaratekaRivalDialogFragment = new BidKaratekaRivalDialogFragment(karateka);
+        Bundle args = new Bundle();
+        args.putInt("idParticipantOwn", idParticipantOwn);
+        args.putInt("idParticipantRival", idParticipantRival);
+        bidKaratekaRivalDialogFragment.setArguments(args);
+        bidKaratekaRivalDialogFragment.show(fragmentManager, "bidRival" );
     }
 }

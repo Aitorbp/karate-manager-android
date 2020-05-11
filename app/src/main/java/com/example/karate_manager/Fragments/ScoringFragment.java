@@ -163,6 +163,7 @@ public class ScoringFragment extends Fragment implements AdapterScoring.ClickOnR
             RivalDialogFragment rivalDialogFragment = new RivalDialogFragment(participantGroup);
             Bundle args = new Bundle();
             args.putInt("idParticipantOwn", participant.getId());
+            args.putInt("idParticipantRival", participantGroup.getId());
             rivalDialogFragment.setArguments(args);
             rivalDialogFragment.show(fragmentManager, "rival");
         }
