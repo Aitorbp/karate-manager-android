@@ -1,0 +1,57 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="340dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/custom_join_group_popup"
+    android:layout_gravity="center">
+
+    <TextView
+        android:id="@+id/default_text_bets_to_rivals"
+        android:visibility="gone"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorButtonBlack"
+
+        android:layout_marginBottom="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You have not bet on any karateka of your rivals"/>
+    <TextView
+        android:id="@+id/main_text_bets_to_rivals"
+        android:visibility="visible"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorButtonBlack"
+android:layout_marginBottom="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your bets on other rivals"></TextView>
+    <ListView
+        android:visibility="visible"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10dp"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listview_bets_to_rivals"></ListView>
+
+    <Button
+        android:id="@+id/exit_popup_bets_to_rivals"
+        android:background="@drawable/custom_button"
+        android:text="Exit"
+        android:textColor="@color/colorWhite"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:layout_width="80dp"
+        android:layout_height="30dp"></Button>
+
+</LinearLayout>

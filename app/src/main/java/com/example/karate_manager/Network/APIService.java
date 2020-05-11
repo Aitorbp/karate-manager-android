@@ -1,6 +1,8 @@
 package com.example.karate_manager.Network;
 
 import com.example.karate_manager.Models.BidModel.BidResponse;
+import com.example.karate_manager.Models.BidModel.BidRivalsResponse;
+import com.example.karate_manager.Models.BidModel.BidToRivalsResponse;
 import com.example.karate_manager.Models.GroupModel.Group;
 import com.example.karate_manager.Models.GroupModel.GroupResponse;
 import com.example.karate_manager.Models.GroupModel.GroupsResponse;
@@ -135,5 +137,19 @@ Call<MarketResponse> getStartingKaratekaByParticipant(@Path("id_participants") i
           @Field("id_participant") int id_participant,
           @Field("bid") int bid,
           @Field("id_group") int id_group);
+
+  //BID BETWEEN RIVALS
+  @FormUrlEncoded
+  @POST("bid/rivals/create")
+  Call<BidRivalsResponse> createBidRivals(
+          @Field("id_participant_bid_send") int id_participant_bid_send,
+          @Field("id_participant_bid_receive") int id_participant_bid_receive,
+          @Field("id_karateka") int id_karateka,
+          @Field("bid_rival") int bid_rival
+  );
+
+
+  @GET("bid/to/rivals/{id_participant_bid_send}")
+  Call<BidToRivalsResponse> myBidsToRivals( @Path("id_participant_bid_send") int id_participant_bid_send);
 
 }

@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.karate_manager.Adapters.AdapterMarket;
 import com.example.karate_manager.Adapters.AdapterScoring;
+import com.example.karate_manager.DialogFragment.BetsToRivalsDialogFragment;
 import com.example.karate_manager.DialogFragment.RivalDialogFragment;
 import com.example.karate_manager.Models.GroupModel.Group;
 import com.example.karate_manager.Models.GroupModel.GroupResponse;
@@ -50,6 +52,7 @@ public class ScoringFragment extends Fragment implements AdapterScoring.ClickOnR
     ApiUtils apiUtils;
     TextView group_name, participant_name;
     ParticipantGroup participant;
+    Button offers;
     int idRival;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,7 +63,7 @@ public class ScoringFragment extends Fragment implements AdapterScoring.ClickOnR
         group_name = (TextView) RootView.findViewById(R.id.group_name);
         participant_name = (TextView) RootView.findViewById(R.id.participant_name);
         APIService = ApiUtils.getAPIService();
-
+        offers = (Button) RootView.findViewById(R.id.offers);
         String userName = user.getUser().getName();
 
 
@@ -87,6 +90,18 @@ public class ScoringFragment extends Fragment implements AdapterScoring.ClickOnR
         participant_name.setText(userName);
 
 
+        //Boton para acceder a las ofertas que les hemos hecho a los demás rivales
+        offers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                BetsToRivalsDialogFragment rivalDialogFragment = new BetsToRivalsDialogFragment();
+                Bundle args = new Bundle();
+                args.putInt("idParticipantOwn", participant.getId());
+                rivalDialogFragment.setArguments(args);
+                rivalDialogFragment.show(fragmentManager, "BetsToRivals");
+            }
+        });
 
         return RootView;
     }

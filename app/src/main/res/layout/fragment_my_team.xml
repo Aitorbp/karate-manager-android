@@ -50,7 +50,7 @@
 
         <ListView
             android:divider="@android:color/transparent"
-            android:dividerHeight="15dp"
+            android:dividerHeight="7dp"
             android:paddingTop="10dp"
             android:layout_marginTop="40dp"
             android:layout_width="match_parent"

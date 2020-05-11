@@ -9,13 +9,19 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.karate_manager.Models.BidModel.BidRivalsResponse;
 import com.example.karate_manager.Models.KaratekaModel.Karateka;
+import com.example.karate_manager.Models.KaratekaModel.MarketResponse;
 import com.example.karate_manager.Network.ApiUtils;
 import com.example.karate_manager.R;
 import com.squareup.picasso.Picasso;
 
 import androidx.fragment.app.DialogFragment;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class BidKaratekaRivalDialogFragment extends DialogFragment implements View.OnClickListener {
 
@@ -112,6 +118,7 @@ public class BidKaratekaRivalDialogFragment extends DialogFragment implements Vi
 
         }
 
+
     }
 
 
@@ -122,8 +129,13 @@ public class BidKaratekaRivalDialogFragment extends DialogFragment implements Vi
 
         switch (view.getId()) {
             case R.id.popup_do_bid:
+                int bidToBBDD = Integer.parseInt(editTextKaratekaValue.getText().toString());
                 Log.d("PULSANDO", "PULSANDO");
-           //     getParticipantByGroupAndUser(idUser, idGroup);
+                Log.d("idParticipantOwn", String.valueOf(idParticipantOwn));
+                Log.d("idParticipantRival", String.valueOf(idParticipantRival));
+                Log.d("bid", String.valueOf(bidEditTex));
+                Log.d("karateka.getId()", String.valueOf(karateka.getId()));
+                createBidRivals(idParticipantOwn, idParticipantRival, karateka.getId(), bidToBBDD);
                 break;
 
             case R.id.popup_close_bid:
@@ -145,5 +157,28 @@ public class BidKaratekaRivalDialogFragment extends DialogFragment implements Vi
             default:
                 break;
         }
+    }
+
+
+    private void createBidRivals(int id_participant_bid_send, int id_participant_bid_receive, int id_karateka, int bid_rival){
+        Call<BidRivalsResponse> call =  APIService.createBidRivals(id_participant_bid_send, id_participant_bid_receive, id_karateka, bid_rival);
+        call.enqueue(new Callback<BidRivalsResponse>() {
+            @Override
+            public void onResponse(Call<BidRivalsResponse> call, Response<BidRivalsResponse> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(getContext(), "Bet sent to your rival", Toast.LENGTH_SHORT).show();
+
+                    dismiss();
+                }else{
+                    Log.d("Failllll", "jajajjajaja");
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<BidRivalsResponse> call, Throwable t) {
+
+            }
+        });
     }
 }
