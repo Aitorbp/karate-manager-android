@@ -4,7 +4,7 @@ import com.example.karate_manager.Models.KaratekaModel.Karateka;
 
 import java.util.ArrayList;
 
-public class BidToRivalsResponse {
+public class BidToFromRivalsResponse {
 
     private int code;
     ArrayList<KaratekaRival> karatekas = new ArrayList < KaratekaRival > ();

@@ -8,12 +8,13 @@
     <color name="colorGrey">#455559</color>
     <color name="colorAlmostWhite">#F2F2F2</color>
     <color name="colorGreySoft">#D9D9D9</color>
-
+    <color name="colorGreen">#49D088</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorOcre">#F2DFCE</color>
     <color name="colorWhiteTransparent">#80FFFFFF</color>
     <color name="colorBlueGrey">#586973</color>
     <color name="colorBlueTransparent">#102C3740</color>
     <color name="colorYellowWithTransparent">#50F2A35E</color>
+    <color name="colorRed">#D93D3D</color>
 
 </resources>

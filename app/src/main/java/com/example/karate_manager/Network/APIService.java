@@ -2,8 +2,7 @@ package com.example.karate_manager.Network;
 
 import com.example.karate_manager.Models.BidModel.BidResponse;
 import com.example.karate_manager.Models.BidModel.BidRivalsResponse;
-import com.example.karate_manager.Models.BidModel.BidToRivalsResponse;
-import com.example.karate_manager.Models.GroupModel.Group;
+import com.example.karate_manager.Models.BidModel.BidToFromRivalsResponse;
 import com.example.karate_manager.Models.GroupModel.GroupResponse;
 import com.example.karate_manager.Models.GroupModel.GroupsResponse;
 import com.example.karate_manager.Models.JoinGroupResponse.JoinGroupResponse;
@@ -15,7 +14,6 @@ import com.example.karate_manager.Models.UserModel.UserResponse;
 import com.example.karate_manager.Models.UserModel.User;
 
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -150,6 +148,9 @@ Call<MarketResponse> getStartingKaratekaByParticipant(@Path("id_participants") i
 
 
   @GET("bid/to/rivals/{id_participant_bid_send}")
-  Call<BidToRivalsResponse> myBidsToRivals( @Path("id_participant_bid_send") int id_participant_bid_send);
+  Call<BidToFromRivalsResponse> myBidsToRivals(@Path("id_participant_bid_send") int id_participant_bid_send);
+
+  @GET("bid/from/rivals/{id_participant_bid_receive}")
+  Call<BidToFromRivalsResponse> myBidsRecieveFromToRivals(@Path("id_participant_bid_receive") int id_participant_bid_receive);
 
 }

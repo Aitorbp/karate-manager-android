@@ -105,7 +105,7 @@
 
         </TextView>
         <Button
-
+            android:textAllCaps="false"
             android:id="@+id/item_button_to_change"
             android:layout_gravity="left"
             android:background="@drawable/custom_position_participant"

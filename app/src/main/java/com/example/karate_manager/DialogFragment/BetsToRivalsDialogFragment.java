@@ -10,8 +10,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.karate_manager.Adapters.AdapterBetsToRivals;
-import com.example.karate_manager.Models.BidModel.BidToRivalsResponse;
-import com.example.karate_manager.Models.BidModel.KaratekaRival;
+import com.example.karate_manager.Models.BidModel.BidToFromRivalsResponse;
 import com.example.karate_manager.Network.APIService;
 import com.example.karate_manager.Network.ApiUtils;
 import com.example.karate_manager.R;
@@ -19,7 +18,6 @@ import com.example.karate_manager.R;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,7 +29,7 @@ public class BetsToRivalsDialogFragment extends DialogFragment implements View.O
     TextView main_text_bets_to_rivals,default_text_bets_to_rivals;
     AdapterBetsToRivals adapterBetsToRivals;
    // KaratekaRival karatekaRival = new KaratekaRival();
-    BidToRivalsResponse bidToRivalsResponse = new BidToRivalsResponse();
+    BidToFromRivalsResponse bidToFromRivalsResponse = new BidToFromRivalsResponse();
 
     @NonNull
     @Override
@@ -46,8 +44,8 @@ public class BetsToRivalsDialogFragment extends DialogFragment implements View.O
         Bundle mArgs = getArguments();
         ownParticipant = mArgs.getInt("idParticipantOwn");
 
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        adapterBetsToRivals = new AdapterBetsToRivals(getContext(), R.layout.item_bet_to_rival, bidToRivalsResponse.getKaratekas());
+
+        adapterBetsToRivals = new AdapterBetsToRivals(getContext(), R.layout.item_bet_to_rival, bidToFromRivalsResponse.getKaratekas());
         listview_bets_to_rivals = (ListView) view.findViewById(R.id.listview_bets_to_rivals);
         main_text_bets_to_rivals = (TextView) view.findViewById(R.id.main_text_bets_to_rivals);
         default_text_bets_to_rivals = (TextView) view.findViewById(R.id.default_text_bets_to_rivals);
@@ -76,18 +74,18 @@ public class BetsToRivalsDialogFragment extends DialogFragment implements View.O
     }
 
     private void myBidsToRivals(int id_participant_bid_send){
-        Call<BidToRivalsResponse> call = APIService.myBidsToRivals(id_participant_bid_send);
-        call.enqueue(new Callback<BidToRivalsResponse>() {
+        Call<BidToFromRivalsResponse> call = APIService.myBidsToRivals(id_participant_bid_send);
+        call.enqueue(new Callback<BidToFromRivalsResponse>() {
             @Override
-            public void onResponse(Call<BidToRivalsResponse> call, Response<BidToRivalsResponse> response) {
+            public void onResponse(Call<BidToFromRivalsResponse> call, Response<BidToFromRivalsResponse> response) {
               if(response.isSuccessful()){
-                  bidToRivalsResponse = response.body();
+                  bidToFromRivalsResponse = response.body();
                   adapterBetsToRivals.notifyDataSetChanged();
-                  adapterBetsToRivals.setData(bidToRivalsResponse);
+                  adapterBetsToRivals.setData(bidToFromRivalsResponse);
                   listview_bets_to_rivals.setAdapter(adapterBetsToRivals);
                   Log.d("Bieeeeen", "bieeeeen");
 
-                  if(bidToRivalsResponse.getKaratekas().size()==0){
+                  if(bidToFromRivalsResponse.getKaratekas().size()==0){
                       listview_bets_to_rivals.setVisibility(View.GONE);
                       main_text_bets_to_rivals.setVisibility(View.GONE);
                       default_text_bets_to_rivals.setVisibility(View.VISIBLE);
@@ -103,7 +101,7 @@ public class BetsToRivalsDialogFragment extends DialogFragment implements View.O
             }
 
             @Override
-            public void onFailure(Call<BidToRivalsResponse> call, Throwable t) {
+            public void onFailure(Call<BidToFromRivalsResponse> call, Throwable t) {
                 Log.d("Mssssaaal", t.toString());
             }
         });

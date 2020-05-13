@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="90dp"
+    android:layout_margin="20dp"
+    android:layout_gravity="center_horizontal"
+    android:background="@drawable/custom_item_participant"
+
+    >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:orientation="horizontal">
+        <de.hdodenhof.circleimageview.CircleImageView
+
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_marginLeft="15dp"
+            android:id="@+id/bet_from_rivals_picture_karateka"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+
+            app:civ_border_width="3dp"
+            app:civ_border_color="@color/colorButtonBlack"
+            android:src="@drawable/logo_border_karate_manager"
+            />
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="vertical">
+           <LinearLayout
+               android:layout_marginTop="2dp"
+               android:layout_width="wrap_content"
+               android:layout_height="15dp"
+               android:orientation="horizontal"
+               >
+               <TextView
+                   android:textSize="10dp"
+                   android:text="From "
+                   android:textColor="@color/colorGrey"
+                   android:layout_marginLeft="15dp"
+                   android:layout_width="match_parent"
+                   android:layout_height="15dp"/>
+               <TextView
+                   android:textSize="10dp"
+                   android:id="@+id/bet_from_rivals_name_rival"
+                   android:textColor="@color/colorButtonBlack"
+                   android:text="For"
+                   android:layout_width="wrap_content"
+                   android:layout_height="15dp"/>
+               <TextView
+
+                   android:textSize="10dp"
+                   android:textColor="@color/colorButtonBlack"
+                   android:text=" at "
+                   android:layout_width="wrap_content"
+                   android:layout_height="15dp"/>
+               <TextView
+                   android:textSize="10dp"
+                   android:layout_marginLeft="1dp"
+                   android:id="@+id/bet_from_rivals_date_bid_rival"
+                   android:textColor="@color/colorButtonBlack"
+                   android:text="For"
+                   android:layout_width="wrap_content"
+                   android:layout_height="15dp"/>
+
+           </LinearLayout>
+
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:orientation="horizontal">
+               <LinearLayout
+
+
+                   android:layout_width="150dp"
+                   android:layout_height="67dp"
+                   android:layout_marginRight="10dp"
+                   android:layout_gravity="center_horizontal|end"
+                   android:gravity="center|top"
+                   android:orientation="vertical">
+                   <TextView
+                       android:id="@+id/bet_from_rivals_name_karateka"
+                       android:textColor="@color/colorButtonBlack"
+                       android:textSize="15dp"
+                       android:gravity="start|center"
+                       android:text="skanksnkasnasawwsw"
+                       android:layout_marginLeft="10dp"
+                       android:layout_width="match_parent"
+                       android:layout_height="35dp"/>
+
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="horizontal"
+                       android:layout_marginLeft="10dp">
+                       <de.hdodenhof.circleimageview.CircleImageView
+                           android:src="@drawable/logo_border_karate_manager"
+                           android:id="@+id/bet_from_rivals_icon_country"
+                           android:layout_width="25dp"
+                           android:layout_height="25dp"
+                           android:gravity="center"
+                           app:civ_border_color="@color/colorButtonBlack"
+                           app:civ_border_width="1dp"
+
+                           xmlns:app="http://schemas.android.com/apk/res-auto"/>
+
+                       <TextView
+                           android:src="@drawable/logo_border_karate_manager"
+                           android:id="@+id/bet_from_rivals_weigth_karateka"
+                           android:layout_width="25dp"
+                           android:layout_height="25dp"
+                           android:gravity="center"
+                           android:text="-75"
+                           android:textColor="@color/colorWhite"
+                           android:layout_marginLeft="10dp"
+                           android:background="@drawable/custom_circular_weigth"/>
+
+                       <TextView
+                           android:src="@drawable/logo_border_karate_manager"
+                           android:id="@+id/bet_from_rivals_points_karateka_market"
+                           android:layout_width="25dp"
+                           android:layout_height="25dp"
+                           android:gravity="center"
+                           android:text="789"
+                           android:textColor="@color/colorWhite"
+                           android:layout_marginLeft="10dp"
+                           android:background="@drawable/custom_points_karatekas"/>
+                   </LinearLayout>
+
+
+               </LinearLayout>
+
+               <LinearLayout
+                   android:layout_gravity="center"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:gravity="center"
+                   android:orientation="vertical">
+
+
+                   <Button
+
+                       android:id="@+id/bet_from_rivals_value_botton_karateka"
+                       android:layout_width="80dp"
+                       android:layout_height="16dp"
+                       android:layout_gravity="center"
+
+                       android:layout_marginBottom="16dp"
+                       android:background="@drawable/custom_button_accept_bit_rival"
+                       android:gravity="center_horizontal"
+                       android:text="10"
+                       android:textColor="@color/colorWhite"
+                       android:textSize="12dp" />
+
+                   <Button
+                       android:id="@+id/bet_from_rivals_refuse_botton_karateka"
+                       android:layout_width="80dp"
+                       android:layout_height="16dp"
+                       android:layout_gravity="center"
+
+                       android:background="@drawable/custom_button_refuse_bit_rival"
+                       android:gravity="center_horizontal"
+                       android:text="Refuse"
+                       android:textAllCaps="false"
+                       android:textColor="@color/colorWhite"
+                       android:textSize="12dp" />
+               </LinearLayout>
+           </LinearLayout>
+       </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

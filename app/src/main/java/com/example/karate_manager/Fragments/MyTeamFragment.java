@@ -25,10 +25,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.karate_manager.Adapters.AdapterBetsFromRivals;
 import com.example.karate_manager.Adapters.AdapterMyTeam;
 import com.example.karate_manager.Adapters.AdapterStartingKarateka;
 import com.example.karate_manager.DialogFragment.ChoosingKaratekaStartingDialog;
 import com.example.karate_manager.DialogFragment.SellKaratekaDialogFragment;
+import com.example.karate_manager.Models.BidModel.BidToFromRivalsResponse;
 import com.example.karate_manager.Models.KaratekaModel.Karateka;
 import com.example.karate_manager.Models.KaratekaModel.MarketResponse;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantResponse;
@@ -37,7 +39,7 @@ import com.example.karate_manager.Models.UserModel.UserResponse;
 import com.example.karate_manager.Network.APIService;
 import com.example.karate_manager.Network.ApiUtils;
 import com.example.karate_manager.R;
-import com.example.karate_manager.Utils.Storage;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
@@ -46,9 +48,10 @@ import java.util.ArrayList;
  */
 public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSell {
 
+    AdapterBetsFromRivals adapterBetsFromRivals;
     AdapterStartingKarateka adapterStartingKarateka;
     AdapterMyTeam adapterMyTeam;
-    ListView listViewMyTeam;
+    ListView listViewMyTeam, listviewBetsFromRivals;
     GridView gridViewMyTeam;
     ArrayList<Karateka>    startingKaratekas = new ArrayList<>();
     UserResponse user = new UserResponse(200,null,null );
@@ -65,7 +68,9 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
     int idParticipant;
     int indexGrid;
     int idKarateka;
-Button add_new_karateka_starting;
+ Button add_new_karateka_starting;
+    BidToFromRivalsResponse bidToFromRivalsResponse = new BidToFromRivalsResponse();
+    TabLayout tabs;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -73,6 +78,7 @@ Button add_new_karateka_starting;
 
 
         listViewMyTeam = (ListView) RootView.findViewById(R.id.myteam_listview);
+        listviewBetsFromRivals = (ListView) RootView.findViewById(R.id.bet_from_rivals_listview);
         gridViewMyTeam = (GridView) RootView.findViewById(R.id.myteam_gridview);
         APIService = ApiUtils.getAPIService();
 
@@ -81,15 +87,47 @@ Button add_new_karateka_starting;
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         adapterMyTeam = new AdapterMyTeam(getActivity().getApplicationContext(), R.layout.item_myteam_layout, myTeamResponse.getKaratekas(), fragmentManager, this);
         adapterStartingKarateka = new AdapterStartingKarateka(getActivity().getApplicationContext(), R.layout.item_card_karateka_myteam, myStartingResponse.getKaratekas());
+
+        adapterBetsFromRivals = new AdapterBetsFromRivals(getActivity(), R.layout.item_bet_from_rival, bidToFromRivalsResponse.getKaratekas());
+
         card_karateka = (LinearLayout) RootView.findViewById(R.id.card_karateka);
         card_default = (LinearLayout) RootView.findViewById(R.id.card_default);
         add_new_karateka_starting = (Button ) RootView.findViewById(R.id.add_new_karateka_starting);
-
+        tabs = (TabLayout) RootView.findViewById((R.id.tabs));
 
         getParticipantByGroupAndUser(user.getUser().getId(), groupSelectedId);
 
 
+    tabs.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
+        @Override
+        public void onTabSelected(TabLayout.Tab tab) {
+            switch (tabs.getSelectedTabPosition()) {
+                case 0:
+                    listViewMyTeam.setVisibility(View.VISIBLE);
+                    listviewBetsFromRivals.setVisibility(View.GONE);
 
+                    break;
+
+                case 1:
+                    listViewMyTeam.setVisibility(View.GONE);
+                    listviewBetsFromRivals.setVisibility(View.VISIBLE);
+
+                    break;
+
+
+            }
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
+    }
+});
 
 
 
@@ -127,16 +165,10 @@ Button add_new_karateka_starting;
                 }
             }
         });
+
+
     }
 
-    public void createDefaultStartingKaratekas(){
-
-        for (int i = 0; i < 8 ; i++) {
-            Karateka startingKarateka = new Karateka(1, "", "", 1,"-67" ,0, null, null);
-            startingKaratekas.add(startingKarateka);
-
-        }
-    }
 
     //El onactivityresult trae la información que señalamos del adappter del dialogfragment
     // para ello necesitamos un  choosingKaratekaStartingDialog.setTargetFragment(this,1); en el métido de apertura del fragmentDialog
@@ -175,6 +207,7 @@ Button add_new_karateka_starting;
                 if (resultCode == Activity.RESULT_OK) {
 
                     getParticipantByGroupAndUser(user.getUser().getId(), groupSelectedId);
+                    Log.d("Devuelta","devuelta");
                     refreshFragmnet();
                 }
 
@@ -275,6 +308,7 @@ public void refreshFragmnet(){
                     getKaratekasByParticipant(String.valueOf(idParticipant));
                     Log.d("RESPONSE_SUCCESS", "Everything All right");
                     getStartingKaratekaByParticipant(idParticipant);
+                    myBidsToRivals(idParticipant);
                 }
             }
 
@@ -336,6 +370,34 @@ public void refreshFragmnet(){
             @Override
             public void onFailure(Call<MarketResponse> call, Throwable t) {
 
+            }
+        });
+    }
+
+
+    private void myBidsToRivals(int id_participant_bid_receive){
+        Call<BidToFromRivalsResponse> call = APIService.myBidsRecieveFromToRivals(id_participant_bid_receive);
+        call.enqueue(new Callback<BidToFromRivalsResponse>() {
+            @Override
+            public void onResponse(Call<BidToFromRivalsResponse> call, Response<BidToFromRivalsResponse> response) {
+                if(response.isSuccessful()){
+                    bidToFromRivalsResponse = response.body();
+
+                    //bidToFromRivalsResponse.getKaratekas().get(0);
+                    adapterBetsFromRivals.notifyDataSetChanged();
+                    adapterBetsFromRivals.setData(bidToFromRivalsResponse);
+                    listviewBetsFromRivals.setAdapter(adapterBetsFromRivals);
+                    Log.d("YUUUUJUU", "bieeeeen");
+
+
+                }else{
+                    Log.d("Maaal", "maaal");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BidToFromRivalsResponse> call, Throwable t) {
+                Log.d("Mssssaaal", t.toString());
             }
         });
     }

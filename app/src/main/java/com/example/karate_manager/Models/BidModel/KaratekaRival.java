@@ -15,7 +15,16 @@ public class KaratekaRival {
     private int bid_rival;
     private String date_bid;
     private String name_rival;
+    private int id_participant_bid_send;
+    private int id_participant_bid_receive;
 
+    public int getId_participant_bid_send() {
+        return id_participant_bid_send;
+    }
+
+    public int getId_participant_bid_receive() {
+        return id_participant_bid_receive;
+    }
 
     public int getId() {
         return id;

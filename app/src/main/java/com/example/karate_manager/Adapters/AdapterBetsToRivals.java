@@ -8,10 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.karate_manager.Models.BidModel.BidToRivalsResponse;
+import com.example.karate_manager.Models.BidModel.BidToFromRivalsResponse;
 import com.example.karate_manager.Models.BidModel.KaratekaRival;
-import com.example.karate_manager.Models.KaratekaModel.Karateka;
-import com.example.karate_manager.Models.KaratekaModel.MarketResponse;
 import com.example.karate_manager.Network.ApiUtils;
 import com.example.karate_manager.R;
 import com.squareup.picasso.Picasso;
@@ -20,7 +18,6 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentManager;
 
 public class AdapterBetsToRivals extends ArrayAdapter {
     Context context;
@@ -39,7 +36,7 @@ public class AdapterBetsToRivals extends ArrayAdapter {
     public int getCount() {
         return data.size();
     }
-    public void setData(BidToRivalsResponse data) {
+    public void setData(BidToFromRivalsResponse data) {
         if(data!=null){
             this.data = data.getKaratekas();
             this.notifyDataSetChanged();

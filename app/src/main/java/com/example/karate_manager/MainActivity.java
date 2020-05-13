@@ -311,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         changeSecreen(screen);
-        Log.d("Id del user", String.valueOf(user.getUser().getId()));
+     //   Log.d("Id del user", String.valueOf(user.getUser().getId()));
         return true;
     }
 
