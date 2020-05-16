@@ -48,7 +48,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSell, AdapterBetsFromRivals.ClickOnAccept {
+public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSell, AdapterBetsFromRivals.ClickOnAccept  {
 
     AdapterBetsFromRivals adapterBetsFromRivals;
     AdapterStartingKarateka adapterStartingKarateka;
@@ -440,9 +440,39 @@ public void refreshFragmnet(){
 
     @Override
     public void onClick(KaratekaRival karatekaRival) {
+
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         AcceptBidRivalDialogFragment acceptBidRivalDialogFragment = new AcceptBidRivalDialogFragment(karatekaRival);
         acceptBidRivalDialogFragment.setTargetFragment(this, CODIGO_REQUEST_ACCEPT_KARATEKA);
         acceptBidRivalDialogFragment.show(fragmentManager, "acceptDialogF");
     }
+
+    @Override
+    public void onClickOnRefuse(KaratekaRival karatekaRival) {
+        Log.d("HOLAAAA", String.valueOf( karatekaRival.getName()));
+        refuseBid(karatekaRival.getId_participant_bid_send(), karatekaRival.getId_participant_bid_receive(), karatekaRival.getId());
+
+        getParticipantByGroupAndUser(user.getUser().getId(), groupSelectedId);
+        Log.d("Devuelta","devuelta");
+        refreshFragmnet();
+    }
+
+
+    public void refuseBid(int id_participant_bid_send, int id_participant_bid_receive, int id_karatekas){
+        Call<BidToFromRivalsResponse> call = APIService.refuseBidRival(id_participant_bid_send, id_participant_bid_receive, id_karatekas);
+        call.enqueue(new Callback<BidToFromRivalsResponse>() {
+            @Override
+            public void onResponse(Call<BidToFromRivalsResponse> call, Response<BidToFromRivalsResponse> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(getActivity(), "You have refused this offer ", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BidToFromRivalsResponse> call, Throwable t) {
+                Log.d("Fail","Something is wrong");
+            }
+        });
+    }
+
 }

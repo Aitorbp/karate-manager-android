@@ -157,4 +157,15 @@ Call<MarketResponse> getStartingKaratekaByParticipant(@Path("id_participants") i
   Call<BidToFromRivalsResponse> acceptBidRival(@Path("id_participant_bid_send") int id_participant_bid_send,
                                                @Path("id_participant_bid_receive") int id_participant_bid_receive,
                                                @Path("id_karateka") int id_karateka);
+
+
+  @DELETE("bid/rivals/refused/{id_participant_bid_send}/{id_participant_bid_receive}/{id_karatekas}")
+  Call<BidToFromRivalsResponse> refuseBidRival(@Path("id_participant_bid_send") int id_participant_bid_send,
+                                                      @Path("id_participant_bid_receive") int id_group,
+                                                      @Path("id_karatekas") int id_karatekas);
+
+  @DELETE("bid/rivals/refused/ownbid/{id_participant_bid_send}/{id_karatekas}")
+  Call<BidToFromRivalsResponse> refuseOwnBid(@Path("id_participant_bid_send") int id_participant_bid_send,
+                                               @Path("id_karatekas") int id_karatekas);
+
 }

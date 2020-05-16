@@ -69,7 +69,7 @@ public class AcceptBidRivalDialogFragment extends DialogFragment implements View
     @Override
     public void onStart() {
         super.onStart();
-        Log.d("KaratekaRivalAccepted", karatekaRival.getName_rival());
+        Log.d("KaratekaRivalAccepted", String.valueOf(karatekaRival.getId()));
         TextView nameKaratekaTexview, weightKaratekaTexview, pointsKaratekaTexview , bidRival, bidRivalTexview ;
 
         bidRivalTexview =  (TextView) getDialog().findViewById(R.id.accept_rival_bid);

@@ -2,15 +2,18 @@ package com.example.karate_manager.DialogFragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.karate_manager.Adapters.AdapterBetsToRivals;
 import com.example.karate_manager.Models.BidModel.BidToFromRivalsResponse;
+import com.example.karate_manager.Models.BidModel.KaratekaRival;
 import com.example.karate_manager.Network.APIService;
 import com.example.karate_manager.Network.ApiUtils;
 import com.example.karate_manager.R;
@@ -18,11 +21,12 @@ import com.example.karate_manager.R;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentTransaction;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BetsToRivalsDialogFragment extends DialogFragment implements View.OnClickListener {
+public class BetsToRivalsDialogFragment extends DialogFragment implements View.OnClickListener, AdapterBetsToRivals.ClickOnRefuseOwnBid {
     private  APIService APIService;
     int ownParticipant;
     ListView listview_bets_to_rivals;
@@ -45,7 +49,7 @@ public class BetsToRivalsDialogFragment extends DialogFragment implements View.O
         ownParticipant = mArgs.getInt("idParticipantOwn");
 
 
-        adapterBetsToRivals = new AdapterBetsToRivals(getContext(), R.layout.item_bet_to_rival, bidToFromRivalsResponse.getKaratekas());
+        adapterBetsToRivals = new AdapterBetsToRivals(getContext(), R.layout.item_bet_to_rival, bidToFromRivalsResponse.getKaratekas(), this);
         listview_bets_to_rivals = (ListView) view.findViewById(R.id.listview_bets_to_rivals);
         main_text_bets_to_rivals = (TextView) view.findViewById(R.id.main_text_bets_to_rivals);
         default_text_bets_to_rivals = (TextView) view.findViewById(R.id.default_text_bets_to_rivals);
@@ -83,6 +87,8 @@ public class BetsToRivalsDialogFragment extends DialogFragment implements View.O
                   adapterBetsToRivals.notifyDataSetChanged();
                   adapterBetsToRivals.setData(bidToFromRivalsResponse);
                   listview_bets_to_rivals.setAdapter(adapterBetsToRivals);
+
+
                   Log.d("Bieeeeen", "bieeeeen");
 
                   if(bidToFromRivalsResponse.getKaratekas().size()==0){
@@ -107,4 +113,39 @@ public class BetsToRivalsDialogFragment extends DialogFragment implements View.O
         });
     }
 
+    @Override
+    public void onClick(KaratekaRival karatekaRival) {
+        refuseOwnBid(ownParticipant, karatekaRival.getId());
+
+        myBidsToRivals(ownParticipant);
+
+        refreshFragmnet();
+    }
+
+
+    public void refuseOwnBid(int id_participant_bid_send,  int id_karatekas){
+        Call<BidToFromRivalsResponse> call = APIService.refuseOwnBid(id_participant_bid_send, id_karatekas);
+        call.enqueue(new Callback<BidToFromRivalsResponse>() {
+            @Override
+            public void onResponse(Call<BidToFromRivalsResponse> call, Response<BidToFromRivalsResponse> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(getActivity(), "You have refused you own offer ", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BidToFromRivalsResponse> call, Throwable t) {
+                Log.d("Fail","Something is wrong");
+            }
+        });
+    }
+
+    public void refreshFragmnet(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        if (Build.VERSION.SDK_INT >= 26) {
+            ft.setReorderingAllowed(false);
+        }
+        ft.detach(this).attach(this).commit();
+
+    }
 }

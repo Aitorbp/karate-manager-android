@@ -24,12 +24,13 @@ public class AdapterBetsToRivals extends ArrayAdapter {
     int item_Layaut;
     ArrayList<KaratekaRival> data;
     ApiUtils apiUtils;
-
-    public AdapterBetsToRivals(Context context, int item_Layaut,  ArrayList<KaratekaRival> data){
+    private ClickOnRefuseOwnBid listener;
+    public AdapterBetsToRivals(Context context, int item_Layaut,  ArrayList<KaratekaRival> data, ClickOnRefuseOwnBid listener){
         super(context, item_Layaut,data);
         this.context = context;
         this.item_Layaut = item_Layaut;
         this.data = data;
+        this.listener = listener;
     }
 
     @Override
@@ -46,7 +47,7 @@ public class AdapterBetsToRivals extends ArrayAdapter {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
             convertView = layoutInflater.inflate(item_Layaut, parent, false);
@@ -98,8 +99,19 @@ public class AdapterBetsToRivals extends ArrayAdapter {
         }else{
             elementPointsKarateka.setText(pointsKarateka);
         }
-
+        final View finalConvertView = convertView;
+        finalConvertView.findViewById(R.id.bet_to_rivals_refuse_karateka).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onClick(data.get(position));
+            }
+        });
 
         return convertView;
+    }
+
+    public interface ClickOnRefuseOwnBid {
+
+        void onClick(KaratekaRival karatekaRival);
     }
 }

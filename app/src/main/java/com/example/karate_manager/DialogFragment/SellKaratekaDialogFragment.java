@@ -53,6 +53,7 @@ public class SellKaratekaDialogFragment extends DialogFragment implements View.O
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view);
 
+
         return builder.create();
     }
 
