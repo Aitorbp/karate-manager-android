@@ -105,7 +105,7 @@
 
         </TextView>
         <Button
-
+            android:textAllCaps="false"
             android:id="@+id/rival_item_button_to_offer"
             android:layout_gravity="left"
             android:background="@drawable/custom_position_participant"

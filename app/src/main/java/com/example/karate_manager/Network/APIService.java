@@ -153,4 +153,8 @@ Call<MarketResponse> getStartingKaratekaByParticipant(@Path("id_participants") i
   @GET("bid/from/rivals/{id_participant_bid_receive}")
   Call<BidToFromRivalsResponse> myBidsRecieveFromToRivals(@Path("id_participant_bid_receive") int id_participant_bid_receive);
 
+  @GET("bid/rivals/accepted/{id_participant_bid_send}/{id_participant_bid_receive}/{id_karateka}")
+  Call<BidToFromRivalsResponse> acceptBidRival(@Path("id_participant_bid_send") int id_participant_bid_send,
+                                               @Path("id_participant_bid_receive") int id_participant_bid_receive,
+                                               @Path("id_karateka") int id_karateka);
 }

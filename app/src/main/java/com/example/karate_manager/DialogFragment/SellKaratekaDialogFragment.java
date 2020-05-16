@@ -106,6 +106,8 @@ public class SellKaratekaDialogFragment extends DialogFragment implements View.O
             case R.id.sell_button_yes:
                 Log.d("PULSANDO", "PULSANDO");
                 getParticipantByGroupAndUser(idUser, idGroup);
+
+                //Funcionalidad para volver al activity Onresult del fragment principal referenciado
                 Intent intent = new Intent();
                 getTargetFragment().onActivityResult(
                         getTargetRequestCode(), Activity.RESULT_OK, intent);

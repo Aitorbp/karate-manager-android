@@ -28,9 +28,11 @@ import android.widget.Toast;
 import com.example.karate_manager.Adapters.AdapterBetsFromRivals;
 import com.example.karate_manager.Adapters.AdapterMyTeam;
 import com.example.karate_manager.Adapters.AdapterStartingKarateka;
+import com.example.karate_manager.DialogFragment.AcceptBidRivalDialogFragment;
 import com.example.karate_manager.DialogFragment.ChoosingKaratekaStartingDialog;
 import com.example.karate_manager.DialogFragment.SellKaratekaDialogFragment;
 import com.example.karate_manager.Models.BidModel.BidToFromRivalsResponse;
+import com.example.karate_manager.Models.BidModel.KaratekaRival;
 import com.example.karate_manager.Models.KaratekaModel.Karateka;
 import com.example.karate_manager.Models.KaratekaModel.MarketResponse;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantResponse;
@@ -46,7 +48,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSell {
+public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSell, AdapterBetsFromRivals.ClickOnAccept {
 
     AdapterBetsFromRivals adapterBetsFromRivals;
     AdapterStartingKarateka adapterStartingKarateka;
@@ -65,6 +67,7 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
     LinearLayout card_default;
     final int CODIGO_REQUEST_CHANGE_KARATEKA = 1;
     final int CODIGO_REQUEST_SELL_KARATEKA = 2;
+    final int CODIGO_REQUEST_ACCEPT_KARATEKA = 3;
     int idParticipant;
     int indexGrid;
     int idKarateka;
@@ -88,7 +91,7 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
         adapterMyTeam = new AdapterMyTeam(getActivity().getApplicationContext(), R.layout.item_myteam_layout, myTeamResponse.getKaratekas(), fragmentManager, this);
         adapterStartingKarateka = new AdapterStartingKarateka(getActivity().getApplicationContext(), R.layout.item_card_karateka_myteam, myStartingResponse.getKaratekas());
 
-        adapterBetsFromRivals = new AdapterBetsFromRivals(getActivity(), R.layout.item_bet_from_rival, bidToFromRivalsResponse.getKaratekas());
+        adapterBetsFromRivals = new AdapterBetsFromRivals(getActivity(), R.layout.item_bet_from_rival, bidToFromRivalsResponse.getKaratekas(), fragmentManager,this);
 
         card_karateka = (LinearLayout) RootView.findViewById(R.id.card_karateka);
         card_default = (LinearLayout) RootView.findViewById(R.id.card_default);
@@ -206,6 +209,15 @@ public class MyTeamFragment extends Fragment implements AdapterMyTeam.ClickOnSel
             case CODIGO_REQUEST_SELL_KARATEKA:
                 if (resultCode == Activity.RESULT_OK) {
 
+                    getParticipantByGroupAndUser(user.getUser().getId(), groupSelectedId);
+                    Log.d("Devuelta","devuelta");
+                    refreshFragmnet();
+                }
+
+                break;
+
+            case CODIGO_REQUEST_ACCEPT_KARATEKA:
+                if (resultCode == Activity.RESULT_OK) {
                     getParticipantByGroupAndUser(user.getUser().getId(), groupSelectedId);
                     Log.d("Devuelta","devuelta");
                     refreshFragmnet();
@@ -426,6 +438,11 @@ public void refreshFragmnet(){
     }
 
 
-
-
+    @Override
+    public void onClick(KaratekaRival karatekaRival) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        AcceptBidRivalDialogFragment acceptBidRivalDialogFragment = new AcceptBidRivalDialogFragment(karatekaRival);
+        acceptBidRivalDialogFragment.setTargetFragment(this, CODIGO_REQUEST_ACCEPT_KARATEKA);
+        acceptBidRivalDialogFragment.show(fragmentManager, "acceptDialogF");
+    }
 }

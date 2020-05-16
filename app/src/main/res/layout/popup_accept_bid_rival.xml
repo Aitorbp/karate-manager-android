@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="340dp"
+    android:layout_height="250dp"
+    android:background="@drawable/custom_join_group_popup"
+    android:layout_gravity="center">
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_marginLeft="15dp"
+            android:id="@+id/accept_picture_karateka"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_gravity="center"
+
+            app:civ_border_width="3dp"
+            app:civ_border_color="@color/colorButtonBlack"
+            android:src="@drawable/logo_border_karate_manager"
+            />
+
+        <LinearLayout
+            android:layout_marginLeft="10dp"
+            android:layout_width="120dp"
+            android:orientation="vertical"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical" >
+            <TextView
+                android:id="@+id/accept_name_karateka"
+                android:text="Rafael Aghayev r"
+                android:gravity="center_vertical"
+                android:textStyle="bold"
+                android:textColor="@color/colorButtonBlack"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:orientation="horizontal">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginRight="5dp"
+                    android:id="@+id/accept_country"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    app:civ_border_color="@color/colorButtonBlack"
+                    app:civ_border_width="2dp"
+                    />
+                <TextView
+                    android:layout_marginRight="5dp"
+                    android:gravity="center"
+                    android:background="@drawable/custom_circular_weigth"
+                    android:textColor="@color/colorWhite"
+                    android:id="@+id/accept_weigth"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    />
+                <TextView
+                    android:background="@drawable/custom_points_karatekas"
+                    android:id="@+id/accept_points_karateka"
+                    android:layout_width="27dp"
+                    android:layout_height="25dp"
+                    android:text="200"
+                    android:textSize="15dp"
+                    android:textColor="@color/colorWhite"
+                    android:gravity="center"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center">
+        <TextView
+            android:layout_marginTop="5dp"
+            android:layout_width="300dp"
+            android:layout_height="27dp"
+            android:textSize="18dp"
+            android:text="Do you want to accept this bet?"
+            android:textColor="@color/colorButtonBlack"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/accept_rival_bid"
+            android:layout_marginTop="5dp"
+            android:layout_width="300dp"
+            android:layout_height="20dp"
+            android:textSize="18dp"
+            android:text="323232"
+            android:textColor="@color/colorButtonBlack"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal">
+
+        </TextView>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <Button
+            android:textAllCaps="false"
+            android:id="@+id/accept_button_no"
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No, yet"
+            android:textColor="@color/colorWhite"
+            android:layout_gravity="center"
+            android:background="@drawable/custom_button_refuse_bit_rival"/>
+
+        <Button
+            android:textAllCaps="false"
+            android:id="@+id/accept_button_yes"
+            android:layout_marginLeft="60dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Accept"
+            android:textColor="@color/colorWhite"
+            android:layout_gravity="center"
+            android:background="@drawable/custom_button_accept_bit_rival"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -178,6 +178,7 @@
 
 
                     <Button
+                        android:textAllCaps="false"
                         android:layout_marginRight="29dp"
                         android:layout_marginLeft="29dp"
                         android:id="@+id/btn_create_group"

@@ -49,6 +49,7 @@
                 android:textSize="20dp"
                 />
             <Button
+                android:textAllCaps="false"
                 android:layout_marginRight="29dp"
                 android:layout_marginLeft="29dp"
                 android:id="@+id/btn_join_group"
@@ -57,7 +58,7 @@
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="30dp"
                 android:padding="12dp"
-                android:text="Create group"
+                android:text="Join group"
                 android:textSize="17dp"
                 android:background="@drawable/custom_button"
                 android:textColor="#FFFFFF"
