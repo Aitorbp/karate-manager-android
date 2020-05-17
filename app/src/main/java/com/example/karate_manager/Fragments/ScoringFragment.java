@@ -50,7 +50,7 @@ public class ScoringFragment extends Fragment implements AdapterScoring.ClickOnR
     Group groupFromMain =new Group(null,122,null,null,null,0,null);
     CircleImageView group_image_in_scoring;
     ApiUtils apiUtils;
-    TextView group_name, participant_name;
+    TextView group_name, participant_name, budget_in_group,points_in_group;
     ParticipantGroup participant;
     Button offers;
     int idRival;
@@ -62,6 +62,8 @@ public class ScoringFragment extends Fragment implements AdapterScoring.ClickOnR
         group_image_in_scoring = (CircleImageView) RootView.findViewById(R.id.group_image_in_scoring);
         group_name = (TextView) RootView.findViewById(R.id.group_name);
         participant_name = (TextView) RootView.findViewById(R.id.participant_name);
+        budget_in_group = (TextView) RootView.findViewById(R.id.budget_in_group);
+        points_in_group = (TextView) RootView.findViewById(R.id.points_in_group);
         APIService = ApiUtils.getAPIService();
         offers = (Button) RootView.findViewById(R.id.offers);
         String userName = user.getUser().getName();
@@ -117,6 +119,8 @@ public class ScoringFragment extends Fragment implements AdapterScoring.ClickOnR
             }
         });
 
+
+
     }
 
     private void getParticipant(){
@@ -125,6 +129,9 @@ public class ScoringFragment extends Fragment implements AdapterScoring.ClickOnR
         for (int i = 0; i <participants.size() ; i++) {
             if(participants.get(i).getId_user()==user.getUser().getId()){
                 participant =participants.get(i);
+
+                budget_in_group.setText(String.valueOf(participant.getOwn_budget() + " €"));
+                points_in_group.setText(String.valueOf(participant.getPoints()));
                 Log.d("Particpante in Scoring", String.valueOf(participant.getId()));
             }
         }

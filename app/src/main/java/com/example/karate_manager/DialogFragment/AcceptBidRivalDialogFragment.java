@@ -79,7 +79,7 @@ public class AcceptBidRivalDialogFragment extends DialogFragment implements View
 
 
         nameKaratekaTexview.setText(karatekaRival.getName());
-        bidRivalTexview.setText(String.valueOf(karatekaRival.getBid_rival()));
+        bidRivalTexview.setText(String.valueOf(karatekaRival.getBid_rival() + " €"));
         weightKaratekaTexview.setText(karatekaRival.getWeight());
 
 

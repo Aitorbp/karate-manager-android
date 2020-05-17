@@ -94,7 +94,7 @@ public class AdapterListviewChangeStartingKarateka extends ArrayAdapter {
         elementWeigth.setText(weigth);
 
         TextView elementValue = convertView.findViewById(R.id.change_starting_item_value_karateka);
-        elementValue.setText(value.replace(".0", ""));
+        elementValue.setText(value.replace(".0", "") + " €");
 
         TextView elementPointsKarateka = convertView.findViewById(R.id.change_starting_points_karateka_market);
         if(pointsKarateka==null){

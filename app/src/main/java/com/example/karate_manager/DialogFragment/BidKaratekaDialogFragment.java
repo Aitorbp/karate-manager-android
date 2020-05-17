@@ -89,7 +89,7 @@ public class BidKaratekaDialogFragment extends DialogFragment implements View.On
 
         TextView valueKaratekaText = (TextView) getDialog().findViewById(R.id.popup_bid_value);
         String valueKarateka = String.valueOf(karateka.getValue());
-        valueKaratekaText.setText(valueKarateka.replace(".0", ""));
+        valueKaratekaText.setText(valueKarateka.replace(".0", "") + " €");
 
         TextView weightKaratekaText = (TextView) getDialog().findViewById(R.id.pop_bid_weigth);
         String weigthKarateka = String.valueOf(karateka.getWeight());

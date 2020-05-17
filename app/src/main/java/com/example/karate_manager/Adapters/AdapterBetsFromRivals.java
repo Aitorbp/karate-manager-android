@@ -123,7 +123,7 @@ public class AdapterBetsFromRivals extends ArrayAdapter {
         elementWeigth.setText(weigth);
 
         TextView elementValue = convertView.findViewById(R.id.bet_from_rivals_accept_botton_karateka);
-        elementValue.setText(bidRival.replace(".0", ""));
+        elementValue.setText(bidRival.replace(".0", "")  + " €");
 
         TextView elementPointsKarateka = convertView.findViewById(R.id.bet_from_rivals_points_karateka_market);
         if (pointsKarateka == "null") {

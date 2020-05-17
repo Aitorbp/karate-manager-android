@@ -93,7 +93,7 @@ public class AdapterMyTeam extends ArrayAdapter {
         elementWeigth.setText(weigth);
 
         TextView elementValue = convertView.findViewById(R.id.item_button_value_karateka);
-        elementValue.setText(value.replace(".0", ""));
+        elementValue.setText(value.replace(".0", "") + " €");
 
         TextView elementPointsKarateka = convertView.findViewById(R.id.points_karateka_market);
         if(pointsKarateka==null){

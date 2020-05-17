@@ -124,7 +124,7 @@ public class AdapterMarket extends ArrayAdapter{
 
 
         Button buttonValue = convertView.findViewById(R.id.item_button_value_karateka);
-        buttonValue.setText(value.replace(".0", ""));
+        buttonValue.setText(value.replace(".0", "") + " €");
 
         final View finalConvertView = convertView;
                 finalConvertView.findViewById(R.id.item_button_value_karateka).setOnClickListener(new View.OnClickListener() {

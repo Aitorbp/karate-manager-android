@@ -68,7 +68,7 @@ public class SellKaratekaDialogFragment extends DialogFragment implements View.O
 
         TextView valueKaratekaText = (TextView) getDialog().findViewById(R.id.sell_value_karateka);
         String valueKarateka = String.valueOf(karateka.getValue());
-        valueKaratekaText.setText(valueKarateka.replace(".0", ""));
+        valueKaratekaText.setText(valueKarateka.replace(".0", "") + " €");
 
         ImageView pictureKaratekaImage = (ImageView) getDialog().findViewById(R.id.sell_picture_karateka);
         String pictureKarateka = String.valueOf(karateka.getPhoto_karateka());

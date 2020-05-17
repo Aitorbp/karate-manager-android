@@ -101,18 +101,10 @@ public class AdapterStartingKarateka extends ArrayAdapter {
             elementPointsKarateka.setText(pointsKarateka);
         }
 
-//        final View finalConvertView = convertView;
-//        finalConvertView.findViewById(R.id.adapter_container).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                listener.onClick(data.get(position));
-//            }
-//        });
+
         return convertView;
     }
 
 
-//    public interface ClickOnKaratekaStarting{
-//        void onClick(Karateka karateka);
-//    }
+
 }

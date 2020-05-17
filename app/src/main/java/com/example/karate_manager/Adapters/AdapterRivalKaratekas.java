@@ -84,7 +84,7 @@ public class AdapterRivalKaratekas extends ArrayAdapter {
         elementWeigth.setText(weigth);
 
         TextView elementValue = convertView.findViewById(R.id.rival_item_value_karateka);
-        elementValue.setText(value.replace(".0", ""));
+        elementValue.setText(value.replace(".0", "") + " €");
 
         TextView elementPointsKarateka = convertView.findViewById(R.id.rival_item_points_karateka);
         if(pointsKarateka==null){
