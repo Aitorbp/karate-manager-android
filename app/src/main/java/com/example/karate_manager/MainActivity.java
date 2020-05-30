@@ -216,9 +216,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void validationInHorizontalMyTeam(){
+            Log.d("PRUEBA HOR", String.valueOf(id_group_storage));
+            if(groups == null || groups.getGroupByParticipant().size() == 0 || groups.getGroupByParticipant().isEmpty()){ //Si el usuario no está en ningún grupo, indicarle que tiene que entrar en alguno
+
+                (Toast.makeText(getApplicationContext(), "You have to join or create a good to start to play", Toast.LENGTH_LONG)).show();
+                JoinGroupFragment joinGroupFragment = new JoinGroupFragment();
+                addFragment(joinGroupFragment);
+                sendUserToJoinGroup(user,joinGroupFragment);
+            }else if(
+                // Si el id del usuario nos llega a 0 por que hemos hecho logout anteriormte pero tenemos grupos, ponemos el primer grupo de la lista
+                    id_group_storage == 0 && groups.getGroupByParticipant().size() != 0 || groups.getGroupByParticipant().isEmpty()){
+                group_send_storage = Storage.getGroupSelected(getApplicationContext());
+                Log.d("STORAGE click general", String.valueOf(id_group_storage));
+                final MyTeamFragment myTeamFragment = new MyTeamFragment();
+                addFragment(myTeamFragment);
+                id_group_storage= groups.getGroupByParticipant().get(0).getId();
+                Storage.getIdGroupPrincipal(getApplication());
+                sendUserGroupToMyTeam(user,id_group_storage,myTeamFragment);
+
+            }
+            else if(id_group_storage != 0 && groups.getGroupByParticipant().size() != 0|| !groups.getGroupByParticipant().isEmpty()){
+                final MyTeamFragment myTeamFragment = new MyTeamFragment();
+                addFragment(myTeamFragment);
+                Storage.getIdGroupPrincipal(getApplication());
+                group_send_storage =  Storage.getGroupSelected(getApplication());
+                sendUserGroupToMyTeam(user,id_group_storage,myTeamFragment);
+
+            }
+    }
+
+    public void validationInHorizontalCalendary(){
         Log.d("PRUEBA HOR", String.valueOf(id_group_storage));
         if(groups == null || groups.getGroupByParticipant().size() == 0 || groups.getGroupByParticipant().isEmpty()){ //Si el usuario no está en ningún grupo, indicarle que tiene que entrar en alguno
-
             (Toast.makeText(getApplicationContext(), "You have to join or create a good to start to play", Toast.LENGTH_LONG)).show();
             JoinGroupFragment joinGroupFragment = new JoinGroupFragment();
             addFragment(joinGroupFragment);
@@ -228,19 +257,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 id_group_storage == 0 && groups.getGroupByParticipant().size() != 0 || groups.getGroupByParticipant().isEmpty()){
             group_send_storage = Storage.getGroupSelected(getApplicationContext());
             Log.d("STORAGE click general", String.valueOf(id_group_storage));
-            final MyTeamFragment myTeamFragment = new MyTeamFragment();
-            addFragment(myTeamFragment);
+            CalendaryFragment calendaryFragment = new CalendaryFragment();
+            addFragment(calendaryFragment);
             id_group_storage= groups.getGroupByParticipant().get(0).getId();
             Storage.getIdGroupPrincipal(getApplication());
-            sendUserGroupToMyTeam(user,id_group_storage,myTeamFragment);
+            sendUserGroupToCalendary(user,id_group_storage, calendaryFragment);
 
         }
         else if(id_group_storage != 0 && groups.getGroupByParticipant().size() != 0|| !groups.getGroupByParticipant().isEmpty()){
-            final MyTeamFragment myTeamFragment = new MyTeamFragment();
-            addFragment(myTeamFragment);
+            final CalendaryFragment calendaryFragment = new CalendaryFragment();
+            addFragment(calendaryFragment);
             Storage.getIdGroupPrincipal(getApplication());
             group_send_storage =  Storage.getGroupSelected(getApplication());
-            sendUserGroupToMyTeam(user,id_group_storage,myTeamFragment);
+            sendUserGroupToCalendary(user,id_group_storage,calendaryFragment);
 
         }
     }
@@ -269,9 +298,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     break;
 
                 case R.id.hor_calendary:
-                    Log.d("aeaeaeaeea","wdwwdwdwd");
-                    final CalendaryFragment calendaryFragment = new CalendaryFragment();
-                    addFragment(calendaryFragment);
+                    validationInHorizontalCalendary();
                     break;
             }
             return true;
@@ -469,7 +496,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragment.recievedUserGroup(userResponse, groupSelected);
 
     }
+    public void sendUserGroupToCalendary(UserResponse userResponse, int groupSelected, CalendaryFragment fragment){
+        fragment.recievedUserGroup(userResponse, groupSelected);
 
+    }
     public void sendUserToProfile(UserResponse userResponse, ProfileFragment fragment){
         fragment.recievedUser(userResponse);
 

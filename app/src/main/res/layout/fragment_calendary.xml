@@ -1,14 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.CalendaryFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments.CalendaryFragment"
+    android:layout_marginTop="60dp"
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="20dp">
+        <Button
+            android:id="@+id/previous_season"
+            android:layout_gravity="start"
+            android:background="@color/colorPrimary"
+            android:layout_width="50dp"
+            android:layout_height="match_parent">
+
+        </Button>
+
+        <Button
+            android:layout_marginHorizontal="5dp"
+            android:id="@+id/season"
+            android:layout_width="250dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_height="match_parent"/>
+        <Button
+            android:layout_alignParentLeft="true"
+            android:id="@+id/following_season"
+            android:layout_gravity="right"
+            android:background="@color/colorPrimary"
+            android:layout_width="50dp"
+            android:layout_height="match_parent">
+
+        </Button>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_marginTop="13dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="20dp"
+        >
+        <TextView
+            android:id="@+id/date_championship"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:text="The season start at 06/08/2020"
+            >
 
-</FrameLayout>
+        </TextView>
+        <ImageView
+            android:id="@+id/image_championship"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="120dp">
+
+        </ImageView>
+        <TextView
+            android:layout_marginVertical="10dp"
+          android:textSize="20dp"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:text="Result in this season"
+            />
+        <ListView
+            android:id="@+id/resultByParticipantSeason"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </ListView>
+    </LinearLayout>
+
+
+</LinearLayout>

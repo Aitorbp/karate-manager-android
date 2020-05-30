@@ -9,6 +9,7 @@ import com.example.karate_manager.Models.JoinGroupResponse.JoinGroupResponse;
 import com.example.karate_manager.Models.KaratekaModel.MarketResponse;
 import com.example.karate_manager.Models.ParticipantModel.ParticipantResponse;
 import com.example.karate_manager.Models.Prueba;
+import com.example.karate_manager.Models.ResultsParticipant.ResultsParticipantResponse;
 import com.example.karate_manager.Models.SaleModel.StartingResponse;
 import com.example.karate_manager.Models.UserModel.UserResponse;
 import com.example.karate_manager.Models.UserModel.User;
@@ -167,5 +168,11 @@ Call<MarketResponse> getStartingKaratekaByParticipant(@Path("id_participants") i
   @DELETE("bid/rivals/refused/ownbid/{id_participant_bid_send}/{id_karatekas}")
   Call<BidToFromRivalsResponse> refuseOwnBid(@Path("id_participant_bid_send") int id_participant_bid_send,
                                                @Path("id_karatekas") int id_karatekas);
+
+
+  //Get result participant by championship and group
+  @GET("group/result/championship/{id_championship}/{id_group}")
+  Call<ResultsParticipantResponse> getResultByChampGroup(@Path("id_championship") int id_championship,
+                                                         @Path("id_group") int id_group);
 
 }
