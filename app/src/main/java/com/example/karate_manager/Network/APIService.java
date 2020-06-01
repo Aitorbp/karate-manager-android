@@ -3,6 +3,7 @@ package com.example.karate_manager.Network;
 import com.example.karate_manager.Models.BidModel.BidResponse;
 import com.example.karate_manager.Models.BidModel.BidRivalsResponse;
 import com.example.karate_manager.Models.BidModel.BidToFromRivalsResponse;
+import com.example.karate_manager.Models.ChampionshipModel.ChampionshipResponse;
 import com.example.karate_manager.Models.GroupModel.GroupResponse;
 import com.example.karate_manager.Models.GroupModel.GroupsResponse;
 import com.example.karate_manager.Models.JoinGroupResponse.JoinGroupResponse;
@@ -174,5 +175,7 @@ Call<MarketResponse> getStartingKaratekaByParticipant(@Path("id_participants") i
   @GET("group/result/championship/{id_championship}/{id_group}")
   Call<ResultsParticipantResponse> getResultByChampGroup(@Path("id_championship") int id_championship,
                                                          @Path("id_group") int id_group);
-
+  //Get all championships
+  @GET("championship/all")
+  Call<ChampionshipResponse> getAllChampionships();
 }
